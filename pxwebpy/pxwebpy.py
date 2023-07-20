@@ -3,7 +3,7 @@ from pathlib import Path
 import json
 from json import JSONDecodeError
 from warnings import warn
-from itertools import cycle
+import itertools
 import requests
 
 
@@ -38,8 +38,11 @@ class PxWeb:
                         received: {response.status_code}: {response.reason}"
                 )
 
-    def to_dict(self) -> dict | None:
-        """Takes json-stat and turns it into a dict"""
+    def to_dicts(self) -> list[dict] | None:
+        """
+        Takes the response json-stat and turns it into a list of dicts that can
+        be used to convert into a dataframe, using either pandas or polars.
+        """
         if self.query is None or self.data is None:
             return warn("`query` and/or `data` cannot be None.")
         if self.query["response"]["format"] != "json-stat":
@@ -47,34 +50,24 @@ class PxWeb:
         query_dims = [dim["code"] for dim in self.query["query"]]
         data_dims = self.data["dataset"]["dimension"]
 
-        all_labels = {}
-        label_lengths = {}
+        category_labels = {}
         for dim in data_dims:
             if dim in query_dims and dim != "ContentsCode":
-                labels = data_dims[dim]["category"]["label"]
-                length = {dim: len(labels)}
-                label_lengths.update(length)
-                all_labels.update({data_dims[dim]["label"]: labels.values()})
+                label = data_dims[dim]["category"]["label"]
+                category_labels.update({data_dims[dim]["label"]: label.values()})
             if dim == "ContentsCode":
                 value_label = list(data_dims[dim]["category"]["label"].values())[0]
 
-        max_length = max(label_lengths.values())
+        result = [
+            dict(zip(category_labels.keys(), x))
+            for x in itertools.product(*category_labels.values())
+        ]
 
-        # Extend all labels to match up length of data
-        for key, value in all_labels.items():
-            new_length = self.__extend_list(value, max_length)
-            all_labels[key] = new_length
+        all_values = self.data["dataset"]["value"]
 
-        all_labels.update({value_label: self.data["dataset"]["value"]})
+        for value, dict_row in zip(all_values, result):
+            dict_row.update({value_label: value})
 
-        return all_labels
-
-    def __extend_list(self, values: list, length: int) -> list:
-        """Recycle items in a list up to given length"""
-        cycle_values = cycle(values)
-        result = []
-        for _i in range(length):
-            result.append(next(cycle_values))
         return result
 
     @property
