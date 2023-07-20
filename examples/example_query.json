@@ -40,6 +40,6 @@
         }
     ],
     "response": {
-        "format": "csv"
+        "format": "json-stat"
     }
 }

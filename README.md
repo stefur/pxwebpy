@@ -1,8 +1,19 @@
 # pxwebpy
-Get data from PxWeb. More to come.
+Get data from PxWeb API.
 
-```
-from pxwebpy import pxwebpy
+```python
+from pxwebpy import PxWeb
 
-pxwebpy.get_data(query, url)
+some_data = PxWeb(url, query)
+
+some_data_dict = some_data.to_dict()
 ```
+
+See examples for more details.
+
+**Todo**
+- Support for more response formats
+- Build query directly from a dict input
+- Timestamp for tracking last data refresh
+- Description metadata for data table
+- Tests

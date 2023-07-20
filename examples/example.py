@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 import polars as pl
 
-from pxwebpy import pxwebpy
+from pxwebpy import PxWeb
 
 URL = "https://api.scb.se/OV0104/v1/doris/sv/ssd/START/HE/HE0110/HE0110A/SamForvInk1"
 
@@ -51,16 +51,19 @@ QUERY = """
     }
   ],
   "response": {
-    "format": "csv"
+    "format": "json-stat"
   }
 }"""
 
 # From a string
-data1 = pxwebpy.get_data(QUERY, URL)
+data1 = PxWeb(URL, QUERY)
 
 # Same query, from a file
-data2 = pxwebpy.get_data(Path("example_query.json"), URL)
+data2 = PxWeb(URL, Path("example_query.json"))
 
-pandas_df = pd.DataFrame.from_dict(data1)
+data1_dict = data1.to_dict()
+data2_dict = data2.to_dict()
 
-polars_df = pl.DataFrame(data2)
+pandas_df = pd.DataFrame.from_dict(data1_dict)
+
+polars_df = pl.DataFrame(data2_dict)
