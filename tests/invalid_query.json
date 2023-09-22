@@ -1,0 +1,12 @@
+{
+    "query": [
+        {
+            "code": "Region",
+        ]
+    }
+}
+],
+"response": {
+"format": "json-stat"
+}
+}

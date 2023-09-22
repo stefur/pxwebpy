@@ -45,6 +45,8 @@ class PxWeb:
                     f"Warning: failed to retrieve data, \
                         received: {response.status_code}: {response.reason}"
                 )
+        else:
+            raise ValueError("Cannot get data if query is None.")
 
     def to_dicts(self) -> list[dict] | None:
         """
@@ -52,9 +54,9 @@ class PxWeb:
         be used to convert into a dataframe, using either pandas or polars.
         """
         if self.query is None or self.data is None:
-            return warn("`query` and/or `data` cannot be None.")
+            raise ValueError("`query` and/or `data` cannot be None.")
         if self.query["response"]["format"] != "json-stat":
-            return warn("Currently only response format 'json-stat' is supported.")
+            raise TypeError("Currently only response format 'json-stat' is supported.")
         query_dims = [dim["code"] for dim in self.query["query"]]
         data_dims = self.data["dataset"]["dimension"]
 
@@ -105,18 +107,26 @@ class PxWeb:
         match json_query:
             case Path():
                 with open(json_query, mode="r", encoding="utf-8") as read_file:
-                    self.__query = json.load(read_file)
+                    try:
+                        self.__query = json.load(read_file)
+                    except JSONDecodeError as err:
+                        print(f"An error occured: {err}")
+                        raise ValueError(
+                            "Provided file could not be decoded as JSON."
+                        ) from err
+
             case str():
                 try:
                     self.__query = json.loads(json_query)
                 except JSONDecodeError as err:
-                    warn(
-                        f"Warning: Provided string could not be decoded as JSON. Error: {err}"
-                    )
+                    print(f"An error occured: {err}")
+                    raise ValueError(
+                        "Provided string could not be decoded as JSON."
+                    ) from err
             case None:
                 self.__query = None
             case _:
-                warn(
+                raise TypeError(
                     f"Invalid input for `json_query`. \
                     Expected `str` or `Path`, got {type(json_query)!r}."
                 )
