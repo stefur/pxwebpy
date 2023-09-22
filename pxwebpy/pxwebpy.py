@@ -13,15 +13,23 @@ class PxWeb:
     If provided with both URL and query when instantiating ,
     it will automatically try to get data from the API.
     This behaviour can be turned off using the
-    toggle "autofetch" (Default: True).
+    parameter `autofetch` <bool> (Default: True).
     """
 
     def __init__(self, url=None, json_query=None, autofetch=True) -> None:
+        """
+        Initialize the PxWeb instance.
+
+        :param url: The PxWeb API URL.
+        :param json_query: The query in JSON format.
+        :param autofetch: Whether to automatically fetch data upon instantiation.
+        """
         self.url: str = url
         self.query: dict | None = json_query
         self.data: dict | None = None
+        self.autofetch: bool = autofetch
 
-        if self.url is not None and self.query is not None and autofetch:
+        if self.url is not None and self.query is not None and self.autofetch:
             self.get_data()
 
     def get_data(self, json_query=None) -> None:
@@ -70,14 +78,30 @@ class PxWeb:
 
         return result
 
+    def toggle_autofetch(self, enable: bool) -> None:
+        """
+        Toggle the autofetch behavior.
+
+        :param enable: True to enable autofetch, False to disable.
+        """
+        self.autofetch = enable
+
     @property
     def query(self) -> dict | None:
-        """Getter for the query"""
+        """
+        Getter for the query
+
+        :return: The query as a dictionary.
+        """
         return self.__query
 
     @query.setter
     def query(self, json_query: Path | str | None) -> None:
-        """Set the query, accepting different variants"""
+        """
+        Set the query, accepting different variants
+
+        :param json_query: The query in JSON format or a path to a JSON file.
+        """
         match json_query:
             case Path():
                 with open(json_query, mode="r", encoding="utf-8") as read_file:
@@ -96,3 +120,10 @@ class PxWeb:
                     f"Invalid input for `json_query`. \
                     Expected `str` or `Path`, got {type(json_query)!r}."
                 )
+
+    @query.deleter
+    def query(self) -> None:
+        """
+        Delete the query, setting it to None.
+        """
+        self.__query = None

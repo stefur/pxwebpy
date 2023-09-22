@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "pxwebpy"
+version = "0.1.0"
+description = "Get data from PxWeb API easily."
+authors = ["stefur <stefan@furne.net>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+requests = "2.31"
+
+
+[tool.poetry.group.dev.dependencies]
+pylint = "^2.17.5"
+mypy = "^1.5.1"
+ipykernel = "^6.25.2"
+pytest = "^7.4.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -6,7 +6,7 @@ from pxwebpy import PxWeb
 
 some_data = PxWeb(url, query)
 
-some_data_dict = some_data.to_dict()
+some_data_dicts = some_data.to_dicts()
 ```
 
 See examples for more details.
