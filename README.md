@@ -1,12 +1,17 @@
 # pxwebpy
-Get data from PxWeb API.
+Helper class to get data from PxWeb API.
 
 ```python
+import pandas as pd
+import polars as pl
+
 from pxwebpy import PxWeb
 
 some_data = PxWeb(url, query)
 
-some_data_dicts = some_data.to_dicts()
+pandas_df = pd.DataFrame.from_dict(some_data.data)
+
+polars_df = pl.DataFrame(some_data.data)
 ```
 
 See examples for more details.
@@ -16,4 +21,3 @@ See examples for more details.
 - Build query directly from a dict input
 - Timestamp for tracking last data refresh
 - Description metadata for data table
-- Tests
