@@ -32,6 +32,9 @@ class PxWeb:
         if self.url is not None and self.query is not None and self.autofetch:
             self.get_data()
 
+    def __repr__(self):
+        return f"PxWeb(url='{self.url}', query={self.query}, autofetch={self.autofetch}, data={self.data})"
+
     def get_data(self, json_query=None) -> None:
         """Get data from the API"""
         if json_query is not None:
