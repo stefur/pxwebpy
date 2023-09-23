@@ -61,6 +61,6 @@ data1 = PxWeb(URL, QUERY)
 # Same query, from a file
 data2 = PxWeb(URL, Path("example_query.json"))
 
-pandas_df = pd.DataFrame.from_dict(data1.data)
+pandas_df = pd.DataFrame(data1.data)
 
 polars_df = pl.DataFrame(data2.data)
