@@ -10,23 +10,17 @@ import requests
 class PxWeb:
     """
     A helper to manage and get data from the PxWeb API.
-    If provided with both URL and query when instantiating ,
-    it will automatically try to get data from the API.
-    This behaviour can be turned off using the
-    parameter `autofetch` <bool> (Default: True).
     """
 
     def __init__(self, url=None, json_query=None, autofetch=True) -> None:
         """
-        Initialize the PxWeb instance.
-
         :param url: The PxWeb API URL.
         :param json_query: The query in JSON format.
         :param autofetch: Whether to automatically fetch data upon instantiation.
         """
         self.url: str = url
         self.query: dict | None = json_query
-        self.data: dict | None = None
+        self.data: list[dict] | None = None
         self.autofetch: bool = autofetch
 
         if self.url is not None and self.query is not None and self.autofetch:
@@ -42,7 +36,7 @@ class PxWeb:
         if self.query is not None:
             response = requests.post(self.url, json=self.query, timeout=10)
             if response.status_code == 200:
-                self.data = json.loads(response.text)
+                self.data = self._response_handler(json.loads(response.text))
             else:
                 warn(
                     f"Failed to retrieve data: {response.status_code}: {response.reason}"
@@ -50,17 +44,17 @@ class PxWeb:
         else:
             raise ValueError("Cannot get data if query is None.")
 
-    def to_dicts(self) -> list[dict] | None:
+    def _response_handler(self, response: dict) -> list[dict] | None:
         """
         Takes the response json-stat and turns it into a list of dicts that can
         be used to convert into a dataframe, using either pandas or polars.
         """
-        if self.query is None or self.data is None:
+        if self.query is None or response is None:
             raise ValueError("`query` and/or `data` cannot be None.")
         if self.query["response"]["format"] != "json-stat":
             raise TypeError("Currently only response format 'json-stat' is supported.")
         query_dims = [dim["code"] for dim in self.query["query"]]
-        data_dims = self.data["dataset"]["dimension"]
+        data_dims = response["dataset"]["dimension"]
 
         category_labels = {}
         for dim in data_dims:
@@ -75,7 +69,7 @@ class PxWeb:
             for x in itertools.product(*category_labels.values())
         ]
 
-        all_values = self.data["dataset"]["value"]
+        all_values = response["dataset"]["value"]
 
         for value, dict_row in zip(all_values, result):
             dict_row.update({value_label: value})
