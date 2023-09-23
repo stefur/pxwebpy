@@ -42,8 +42,7 @@ class PxWeb:
                 self.data = json.loads(response.text)
             else:
                 warn(
-                    f"Warning: failed to retrieve data, \
-                        received: {response.status_code}: {response.reason}"
+                    f"Failed to retrieve data: {response.status_code}: {response.reason}"
                 )
         else:
             raise ValueError("Cannot get data if query is None.")
