@@ -30,7 +30,7 @@ class PxWeb:
                     f"""Response format must be 'json-stat', got '{self.query["response"]["format"]}'."""
                 )
         except KeyError as err:
-            raise KeyError(f"Invalid format query format. {err} not found.")
+            raise KeyError(f"Invalid query format. {err} not found.")
 
         if self.autofetch:
             self.get_data()
