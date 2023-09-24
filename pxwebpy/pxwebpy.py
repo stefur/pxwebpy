@@ -12,21 +12,25 @@ class PxWeb:
     A helper class to get data from the PxWeb API.
     """
 
-    def __init__(self, url, json_query, autofetch=True) -> None:
+    def __init__(self, url, query, autofetch=True) -> None:
         """
         :param url: The PxWeb API URL.
-        :param json_query: The query in JSON format.
+        :param query: The query in JSON format.
         :param autofetch: Whether to automatically fetch data upon instantiation.
         """
         self.url: str = url
-        self.query: dict = json_query
+        self.query: dict = query
         self.dataset: list[dict] | None = None
         self.autofetch: bool = autofetch
 
-        if self.query["response"]["format"] != "json-stat":
-            raise TypeError(
-                f"""Response format must be 'json-stat', got '{self.query["response"]["format"]}'."""
-            )
+        try:
+            response_format = self.query["response"]["format"]
+            if response_format != "json-stat":
+                raise TypeError(
+                    f"""Response format must be 'json-stat', got '{self.query["response"]["format"]}'."""
+                )
+        except KeyError as err:
+            raise KeyError(f"Invalid format query format. {err} not found.")
 
         if self.autofetch:
             self.get_data()
@@ -89,13 +93,13 @@ class PxWeb:
         return self.__query
 
     @query.setter
-    def query(self, json_query: Path | str) -> None:
+    def query(self, query: Path | str) -> None:
         """
         Set the JSON query, accepting either a `Path` to a file or a `str`.
         """
-        match json_query:
+        match query:
             case Path():
-                with open(json_query, mode="r", encoding="utf-8") as read_file:
+                with open(query, mode="r", encoding="utf-8") as read_file:
                     try:
                         self.__query = json.load(read_file)
                     except JSONDecodeError as err:
@@ -105,7 +109,7 @@ class PxWeb:
                         ) from err
             case str():
                 try:
-                    self.__query = json.loads(json_query)
+                    self.__query = json.loads(query)
                 except JSONDecodeError as err:
                     print(f"An error occured: {err}")
                     raise ValueError(
@@ -115,6 +119,6 @@ class PxWeb:
                 raise ValueError("Query cannot be None.")
             case _:
                 raise TypeError(
-                    f"Invalid input for `json_query`. \
-                    Expected `str` or `Path`, got {type(json_query)!r}."
+                    f"Invalid input for `query`. \
+                    Expected `str` or `Path`, got {type(query)!r}."
                 )

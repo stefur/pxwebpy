@@ -1,5 +1,6 @@
 """Tests"""
 from pathlib import Path
+import json
 import pytest
 from pxwebpy import PxWeb
 
@@ -55,44 +56,40 @@ QUERY = """
 
 def test_query_setter_with_json_string():
     """The query should also be able to handle a JSON string"""
-    pxweb = PxWeb()
-    pxweb.query = '{"key": "value"}'
-    assert pxweb.query == {"key": "value"}
+    pxweb = PxWeb(url=URL, query=QUERY, autofetch=False)
+    json_query = json.loads(QUERY)
+    assert pxweb.query == json_query
 
 
 def test_query_setter_with_invalid_json_string():
     """Invalid query should produce an error"""
-    pxweb = PxWeb()
     with pytest.raises(ValueError):
-        pxweb.query = Path("tests/invalid_query.json")
+        PxWeb(url=URL, query=Path("tests/invalid_query.json"))
 
 
 def test_query_setter_with_invalid_type():
     """Wrong data type should raise a TypeError"""
-    pxweb = PxWeb()
     with pytest.raises(TypeError):
-        pxweb.query = ["query"]
+        PxWeb(url=URL, query=[QUERY])
 
 
-def test_get_data_success():
-    """Getting data should not fail"""
-    pxweb = PxWeb(url=URL)
-    pxweb.query = QUERY
-    pxweb.get_data()
-    assert pxweb.data is not None
+def test_get_data():
+    """Getting data with and without autofetch"""
+    fetch = PxWeb(url=URL, query=QUERY)
+    assert fetch.dataset is not None
+    no_fetch = PxWeb(url=URL, query=QUERY, autofetch=False)
+    assert no_fetch.dataset is None
 
 
 def test_get_data_failure():
     """Invalid URL should raise a ValueError"""
-    pxweb = PxWeb(url="invalid_url")
-    pxweb.query = QUERY
     with pytest.raises(ValueError):
-        pxweb.get_data()
+        PxWeb(url="invalid_url", query=QUERY)
 
 
 def test_toggle_autofetch():
     """It should be possible to toggle the autofetch"""
-    pxweb = PxWeb()
+    pxweb = PxWeb(url=URL, query=QUERY)
     assert pxweb.autofetch is True
     pxweb.toggle_autofetch(False)
     assert pxweb.autofetch is False
