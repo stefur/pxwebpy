@@ -84,18 +84,14 @@ class PxWeb:
     @property
     def query(self) -> dict:
         """
-        Getter for the query
-
-        :return: The query as a dictionary.
+        Getter for the query.
         """
         return self.__query
 
     @query.setter
     def query(self, json_query: Path | str) -> None:
         """
-        Set the query, accepting different variants
-
-        :param json_query: The query in JSON format or a path to a JSON file.
+        Set the JSON query, accepting either a `Path` to a file or a `str`.
         """
         match json_query:
             case Path():
@@ -107,7 +103,6 @@ class PxWeb:
                         raise ValueError(
                             "Provided file could not be decoded as JSON."
                         ) from err
-
             case str():
                 try:
                     self.__query = json.loads(json_query)
