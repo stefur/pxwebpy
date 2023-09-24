@@ -9,9 +9,9 @@ from pxwebpy import PxWeb
 
 some_data = PxWeb(url, query)
 
-pandas_df = pd.DataFrame(some_data.data)
+pandas_df = pd.DataFrame(some_data.dataset)
 
-polars_df = pl.DataFrame(some_data.data)
+polars_df = pl.DataFrame(some_data.dataset)
 ```
 
 See examples for more details.

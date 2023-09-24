@@ -9,60 +9,57 @@ import requests
 
 class PxWeb:
     """
-    A helper to manage and get data from the PxWeb API.
+    A helper class to get data from the PxWeb API.
     """
 
-    def __init__(self, url=None, json_query=None, autofetch=True) -> None:
+    def __init__(self, url, json_query, autofetch=True) -> None:
         """
         :param url: The PxWeb API URL.
         :param json_query: The query in JSON format.
         :param autofetch: Whether to automatically fetch data upon instantiation.
         """
         self.url: str = url
-        self.query: dict | None = json_query
-        self.data: list[dict] | None = None
+        self.query: dict = json_query
+        self.dataset: list[dict] | None = None
         self.autofetch: bool = autofetch
 
-        if self.url is not None and self.query is not None and self.autofetch:
+        if self.query["response"]["format"] != "json-stat":
+            raise TypeError(
+                f"""Response format must be 'json-stat', got '{self.query["response"]["format"]}'."""
+            )
+
+        if self.autofetch:
             self.get_data()
 
     def __repr__(self):
-        return f"PxWeb(url='{self.url}', query={self.query}, autofetch={self.autofetch}, data={self.data})"
+        return f"PxWeb(url='{self.url}', query={self.query}, autofetch={self.autofetch}, data={self.dataset})"
 
-    def get_data(self, json_query=None) -> None:
+    def get_data(self) -> None:
         """Get data from the API"""
-        if json_query is not None:
-            self.query = json_query
-        if self.query is not None:
-            response = requests.post(self.url, json=self.query, timeout=10)
-            if response.status_code == 200:
-                self.data = self._response_handler(json.loads(response.text))
-            else:
-                warn(
-                    f"Failed to retrieve data: {response.status_code}: {response.reason}"
-                )
+        response = requests.post(self.url, json=self.query, timeout=10)
+        if response.status_code == 200:
+            self.dataset = self._response_handler(json.loads(response.text))
         else:
-            raise ValueError("Cannot get data if query is None.")
+            warn(f"Failed to retrieve data: {response.status_code}: {response.reason}")
 
-    def _response_handler(self, response: dict) -> list[dict] | None:
+    def _response_handler(self, response: dict) -> list[dict]:
         """
         Takes the response json-stat and turns it into a list of dicts that can
         be used to convert into a dataframe, using either pandas or polars.
         """
-        if self.query is None or response is None:
-            raise ValueError("`query` and/or `data` cannot be None.")
-        if self.query["response"]["format"] != "json-stat":
-            raise TypeError("Currently only response format 'json-stat' is supported.")
+        if response is None:
+            raise ValueError("response cannot be None.")
+
         query_dims = [dim["code"] for dim in self.query["query"]]
-        data_dims = response["dataset"]["dimension"]
+        response_dims = response["dataset"]["dimension"]
 
         category_labels = {}
-        for dim in data_dims:
+        for dim in response_dims:
             if dim in query_dims and dim != "ContentsCode":
-                label = data_dims[dim]["category"]["label"]
-                category_labels.update({data_dims[dim]["label"]: label.values()})
+                label = response_dims[dim]["category"]["label"]
+                category_labels.update({response_dims[dim]["label"]: label.values()})
             if dim == "ContentsCode":
-                value_label = list(data_dims[dim]["category"]["label"].values())[0]
+                value_label = list(response_dims[dim]["category"]["label"].values())[0]
 
         result = [
             dict(zip(category_labels.keys(), x))
@@ -85,7 +82,7 @@ class PxWeb:
         self.autofetch = enable
 
     @property
-    def query(self) -> dict | None:
+    def query(self) -> dict:
         """
         Getter for the query
 
@@ -94,7 +91,7 @@ class PxWeb:
         return self.__query
 
     @query.setter
-    def query(self, json_query: Path | str | None) -> None:
+    def query(self, json_query: Path | str) -> None:
         """
         Set the query, accepting different variants
 
@@ -120,16 +117,9 @@ class PxWeb:
                         "Provided string could not be decoded as JSON."
                     ) from err
             case None:
-                self.__query = None
+                raise ValueError("Query cannot be None.")
             case _:
                 raise TypeError(
                     f"Invalid input for `json_query`. \
                     Expected `str` or `Path`, got {type(json_query)!r}."
                 )
-
-    @query.deleter
-    def query(self) -> None:
-        """
-        Delete the query, setting it to None.
-        """
-        self.__query = None
