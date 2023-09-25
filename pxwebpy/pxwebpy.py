@@ -59,7 +59,9 @@ class PxWeb:
         category_labels = {}
         for dim in response_dims:
             if dim in response["role"]["metric"]:
-                value_label = list(response_dims[dim]["category"]["label"].values())[0]
+                value_label = next(
+                    iter(response_dims[dim]["category"]["label"].values()), None
+                )
             else:
                 label = response_dims[dim]["category"]["label"]
                 category_labels.update({response_dims[dim]["label"]: label.values()})
