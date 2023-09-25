@@ -7,11 +7,11 @@ import polars as pl
 
 from pxwebpy import PxWeb
 
-some_data = PxWeb(url, query)
+some_px_table = PxWeb(url, query)
 
-pandas_df = pd.DataFrame(some_data.dataset)
+pandas_df = pd.DataFrame(some_px_table.dataset)
 
-polars_df = pl.DataFrame(some_data.dataset)
+polars_df = pl.DataFrame(some_px_table.dataset)
 ```
 
 See examples for more details.

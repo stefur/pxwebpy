@@ -51,9 +51,10 @@ QUERY = """
     }
   ],
   "response": {
-    "format": "json-stat"
+    "format": "json-stat2"
   }
-}"""
+}
+"""
 
 # From a string
 data1 = PxWeb(URL, QUERY)

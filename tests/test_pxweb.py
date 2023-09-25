@@ -49,7 +49,7 @@ QUERY = """
     }
   ],
   "response": {
-    "format": "json-stat"
+    "format": "json-stat2"
   }
 }"""
 

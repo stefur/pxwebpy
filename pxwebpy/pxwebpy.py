@@ -25,9 +25,9 @@ class PxWeb:
 
         try:
             response_format = self.query["response"]["format"]
-            if response_format != "json-stat":
+            if response_format != "json-stat2":
                 raise TypeError(
-                    f"""Response format must be 'json-stat', got '{self.query["response"]["format"]}'."""
+                    f"""Response format must be 'json-stat2', got '{self.query["response"]["format"]}'."""
                 )
         except KeyError as err:
             raise KeyError(f"Invalid query format. {err} not found.")
@@ -55,22 +55,22 @@ class PxWeb:
             raise ValueError("response cannot be None.")
 
         query_dims = [dim["code"] for dim in self.query["query"]]
-        response_dims = response["dataset"]["dimension"]
+        response_dims = response["dimension"]
 
         category_labels = {}
         for dim in response_dims:
-            if dim in query_dims and dim != "ContentsCode":
+            if dim in response["role"]["metric"]:
+                value_label = list(response_dims[dim]["category"]["label"].values())[0]
+            elif dim in query_dims:
                 label = response_dims[dim]["category"]["label"]
                 category_labels.update({response_dims[dim]["label"]: label.values()})
-            if dim == "ContentsCode":
-                value_label = list(response_dims[dim]["category"]["label"].values())[0]
 
         result = [
             dict(zip(category_labels.keys(), x))
             for x in itertools.product(*category_labels.values())
         ]
 
-        all_values = response["dataset"]["value"]
+        all_values = response["value"]
 
         for value, dict_row in zip(all_values, result):
             dict_row.update({value_label: value})
