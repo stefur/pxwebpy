@@ -54,14 +54,13 @@ class PxWeb:
         if response is None:
             raise ValueError("response cannot be None.")
 
-        query_dims = [dim["code"] for dim in self.query["query"]]
         response_dims = response["dimension"]
 
         category_labels = {}
         for dim in response_dims:
             if dim in response["role"]["metric"]:
                 value_label = list(response_dims[dim]["category"]["label"].values())[0]
-            elif dim in query_dims:
+            else:
                 label = response_dims[dim]["category"]["label"]
                 category_labels.update({response_dims[dim]["label"]: label.values()})
 
