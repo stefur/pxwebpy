@@ -75,9 +75,14 @@ class PxWeb:
 
         response_dims = response["dimension"]
 
+        try:
+            metric = response["role"]["metric"]
+        except KeyError as err:
+            raise KeyError(f"Response error: {err} not found. Cannot parse data.")
+
         category_labels = {}
         for dim in response_dims:
-            if dim in response["role"]["metric"]:
+            if dim in metric:
                 value_label = next(
                     iter(response_dims[dim]["category"]["label"].values()), None
                 )
