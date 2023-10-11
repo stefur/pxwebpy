@@ -5,6 +5,7 @@ from json import JSONDecodeError
 from warnings import warn
 import itertools
 import requests
+from datetime import datetime
 
 
 class PxWeb:
@@ -21,6 +22,8 @@ class PxWeb:
         self.url: str = url
         self.query: dict = query
         self.dataset: list[dict] | None = None
+        self.metadata: dict = {key: None for key in ["label", "source", "updated"]}
+        self.last_refresh: datetime | None = None
         self.autofetch: bool = autofetch
 
         try:
@@ -36,19 +39,35 @@ class PxWeb:
             self.get_data()
 
     def __repr__(self):
-        return f"PxWeb(url='{self.url}', query={self.query}, autofetch={self.autofetch}, data={self.dataset})"
+        return f"""PxWeb(url='{self.url}',
+        query={self.query},
+        metadata={self.metadata},
+        autofetch={self.autofetch},
+        last_refresh={self.last_refresh},
+        data={self.dataset})"""
 
     def get_data(self) -> None:
         """Get data from the API"""
         response = requests.post(self.url, json=self.query, timeout=10)
         if response.status_code == 200:
-            self.dataset = self._response_handler(json.loads(response.text))
+            json_data = json.loads(response.text)
+
+            self.dataset = self._unpack_data(json_data)
+            self.metadata.update(
+                {
+                    "label": json_data["label"],
+                    "source": json_data["source"],
+                    "updated": json_data["updated"],
+                }
+            )
+            self.last_refresh = datetime.now()
+
         else:
             warn(f"Failed to retrieve data: {response.status_code}: {response.reason}")
 
-    def _response_handler(self, response: dict) -> list[dict]:
+    def _unpack_data(self, response: dict) -> list[dict]:
         """
-        Takes the response json-stat and turns it into a list of dicts that can
+        Takes the response json-stat2 and turns it into a list of dicts that can
         be used to convert into a dataframe, using either pandas or polars.
         """
         if response is None:
