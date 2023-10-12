@@ -4,8 +4,8 @@ import json
 from json import JSONDecodeError
 from warnings import warn
 import itertools
-import requests
 from datetime import datetime
+import requests
 
 
 class PxWeb:
@@ -30,10 +30,11 @@ class PxWeb:
             response_format = self.query["response"]["format"]
             if response_format != "json-stat2":
                 raise TypeError(
-                    f"""Response format must be 'json-stat2', got '{self.query["response"]["format"]}'."""
+                    f"""Response format must be 'json-stat2', \
+                    got '{self.query["response"]["format"]}'."""
                 )
         except KeyError as err:
-            raise KeyError(f"Invalid query format. {err} not found.")
+            raise KeyError(f"Invalid query format. {err} not found.") from err
 
         if self.autofetch:
             self.get_data()
@@ -74,7 +75,8 @@ class PxWeb:
 
             if missing_metadata:
                 warn(
-                    f"Response is missing the following metadata keys: {', '.join(missing_metadata)}."
+                    f"Response is missing the following \
+                        metadata keys: {', '.join(missing_metadata)}."
                 )
 
             self.metadata.update({"label": label, "source": source, "updated": updated})
@@ -103,7 +105,8 @@ class PxWeb:
         category_labels = {}
         for dim in response_dims:
             if metric is not None and dim in metric:
-                # Extract the first (and only) metric label from the values list or use an empty string as a default
+                # Extract the first (and only) metric label
+                # from the values list or use an empty string as a default.
                 value_label = next(
                     iter(response_dims[dim]["category"]["label"].values()), ""
                 )
