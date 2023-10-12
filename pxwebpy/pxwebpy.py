@@ -75,16 +75,19 @@ class PxWeb:
 
         response_dims = response["dimension"]
 
+        # Check if the response contains a metric, otherwise we default to using "value" as label
         try:
             metric = response["role"]["metric"]
-        except KeyError as err:
-            raise KeyError(f"Response error: {err} not found. Cannot parse data.")
+        except KeyError:
+            metric = None
+            value_label = "value"
 
         category_labels = {}
         for dim in response_dims:
-            if dim in metric:
+            if metric is not None and dim in metric:
+                # Extract the first (and only) metric label from the values list or use an empty string as a default
                 value_label = next(
-                    iter(response_dims[dim]["category"]["label"].values()), None
+                    iter(response_dims[dim]["category"]["label"].values()), ""
                 )
             else:
                 label = response_dims[dim]["category"]["label"]
