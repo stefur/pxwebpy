@@ -53,13 +53,31 @@ class PxWeb:
             json_data = json.loads(response.text)
 
             self.dataset = self._unpack_data(json_data)
-            self.metadata.update(
-                {
-                    "label": json_data["label"],
-                    "source": json_data["source"],
-                    "updated": json_data["updated"],
-                }
-            )
+
+            # Check if any metadata is missing and warn the user.
+            missing_metadata = []
+
+            try:
+                label = json_data["label"]
+            except KeyError:
+                missing_metadata.append("label")
+
+            try:
+                source = json_data["source"]
+            except KeyError:
+                missing_metadata.append("source")
+
+            try:
+                updated = json_data["updated"]
+            except KeyError:
+                missing_metadata.append("updated")
+
+            if missing_metadata:
+                warn(
+                    f"Response is missing the following metadata keys: {', '.join(missing_metadata)}."
+                )
+
+            self.metadata.update({"label": label, "source": source, "updated": updated})
             self.last_refresh = datetime.now()
 
         else:
