@@ -24,7 +24,6 @@ class PxWeb:
         self.dataset: list[dict] | None = None
         self.metadata: dict = {key: None for key in ["label", "source", "updated"]}
         self.last_refresh: datetime | None = None
-        self.autofetch: bool = autofetch
 
         try:
             response_format = self.query["response"]["format"]
@@ -36,14 +35,13 @@ class PxWeb:
         except KeyError as err:
             raise KeyError(f"Invalid query format. {err} not found.") from err
 
-        if self.autofetch:
+        if autofetch:
             self.get_data()
 
     def __repr__(self):
         return f"""PxWeb(url='{self.url}',
         query={self.query},
         metadata={self.metadata},
-        autofetch={self.autofetch},
         last_refresh={self.last_refresh},
         data={self.dataset})"""
 
@@ -125,14 +123,6 @@ class PxWeb:
             dict_row.update({value_label: value})
 
         return result
-
-    def toggle_autofetch(self, enable: bool) -> None:
-        """
-        Toggle the autofetch behavior.
-
-        :param enable: True to enable autofetch, False to disable.
-        """
-        self.autofetch = enable
 
     @property
     def query(self) -> dict:

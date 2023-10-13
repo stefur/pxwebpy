@@ -85,11 +85,3 @@ def test_get_data_failure():
     """Invalid URL should raise a ValueError"""
     with pytest.raises(ValueError):
         PxWeb(url="invalid_url", query=QUERY)
-
-
-def test_toggle_autofetch():
-    """It should be possible to toggle the autofetch"""
-    pxweb = PxWeb(url=URL, query=QUERY)
-    assert pxweb.autofetch is True
-    pxweb.toggle_autofetch(False)
-    assert pxweb.autofetch is False
