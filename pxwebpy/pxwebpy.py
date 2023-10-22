@@ -43,7 +43,7 @@ class PxWeb:
         query={self.query},
         metadata={self.metadata},
         last_refresh={self.last_refresh},
-        data={self.dataset})"""
+        dataset={self.dataset})"""
 
     def get_data(self) -> None:
         """Get data from the API"""
