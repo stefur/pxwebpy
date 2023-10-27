@@ -1,6 +1,6 @@
 # pxwebpy
 [![ci](https://github.com/stefur/pxwebpy/actions/workflows/ci.yml/badge.svg)](https://github.com/stefur/pxwebpy/actions/workflows/ci.yml)
-[![release](https://github.com/stefur/pxwebpy/actions/workflows/release.yml/badge.svg)](https://github.com/stefur/pxwebpy/actions/workflows/release.yml)  
+[![release](https://github.com/stefur/pxwebpy/actions/workflows/release.yml/badge.svg?event=release)](https://github.com/stefur/pxwebpy/actions/workflows/release.yml)   
 Easily get data from the PxWeb API and into either a polars or pandas dataframe.  
   
 Pxwebpy parses the PxWeb table data as well as metadata using the json-stat2 response format. 
