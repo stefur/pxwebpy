@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pxwebpy"
-version = "0.1.0"
+version = "0.1.1"
 description = "Get data from PxWeb API easily."
 authors = ["stefur <stefan@furne.net>"]
 license = "MIT"
