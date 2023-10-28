@@ -5,6 +5,17 @@ description = "Get data from PxWeb API easily."
 authors = ["stefur <stefan@furne.net>"]
 license = "MIT"
 readme = "README.md"
+repository = "https://github.com/stefur/pxwebpy/"
+keywords = ["pxweb", "statistics", "dataframes", "pandas", "polars"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+[tool.poetry.urls]
+"Issue tracker" = "https://github.com/stefur/pxwebpy/issues"
 
 [tool.poetry.dependencies]
 python = "^3.11"
