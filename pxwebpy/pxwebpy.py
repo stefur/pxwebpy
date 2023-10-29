@@ -10,17 +10,75 @@ import requests
 
 class PxWeb:
     """
-    A helper class to get data from the PxWeb API.
+    A helper object to get data from the PxWeb API.
+    The table dataset is collected as a long format.
+
+    Parameters
+    ----------
+    url : str
+        The PxWeb API URL for the table to query.
+    query :  str or Path
+        The query must be in JSON format, supplied either as a string or Path to a file.
+    autofetch : bool, default True
+        Whether to automatically fetch data from the URL upon instantiation of the object.
+
+    Example
+    --------
+    Fetching data with a very simple query and turning it into a Pandas dataframe:
+
+    >>> import pandas as pd
+
+    >>> URL = "https://api.scb.se/OV0104/v1/doris/sv/ssd/START/HE/HE0110/HE0110A/SamForvInk1"
+
+    >>> QUERY = "
+            {
+                "query": [
+                    {
+                    "code": "Tid",
+                    "selection": {
+                        "filter": "item",
+                        "values": [
+                        "2021"
+                        ]
+                    }
+                    }
+                ],
+                "response": {
+                    "format": "json-stat2"
+                }
+            }
+        "
+
+    >>> tbl = PxWeb(URL, QUERY)
+    >>> print(tbl)
+
+    PxWeb(url='https://api.scb.se/OV0104/v1/doris/sv/ssd/START/HE/HE0110/HE0110A/SamForvInk1',
+        query={'query': [{'code': 'Tid', 'selection': {'filter': 'item', 'values': ['2021']}}], 'response': {'format': 'json-stat2'}},
+        metadata={'label': 'Sammanräknad förvärvsinkomst för boende i Sverige hela året efter ålder, tabellinnehåll och år', 'source': 'SCB', 'updated': '2023-01-10T10:42:00Z'},
+        last_refresh=2023-10-29 14:21:57.628639,
+        dataset=[{'ålder': 'totalt 16+ år', 'tabellinnehåll': 'Medelinkomst, tkr', 'år': '2021' ...
+
+    >>> df = pd.DataFrame(tbl.dataset)
+    >>> print(df)
+                ålder      tabellinnehåll    år      value
+    0   totalt 16+ år   Medelinkomst, tkr  2021      331.5
+    1   totalt 16+ år  Medianinkomst, tkr  2021      301.5
+    2   totalt 16+ år    Totalsumma, mnkr  2021  2779588.9
+    3   totalt 16+ år      Antal personer  2021  8383640.0
+    4        16-19 år   Medelinkomst, tkr  2021       28.1
+    ..            ...                 ...   ...        ...
+    71       80-84 år      Antal personer  2021   290684.0
+    72         85+ år   Medelinkomst, tkr  2021      214.4
+    73         85+ år  Medianinkomst, tkr  2021      200.1
+    74         85+ år    Totalsumma, mnkr  2021    57529.3
+    75         85+ år      Antal personer  2021   268320.0
+
+    [76 rows x 4 columns]
     """
 
     def __init__(self, url, query, autofetch=True) -> None:
-        """
-        :param url: The PxWeb API URL.
-        :param query: The query in JSON format.
-        :param autofetch: Whether to automatically fetch data upon instantiation.
-        """
         self.url: str = url
-        self.query: dict = query
+        self.query: dict | Path = query
         self.dataset: list[dict] | None = None
         self.metadata: dict = {key: None for key in ["label", "source", "updated"]}
         self.last_refresh: datetime | None = None
