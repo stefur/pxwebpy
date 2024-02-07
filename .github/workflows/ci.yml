@@ -16,18 +16,17 @@ jobs:
         python-version: ["3.11", "3.12"]
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
+    - name: Install the latest version of rye
+      uses: eifinger/setup-rye@v1
 
-    - name: Install rye
-      uses: sksat/setup-rye@v0.13.0
+    - name: Setup rye
+      run: |
+        rye fetch ${{ matrix.python-version }}
+        echo ${{ matrix.python-version }} > .python-version
 
     - name: Install dependencies
       run: |
-        python -m pip install --no-cache-dir .
+        rye sync --no-lock
 
     - name: Run tests
       run: |
