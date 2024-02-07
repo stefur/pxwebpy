@@ -35,5 +35,5 @@ jobs:
 
     - name: Lint and format
       run: |
-      rye lint
-      rye fmt
+        rye lint
+        rye fmt
