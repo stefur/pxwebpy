@@ -1,10 +1,8 @@
-[tool.poetry]
+[project]
 name = "pxwebpy"
 version = "0.1.2"
 description = "Get data from PxWeb API easily."
-authors = ["stefur <stefan@furne.net>"]
 license = "MIT"
-readme = "README.md"
 repository = "https://github.com/stefur/pxwebpy/"
 keywords = ["pxweb", "statistics", "dataframes", "pandas", "polars"]
 classifiers = [
@@ -13,23 +11,32 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
+authors = [
+    { name = "stefur", email = "stefan@furne.net" }
+]
+dependencies = [
+    "requests>=2.31.0",
+]
+readme = "README.md"
+requires-python = ">= 3.11"
 
-[tool.poetry.urls]
+[project.urls]
 "Issue tracker" = "https://github.com/stefur/pxwebpy/issues"
 
-[tool.poetry.dependencies]
-python = "^3.11"
-requests = "2.31"
-
-
-[tool.poetry.group.dev.dependencies]
-mypy = "^1.5.1"
-ipykernel = "^6.25.2"
-pytest = "^7.4.2"
-ruff = "^0.1.0"
-black = "^23.10.0"
-pre-commit = "^3.5.0"
-
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = [
+    "pytest>=8.0.0",
+    "types-requests>=2.31.0.20240125",
+    "pandas-stubs>=2.1.4.231227",
+]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pxwebpy"]

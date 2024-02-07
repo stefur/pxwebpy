@@ -1,10 +1,11 @@
 """Helper to make fetching data from PxWeb a bit easier"""
-from pathlib import Path
-import json
-from json import JSONDecodeError
-from warnings import warn
 import itertools
+import json
 from datetime import datetime
+from json import JSONDecodeError
+from pathlib import Path
+from warnings import warn
+
 import requests
 
 

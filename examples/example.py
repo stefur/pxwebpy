@@ -2,8 +2,7 @@
 from pathlib import Path
 
 import pandas as pd
-import polars as pl
-
+import polars as pl  # type: ignore
 from pxwebpy import PxWeb
 
 URL = "https://api.scb.se/OV0104/v1/doris/sv/ssd/START/HE/HE0110/HE0110A/SamForvInk1"
