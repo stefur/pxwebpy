@@ -13,26 +13,23 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.11", "3.12"]
+        python-version: ["3.11"]
 
     steps:
-    - name: Install the latest version of rye
-      uses: eifinger/setup-rye@v1
+    - uses: actions/checkout@v3
+    - name: setup rye
+      uses: sksat/setup-rye@v0.13.0
 
     - name: Setup rye
       run: |
         rye fetch ${{ matrix.python-version }}
-        echo ${{ matrix.python-version }} > .python-version
+        rye pin ${{ matrix.python-version }}
 
-    - name: Install dependencies
+    - name: Install dependencies and build
       run: |
-        rye sync --no-lock
+        rye sync
 
-    - name: Run tests
-      run: |
-        rye run pytest
-
-    - name: Lint and format
+    - name: Lint and run tests
       run: |
         rye lint
-        rye fmt
+        rye run pytest
