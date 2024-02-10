@@ -1,6 +1,7 @@
 # pxwebpy
 [![ci](https://github.com/stefur/pxwebpy/actions/workflows/ci.yml/badge.svg)](https://github.com/stefur/pxwebpy/actions/workflows/ci.yml)
-[![release](https://github.com/stefur/pxwebpy/actions/workflows/release.yml/badge.svg?event=release)](https://github.com/stefur/pxwebpy/actions/workflows/release.yml)   
+[![Rye](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/mitsuhiko/rye/main/artwork/badge.json)](https://rye-up.com)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)   
 Easily get data from the PxWeb API and into either a polars or pandas dataframe.  
   
 Pxwebpy parses the PxWeb table data as well as metadata using the json-stat2 response format. 
