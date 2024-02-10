@@ -13,23 +13,26 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.11"]
+        python-version: ["3.11", "3.12"]
 
     steps:
-    - uses: actions/checkout@v3
-    - name: setup rye
-      uses: sksat/setup-rye@v0.13.0
+    - uses: actions/checkout@v4
+    
+    - name: Install and setup rye
+      run: | 
+        curl -sSf https://rye-up.com/get | RYE_VERSION="0.22.0" RYE_TOOLCHAIN_VERSION="${{ matrix.python-version }}" RYE_INSTALL_OPTION="--yes" bash
+        echo "$HOME/.rye/shims" >> $GITHUB_PATH
 
-    - name: Setup rye
+    - name: Pin ${{ matrix.python-version }}
       run: |
-        rye fetch ${{ matrix.python-version }}
         rye pin ${{ matrix.python-version }}
 
-    - name: Install dependencies and build
+    - name: Run tests and lint
       run: |
-        rye sync
-
-    - name: Lint and run tests
-      run: |
-        rye lint
+        rye sync --no-lock
         rye run pytest
+        rye lint
+
+    - name: Build
+      run: |
+        rye build
