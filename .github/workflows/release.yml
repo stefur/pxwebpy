@@ -11,29 +11,17 @@ jobs:
       fail-fast: false
     
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v3
-        with:
-          python-version: "3.12"
+      - uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-
-      - name: Install Poetry Action
-        uses: snok/install-poetry@v1.3.4
-    
-      - name: Install dependencies
-        run: |
-          poetry install --no-dev
+      - name: Install and setup rye
+        run: | 
+          curl -sSf https://rye-up.com/get | RYE_VERSION="0.22.0" RYE_TOOLCHAIN_VERSION="${{ matrix.python-version }}" RYE_INSTALL_OPTION="--yes" bash
+          echo "$HOME/.rye/shims" >> $GITHUB_PATH
 
       - name: Build for distribution
         run: |
-          poetry build
+          rye build
     
       - name: Publish to PyPI
-        env:
-          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
         run: |
-          poetry publish
+          rye publish --token ${{ secrets.PYPI_TOKEN }} --yes
