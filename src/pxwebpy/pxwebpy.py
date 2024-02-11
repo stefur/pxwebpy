@@ -79,9 +79,11 @@ class PxWeb:
 
     def __init__(self, url, query, autofetch=True) -> None:
         self.url: str = url
-        self.query: dict | Path = query
+        self.query: dict = query
         self.dataset: list[dict] | None = None
-        self.metadata: dict = {key: None for key in ["label", "source", "updated"]}
+        self.metadata: dict = {
+            key: None for key in ["label", "note", "source", "updated"]
+        }
         self.last_refresh: datetime | None = None
 
         try:
@@ -91,13 +93,14 @@ class PxWeb:
                     f"""Response format must be 'json-stat2', \
                     got '{self.query["response"]["format"]}'."""
                 )
-        except KeyError as err:
-            raise KeyError(f"Invalid query format. {err} not found.") from err
+        except Exception as err:
+            print(f"An error occured: {err}")
+            raise Exception("Invalid query format.") from err
 
         if autofetch:
             self.get_data()
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"""PxWeb(url='{self.url}',
         query={self.query},
         metadata={self.metadata},
@@ -112,31 +115,12 @@ class PxWeb:
 
             self.dataset = self._unpack_data(json_data)
 
-            # Check if any metadata is missing and warn the user.
-            missing_metadata = []
+            metadata_keys = ["label", "note", "source", "updated"]
 
-            try:
-                label = json_data["label"]
-            except KeyError:
-                missing_metadata.append("label")
+            self.metadata = self.metadata = {
+                key: json_data.get(key) for key in metadata_keys
+            }
 
-            try:
-                source = json_data["source"]
-            except KeyError:
-                missing_metadata.append("source")
-
-            try:
-                updated = json_data["updated"]
-            except KeyError:
-                missing_metadata.append("updated")
-
-            if missing_metadata:
-                warn(
-                    f"Response is missing the following \
-                        metadata keys: {', '.join(missing_metadata)}."
-                )
-
-            self.metadata.update({"label": label, "source": source, "updated": updated})
             self.last_refresh = datetime.now()
 
         else:
