@@ -1,5 +1,4 @@
 """pxwebpy pulling some data to Pandas and Polars respectively"""
-from pathlib import Path
 
 import pandas as pd
 import polars as pl  # type: ignore
@@ -59,7 +58,7 @@ QUERY = """
 data1 = PxWeb(URL, QUERY)
 
 # Same query, from a file
-data2 = PxWeb(URL, Path("example_query.json"))
+data2 = PxWeb(URL, "example_query.json")
 
 # The object can be instantiated without running the query immediately
 # by setting the autofetch flag to `False`
