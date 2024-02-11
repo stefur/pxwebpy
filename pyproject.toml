@@ -23,6 +23,11 @@ requires-python = ">= 3.11"
 [project.urls]
 "Issue tracker" = "https://github.com/stefur/pxwebpy/issues"
 
+[project.optional-dependencies]
+ci = [
+    "pytest>=8.0.0",
+]
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
@@ -32,6 +37,8 @@ managed = true
 dev-dependencies = [
     "pytest>=8.0.0",
     "types-requests>=2.31.0.20240125",
+    "polars>=0.20.7",
+    "pandas>=2.2.0",
     "pandas-stubs>=2.1.4.231227",
 ]
 
