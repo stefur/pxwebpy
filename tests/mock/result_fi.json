@@ -1,0 +1,632 @@
+[
+    {
+        "År": "2020",
+        "Kön": "Totalt",
+        "Ålder": "20 - 24",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 308410
+    },
+    {
+        "År": "2020",
+        "Kön": "Totalt",
+        "Ålder": "25 - 29",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 352990
+    },
+    {
+        "År": "2020",
+        "Kön": "Totalt",
+        "Ålder": "30 - 34",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 355067
+    },
+    {
+        "År": "2020",
+        "Kön": "Totalt",
+        "Ålder": "35 - 39",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 363694
+    },
+    {
+        "År": "2020",
+        "Kön": "Totalt",
+        "Ålder": "40 - 44",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 348531
+    },
+    {
+        "År": "2020",
+        "Kön": "Totalt",
+        "Ålder": "45 - 49",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 317890
+    },
+    {
+        "År": "2020",
+        "Kön": "Totalt",
+        "Ålder": "50 - 54",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 347146
+    },
+    {
+        "År": "2020",
+        "Kön": "Totalt",
+        "Ålder": "55 - 59",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 367783
+    },
+    {
+        "År": "2020",
+        "Kön": "Totalt",
+        "Ålder": "60 - 64",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 357251
+    },
+    {
+        "År": "2020",
+        "Kön": "Totalt",
+        "Ålder": "65 - 69",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 353975
+    },
+    {
+        "År": "2020",
+        "Kön": "Män",
+        "Ålder": "20 - 24",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 159178
+    },
+    {
+        "År": "2020",
+        "Kön": "Män",
+        "Ålder": "25 - 29",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 181808
+    },
+    {
+        "År": "2020",
+        "Kön": "Män",
+        "Ålder": "30 - 34",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 183434
+    },
+    {
+        "År": "2020",
+        "Kön": "Män",
+        "Ålder": "35 - 39",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 187719
+    },
+    {
+        "År": "2020",
+        "Kön": "Män",
+        "Ålder": "40 - 44",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 178936
+    },
+    {
+        "År": "2020",
+        "Kön": "Män",
+        "Ålder": "45 - 49",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 162358
+    },
+    {
+        "År": "2020",
+        "Kön": "Män",
+        "Ålder": "50 - 54",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 174856
+    },
+    {
+        "År": "2020",
+        "Kön": "Män",
+        "Ålder": "55 - 59",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 183465
+    },
+    {
+        "År": "2020",
+        "Kön": "Män",
+        "Ålder": "60 - 64",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 175134
+    },
+    {
+        "År": "2020",
+        "Kön": "Män",
+        "Ålder": "65 - 69",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 169845
+    },
+    {
+        "År": "2020",
+        "Kön": "Kvinnor",
+        "Ålder": "20 - 24",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 149232
+    },
+    {
+        "År": "2020",
+        "Kön": "Kvinnor",
+        "Ålder": "25 - 29",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 171182
+    },
+    {
+        "År": "2020",
+        "Kön": "Kvinnor",
+        "Ålder": "30 - 34",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 171633
+    },
+    {
+        "År": "2020",
+        "Kön": "Kvinnor",
+        "Ålder": "35 - 39",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 175975
+    },
+    {
+        "År": "2020",
+        "Kön": "Kvinnor",
+        "Ålder": "40 - 44",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 169595
+    },
+    {
+        "År": "2020",
+        "Kön": "Kvinnor",
+        "Ålder": "45 - 49",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 155532
+    },
+    {
+        "År": "2020",
+        "Kön": "Kvinnor",
+        "Ålder": "50 - 54",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 172290
+    },
+    {
+        "År": "2020",
+        "Kön": "Kvinnor",
+        "Ålder": "55 - 59",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 184318
+    },
+    {
+        "År": "2020",
+        "Kön": "Kvinnor",
+        "Ålder": "60 - 64",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 182117
+    },
+    {
+        "År": "2020",
+        "Kön": "Kvinnor",
+        "Ålder": "65 - 69",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 184130
+    },
+    {
+        "År": "2021",
+        "Kön": "Totalt",
+        "Ålder": "20 - 24",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 305266
+    },
+    {
+        "År": "2021",
+        "Kön": "Totalt",
+        "Ålder": "25 - 29",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 349251
+    },
+    {
+        "År": "2021",
+        "Kön": "Totalt",
+        "Ålder": "30 - 34",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 361543
+    },
+    {
+        "År": "2021",
+        "Kön": "Totalt",
+        "Ålder": "35 - 39",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 364634
+    },
+    {
+        "År": "2021",
+        "Kön": "Totalt",
+        "Ålder": "40 - 44",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 350308
+    },
+    {
+        "År": "2021",
+        "Kön": "Totalt",
+        "Ålder": "45 - 49",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 325423
+    },
+    {
+        "År": "2021",
+        "Kön": "Totalt",
+        "Ålder": "50 - 54",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 337196
+    },
+    {
+        "År": "2021",
+        "Kön": "Totalt",
+        "Ålder": "55 - 59",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 366313
+    },
+    {
+        "År": "2021",
+        "Kön": "Totalt",
+        "Ålder": "60 - 64",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 354782
+    },
+    {
+        "År": "2021",
+        "Kön": "Totalt",
+        "Ålder": "65 - 69",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 354164
+    },
+    {
+        "År": "2021",
+        "Kön": "Män",
+        "Ålder": "20 - 24",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 157456
+    },
+    {
+        "År": "2021",
+        "Kön": "Män",
+        "Ålder": "25 - 29",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 180133
+    },
+    {
+        "År": "2021",
+        "Kön": "Män",
+        "Ålder": "30 - 34",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 186959
+    },
+    {
+        "År": "2021",
+        "Kön": "Män",
+        "Ålder": "35 - 39",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 188746
+    },
+    {
+        "År": "2021",
+        "Kön": "Män",
+        "Ålder": "40 - 44",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 179969
+    },
+    {
+        "År": "2021",
+        "Kön": "Män",
+        "Ålder": "45 - 49",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 166795
+    },
+    {
+        "År": "2021",
+        "Kön": "Män",
+        "Ålder": "50 - 54",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 169983
+    },
+    {
+        "År": "2021",
+        "Kön": "Män",
+        "Ålder": "55 - 59",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 182956
+    },
+    {
+        "År": "2021",
+        "Kön": "Män",
+        "Ålder": "60 - 64",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 174053
+    },
+    {
+        "År": "2021",
+        "Kön": "Män",
+        "Ålder": "65 - 69",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 169895
+    },
+    {
+        "År": "2021",
+        "Kön": "Kvinnor",
+        "Ålder": "20 - 24",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 147810
+    },
+    {
+        "År": "2021",
+        "Kön": "Kvinnor",
+        "Ålder": "25 - 29",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 169118
+    },
+    {
+        "År": "2021",
+        "Kön": "Kvinnor",
+        "Ålder": "30 - 34",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 174584
+    },
+    {
+        "År": "2021",
+        "Kön": "Kvinnor",
+        "Ålder": "35 - 39",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 175888
+    },
+    {
+        "År": "2021",
+        "Kön": "Kvinnor",
+        "Ålder": "40 - 44",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 170339
+    },
+    {
+        "År": "2021",
+        "Kön": "Kvinnor",
+        "Ålder": "45 - 49",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 158628
+    },
+    {
+        "År": "2021",
+        "Kön": "Kvinnor",
+        "Ålder": "50 - 54",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 167213
+    },
+    {
+        "År": "2021",
+        "Kön": "Kvinnor",
+        "Ålder": "55 - 59",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 183357
+    },
+    {
+        "År": "2021",
+        "Kön": "Kvinnor",
+        "Ålder": "60 - 64",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 180729
+    },
+    {
+        "År": "2021",
+        "Kön": "Kvinnor",
+        "Ålder": "65 - 69",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 184269
+    },
+    {
+        "År": "2022",
+        "Kön": "Totalt",
+        "Ålder": "20 - 24",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 304385
+    },
+    {
+        "År": "2022",
+        "Kön": "Totalt",
+        "Ålder": "25 - 29",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 344950
+    },
+    {
+        "År": "2022",
+        "Kön": "Totalt",
+        "Ålder": "30 - 34",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 372101
+    },
+    {
+        "År": "2022",
+        "Kön": "Totalt",
+        "Ålder": "35 - 39",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 363619
+    },
+    {
+        "År": "2022",
+        "Kön": "Totalt",
+        "Ålder": "40 - 44",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 356657
+    },
+    {
+        "År": "2022",
+        "Kön": "Totalt",
+        "Ålder": "45 - 49",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 334702
+    },
+    {
+        "År": "2022",
+        "Kön": "Totalt",
+        "Ålder": "50 - 54",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 326045
+    },
+    {
+        "År": "2022",
+        "Kön": "Totalt",
+        "Ålder": "55 - 59",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 364009
+    },
+    {
+        "År": "2022",
+        "Kön": "Totalt",
+        "Ålder": "60 - 64",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 354703
+    },
+    {
+        "År": "2022",
+        "Kön": "Totalt",
+        "Ålder": "65 - 69",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 349928
+    },
+    {
+        "År": "2022",
+        "Kön": "Män",
+        "Ålder": "20 - 24",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 157373
+    },
+    {
+        "År": "2022",
+        "Kön": "Män",
+        "Ålder": "25 - 29",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 177930
+    },
+    {
+        "År": "2022",
+        "Kön": "Män",
+        "Ålder": "30 - 34",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 192595
+    },
+    {
+        "År": "2022",
+        "Kön": "Män",
+        "Ålder": "35 - 39",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 188248
+    },
+    {
+        "År": "2022",
+        "Kön": "Män",
+        "Ålder": "40 - 44",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 183898
+    },
+    {
+        "År": "2022",
+        "Kön": "Män",
+        "Ålder": "45 - 49",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 171537
+    },
+    {
+        "År": "2022",
+        "Kön": "Män",
+        "Ålder": "50 - 54",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 164781
+    },
+    {
+        "År": "2022",
+        "Kön": "Män",
+        "Ålder": "55 - 59",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 181875
+    },
+    {
+        "År": "2022",
+        "Kön": "Män",
+        "Ålder": "60 - 64",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 174364
+    },
+    {
+        "År": "2022",
+        "Kön": "Män",
+        "Ålder": "65 - 69",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 167972
+    },
+    {
+        "År": "2022",
+        "Kön": "Kvinnor",
+        "Ålder": "20 - 24",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 147012
+    },
+    {
+        "År": "2022",
+        "Kön": "Kvinnor",
+        "Ålder": "25 - 29",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 167020
+    },
+    {
+        "År": "2022",
+        "Kön": "Kvinnor",
+        "Ålder": "30 - 34",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 179506
+    },
+    {
+        "År": "2022",
+        "Kön": "Kvinnor",
+        "Ålder": "35 - 39",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 175371
+    },
+    {
+        "År": "2022",
+        "Kön": "Kvinnor",
+        "Ålder": "40 - 44",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 172759
+    },
+    {
+        "År": "2022",
+        "Kön": "Kvinnor",
+        "Ålder": "45 - 49",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 163165
+    },
+    {
+        "År": "2022",
+        "Kön": "Kvinnor",
+        "Ålder": "50 - 54",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 161264
+    },
+    {
+        "År": "2022",
+        "Kön": "Kvinnor",
+        "Ålder": "55 - 59",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 182134
+    },
+    {
+        "År": "2022",
+        "Kön": "Kvinnor",
+        "Ålder": "60 - 64",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 180339
+    },
+    {
+        "År": "2022",
+        "Kön": "Kvinnor",
+        "Ålder": "65 - 69",
+        "Uppgifter": "Befolkning 31.12.",
+        "value": 181956
+    }
+]
