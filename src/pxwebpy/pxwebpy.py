@@ -2,7 +2,6 @@
 import itertools
 import json
 from datetime import datetime
-from json import JSONDecodeError
 from pathlib import Path
 from warnings import warn
 
@@ -18,8 +17,8 @@ class PxWeb:
     ----------
     url : str
         The PxWeb API URL for the table to query.
-    query :  str or Path
-        The query must be in JSON format, supplied either as a string or Path to a file.
+    query :  str | dict
+        The query must be a JSON structure, supplied either as a dict, string or a string representing a path to a file.
     autofetch : bool, default True
         Whether to automatically fetch data from the URL upon instantiation of the object.
 
@@ -27,12 +26,12 @@ class PxWeb:
     --------
     Fetching data with a very simple query and turning it into a Pandas dataframe:
 
+    >>> from pxwebpy import PxWeb
     >>> import pandas as pd
 
     >>> URL = "https://api.scb.se/OV0104/v1/doris/sv/ssd/START/HE/HE0110/HE0110A/SamForvInk1"
 
-    >>> QUERY = "
-            {
+    >>> QUERY = {
                 "query": [
                     {
                     "code": "Tid",
@@ -48,7 +47,6 @@ class PxWeb:
                     "format": "json-stat2"
                 }
             }
-        "
 
     >>> tbl = PxWeb(URL, QUERY)
     >>> print(tbl)
@@ -153,6 +151,14 @@ class PxWeb:
 
         return result
 
+    def _is_path(self, query: str) -> bool:
+        """Check if query is a path or not"""
+        try:
+            path = Path(query)
+            return path.exists()
+        except Exception:
+            return False
+
     @property
     def query(self) -> dict:
         """
@@ -161,32 +167,27 @@ class PxWeb:
         return self.__query
 
     @query.setter
-    def query(self, query: Path | str) -> None:
+    def query(self, query: str | dict) -> None:
         """
-        Set the JSON query, accepting either a `Path` to a file or a `str`.
+        Set the JSON query from a string representing a path or a JSON structure that is either a string or a dict.
         """
-        match query:
-            case Path():
+
+        if not isinstance(query, str | dict):
+            raise TypeError(
+                f"""Invalid input for `query`.
+                Expected `str` or `dict`, got {type(query)!r}."""
+            )
+
+        if isinstance(query, str):
+            if self._is_path(query):
                 with open(query, mode="r", encoding="utf-8") as read_file:
-                    try:
-                        self.__query = json.load(read_file)
-                    except JSONDecodeError as err:
-                        print(f"An error occured: {err}")
-                        raise ValueError(
-                            "Provided file could not be decoded as JSON."
-                        ) from err
-            case str():
+                    self.__query = json.load(read_file)
+            else:
                 try:
                     self.__query = json.loads(query)
-                except JSONDecodeError as err:
-                    print(f"An error occured: {err}")
+                except Exception as err:
                     raise ValueError(
-                        "Provided string could not be decoded as JSON."
+                        "Provided value could not be decoded as JSON."
                     ) from err
-            case None:
-                raise ValueError("Query cannot be None.")
-            case _:
-                raise TypeError(
-                    f"Invalid input for `query`. \
-                    Expected `str` or `Path`, got {type(query)!r}."
-                )
+        else:
+            self.__query = query
