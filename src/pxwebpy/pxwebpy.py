@@ -1,4 +1,5 @@
 """Helper to make fetching data from PxWeb a bit easier"""
+
 import itertools
 import json
 from datetime import datetime
