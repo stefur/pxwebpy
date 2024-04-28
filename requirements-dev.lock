@@ -12,21 +12,21 @@ certifi==2024.2.2
     # via requests
 charset-normalizer==3.3.2
     # via requests
-idna==3.6
+idna==3.7
     # via requests
 iniconfig==2.0.0
     # via pytest
 numpy==1.26.4
     # via pandas
     # via pandas-stubs
-packaging==23.2
+packaging==24.0
     # via pytest
-pandas==2.2.1
-pandas-stubs==2.2.0.240218
-pluggy==1.4.0
+pandas==2.2.2
+pandas-stubs==2.2.1.240316
+pluggy==1.5.0
     # via pytest
-polars==0.20.14
-pytest==8.0.2
+polars==0.20.22
+pytest==8.2.0
 python-dateutil==2.9.0.post0
     # via pandas
 pytz==2024.1
@@ -35,9 +35,9 @@ requests==2.31.0
     # via pxwebpy
 six==1.16.0
     # via python-dateutil
-types-pytz==2024.1.0.20240203
+types-pytz==2024.1.0.20240417
     # via pandas-stubs
-types-requests==2.31.0.20240218
+types-requests==2.31.0.20240406
 tzdata==2024.1
     # via pandas
 urllib3==2.2.1

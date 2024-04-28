@@ -20,18 +20,18 @@ jobs:
     
     - name: Install and setup rye
       run: | 
-        curl -sSf https://rye-up.com/get | RYE_VERSION="0.28.0" RYE_TOOLCHAIN_VERSION="${{ matrix.python-version }}" RYE_INSTALL_OPTION="--yes" bash
+        curl -sSf https://rye-up.com/get | RYE_VERSION="0.33.0" RYE_TOOLCHAIN_VERSION="${{ matrix.python-version }}" RYE_INSTALL_OPTION="--yes" bash
         echo "$HOME/.rye/shims" >> $GITHUB_PATH
 
     - name: Pin ${{ matrix.python-version }}
       run: |
         rye pin ${{ matrix.python-version }}
 
-    - name: Run tests and lint
+    - name: Test and lint
       run: |
         rye lock --features ci
         rye sync --no-lock --no-dev
-        rye run pytest
+        rye test
         rye lint
 
     - name: Build
