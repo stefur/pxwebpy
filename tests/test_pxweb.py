@@ -1,4 +1,5 @@
 """Tests"""
+
 import json
 
 import pytest
@@ -57,7 +58,7 @@ QUERY = """
 
 def test_query_setter_with_string():
     """The query should be able to handle a string representing a JSON structure"""
-    pxweb = PxWeb(url=URL, query=QUERY, autofetch=False)
+    pxweb = PxWeb(url=URL, query=QUERY)
     json_query = json.loads(QUERY)
     assert pxweb.query == json_query
 
@@ -84,17 +85,18 @@ def test_query_setter_with_invalid_type():
 
 
 def test_get_data():
-    """Getting data with and without autofetch"""
-    fetch = PxWeb(url=URL, query=QUERY)
-    assert fetch.dataset is not None
-    no_fetch = PxWeb(url=URL, query=QUERY, autofetch=False)
-    assert no_fetch.dataset is None
+    """Getting data"""
+    pxweb = PxWeb(url=URL, query=QUERY)
+    assert pxweb.dataset is None
+    pxweb.get_data()
+    assert pxweb.dataset is not None
 
 
 def test_get_data_failure():
     """Invalid URL should raise a ValueError"""
     with pytest.raises(ValueError):
-        PxWeb(url="invalid_url", query=QUERY)
+        pxweb = PxWeb(url="invalid_url", query=QUERY)
+        pxweb.get_data()
 
 
 def test_mock_responses():
@@ -108,7 +110,7 @@ def test_mock_responses():
         expected_response = query["expected_response"]
         expected_result = query["expected_result"]
 
-        mock_api = PxWeb("api.example.com", QUERY, autofetch=False)
+        mock_api = PxWeb("api.example.com", QUERY)
 
         # Load the expected response data from the referenced file
         with open(expected_response, mode="r", encoding="utf-8") as response_file:

@@ -16,12 +16,10 @@ class PxWeb:
 
     Parameters
     ----------
-    url : str
+    url : str | None
         The PxWeb API URL for the table to query.
-    query :  str | dict
+    query :  str | dict | None
         The query must be a JSON structure, supplied either as a dict, string or a string representing a path to a file.
-    autofetch : bool, default True
-        Whether to automatically fetch data from the URL upon instantiation of the object.
 
     Example
     --------
@@ -76,28 +74,27 @@ class PxWeb:
     [76 rows x 4 columns]
     """
 
-    def __init__(self, url, query, autofetch=True) -> None:
-        self.url: str = url
-        self.query: dict = query
+    def __init__(self, url=None, query=None) -> None:
+        self.url: str | None = url
+        self.query: dict | None = query
         self.dataset: list[dict] | None = None
         self.metadata: dict = {
             key: None for key in ["label", "note", "source", "updated"]
         }
         self.last_refresh: datetime | None = None
 
-        try:
-            response_format = self.query["response"]["format"]
-            if response_format != "json-stat2":
-                raise TypeError(
-                    f"""Response format must be 'json-stat2', \
-                    got '{self.query["response"]["format"]}'."""
-                )
-        except Exception as err:
-            print(f"An error occured: {err}")
-            raise Exception("Invalid query format.") from err
-
-        if autofetch:
-            self.get_data()
+        if query:
+            try:
+                response_format = self.query["response"]["format"]
+                if response_format != "json-stat2":
+                    raise TypeError(
+                        f"""Response format must be 'json-stat2', \
+                        got '{self.query["response"]["format"]}'."""
+                    )
+            # TODO This should be a proper exception.
+            except Exception as err:
+                print(f"An error occured: {err}")
+                raise Exception("Invalid query format.") from err
 
     def __repr__(self) -> str:
         return f"""PxWeb(url='{self.url}',
@@ -108,22 +105,27 @@ class PxWeb:
 
     def get_data(self) -> None:
         """Get data from the API"""
-        response = requests.post(self.url, json=self.query, timeout=10)
-        if response.status_code == 200:
-            json_data = json.loads(response.text)
+        if self.url:
+            response = requests.post(self.url, json=self.query, timeout=10)
+            if response.status_code == 200:
+                json_data = json.loads(response.text)
 
-            self.dataset = self._unpack_data(json_data)
+                self.dataset = self._unpack_data(json_data)
 
-            metadata_keys = ["label", "note", "source", "updated"]
+                metadata_keys = ["label", "note", "source", "updated"]
 
-            self.metadata = self.metadata = {
-                key: json_data.get(key) for key in metadata_keys
-            }
+                self.metadata = self.metadata = {
+                    key: json_data.get(key) for key in metadata_keys
+                }
 
-            self.last_refresh = datetime.now()
+                self.last_refresh = datetime.now()
 
+            else:
+                warn(
+                    f"Failed to retrieve data: {response.status_code}: {response.reason}"
+                )
         else:
-            warn(f"Failed to retrieve data: {response.status_code}: {response.reason}")
+            warn("Cannot retrieve data. URL is empty.")
 
     def _unpack_data(self, response: dict) -> list[dict]:
         """
@@ -168,15 +170,15 @@ class PxWeb:
         return self.__query
 
     @query.setter
-    def query(self, query: str | dict) -> None:
+    def query(self, query: str | dict | None) -> None:
         """
         Set the JSON query from a string representing a path or a JSON structure that is either a string or a dict.
         """
 
-        if not isinstance(query, str | dict):
+        if not isinstance(query, str | dict | None):
             raise TypeError(
                 f"""Invalid input for `query`.
-                Expected `str` or `dict`, got {type(query)!r}."""
+                Expected `str`, `dict` or `None`, got {type(query)!r}."""
             )
 
         if isinstance(query, str):

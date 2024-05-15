@@ -60,11 +60,10 @@ data1 = PxWeb(URL, QUERY)
 # Same query, from a file
 data2 = PxWeb(URL, "example_query.json")
 
-# The object can be instantiated without running the query immediately
-# by setting the autofetch flag to `False`
-data3 = PxWeb(URL, QUERY, autofetch=False)
+# The object is instantiated without running the query immediately
+data3 = PxWeb(URL, QUERY)
 
-# Instead we can fetch the data later on if we want to
+# We can fetch the data later on
 data3.get_data()
 
 # The get_data() function can be used to refresh data as well

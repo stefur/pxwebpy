@@ -1,9 +1,9 @@
 # pxwebpy
-[![ci](https://github.com/stefur/pxwebpy/actions/workflows/ci.yml/badge.svg)](https://github.com/stefur/pxwebpy/actions/workflows/ci.yml)
-![PyPI - Version](https://img.shields.io/pypi/v/pxwebpy)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pxwebpy)
-[![Rye](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/mitsuhiko/rye/main/artwork/badge.json)](https://rye-up.com)
-[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)   
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/stefur/pxwebpy/ci.yml?style=flat-square&label=ci)](https://github.com/stefur/pxwebpy/actions/workflows/ci.yml)
+![PyPI - Version](https://img.shields.io/pypi/v/pxwebpy?style=flat-square)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pxwebpy?style=flat-square)
+[![Rye](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/mitsuhiko/rye/main/artwork/badge.json&style=flat-square)](https://rye-up.com)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json&style=flat-square)](https://github.com/astral-sh/ruff)   
 Easily get data from the PxWeb API and into either a polars or pandas dataframe.  
   
 Pxwebpy parses the PxWeb table data as well as metadata using the json-stat2 response format. 
