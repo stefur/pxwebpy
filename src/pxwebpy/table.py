@@ -9,9 +9,9 @@ from warnings import warn
 import requests
 
 
-class PxWeb:
+class PxTable:
     """
-    A helper object to get data from the PxWeb API.
+    A table object to get data from the PxWeb API.
     The table dataset is collected as a long format.
 
     Parameters
@@ -25,7 +25,7 @@ class PxWeb:
     --------
     Fetching data with a very simple query and turning it into a Pandas dataframe:
 
-    >>> from pxwebpy import PxWeb
+    >>> from pxwebpy import PxTable
     >>> import pandas as pd
 
     >>> URL = "https://api.scb.se/OV0104/v1/doris/sv/ssd/START/HE/HE0110/HE0110A/SamForvInk1"
@@ -47,10 +47,10 @@ class PxWeb:
                 }
             }
 
-    >>> tbl = PxWeb(URL, QUERY)
+    >>> tbl = PxTable(URL, QUERY)
     >>> print(tbl)
 
-    PxWeb(url='https://api.scb.se/OV0104/v1/doris/sv/ssd/START/HE/HE0110/HE0110A/SamForvInk1',
+    PxTable(url='https://api.scb.se/OV0104/v1/doris/sv/ssd/START/HE/HE0110/HE0110A/SamForvInk1',
         query={'query': [{'code': 'Tid', 'selection': {'filter': 'item', 'values': ['2021']}}], 'response': {'format': 'json-stat2'}},
         metadata={'label': 'Sammanräknad förvärvsinkomst för boende i Sverige hela året efter ålder, tabellinnehåll och år', 'source': 'SCB', 'updated': '2023-01-10T10:42:00Z'},
         last_refresh=2023-10-29 14:21:57.628639,
@@ -97,7 +97,7 @@ class PxWeb:
                 raise Exception("Invalid query format.") from err
 
     def __repr__(self) -> str:
-        return f"""PxWeb(url='{self.url}',
+        return f"""PxTable(url='{self.url}',
         query={self.query},
         metadata={self.metadata},
         last_refresh={self.last_refresh},

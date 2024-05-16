@@ -2,7 +2,7 @@
 
 import pandas as pd
 import polars as pl  # type: ignore
-from pxwebpy import PxWeb
+from pxwebpy.table import PxTable
 
 URL = "https://api.scb.se/OV0104/v1/doris/sv/ssd/START/HE/HE0110/HE0110A/SamForvInk1"
 
@@ -55,13 +55,13 @@ QUERY = """
 """
 
 # From a string
-data1 = PxWeb(URL, QUERY)
+data1 = PxTable(URL, QUERY)
 
 # Same query, from a file
-data2 = PxWeb(URL, "example_query.json")
+data2 = PxTable(URL, "example_query.json")
 
 # The object is instantiated without running the query immediately
-data3 = PxWeb(URL, QUERY)
+data3 = PxTable(URL, QUERY)
 
 # We can fetch the data later on
 data3.get_data()
@@ -72,7 +72,7 @@ data3.get_data()
 # is updated with a timestamp (datetime).
 data3.last_refresh
 
-# The objects also contain the metadata of the PxWeb table
+# The objects also contain the metadata of the PxTable table
 # such as "label", "source" and "updated".
 data3.metadata
 
