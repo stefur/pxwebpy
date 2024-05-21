@@ -3,10 +3,21 @@
 import itertools
 import json
 from datetime import datetime
+from enum import Enum
 from pathlib import Path
-from warnings import warn
 
 import requests
+
+
+class Context(Enum):
+    QUERY = "create a query"
+    VARIABLES = "get variables"
+    DATA = "get data"
+
+
+class HttpMethod(Enum):
+    GET = "GET"
+    POST = "POST"
 
 
 class PxTable:
@@ -105,29 +116,19 @@ class PxTable:
 
     def get_data(self) -> None:
         """Get data from the API"""
-        if self.url:
-            response = requests.post(self.url, json=self.query, timeout=10)
-            if response.status_code == 200:
-                json_data = json.loads(response.text)
+        json_data = self.__send_request(HttpMethod.POST, Context.DATA)
 
-                self.dataset = self._unpack_data(json_data)
+        self.dataset = self.__unpack_data(json_data)
 
-                metadata_keys = ["label", "note", "source", "updated"]
+        metadata_keys = ["label", "note", "source", "updated"]
 
-                self.metadata = self.metadata = {
-                    key: json_data.get(key) for key in metadata_keys
-                }
+        self.metadata = self.metadata = {
+            key: json_data.get(key) for key in metadata_keys
+        }
 
-                self.last_refresh = datetime.now()
+        self.last_refresh = datetime.now()
 
-            else:
-                warn(
-                    f"Failed to retrieve data: {response.status_code}: {response.reason}"
-                )
-        else:
-            warn("Cannot retrieve data. URL is empty.")
-
-    def _unpack_data(self, response: dict) -> list[dict]:
+    def __unpack_data(self, response: dict) -> list[dict]:
         """
         Takes the response json-stat2 and turns it into a list of dicts that can
         be used to convert into a dataframe, using either pandas or polars.
@@ -154,7 +155,7 @@ class PxTable:
 
         return result
 
-    def _is_path(self, query: str) -> bool:
+    def __is_path(self, query: str) -> bool:
         """Check if query is a path or not"""
         try:
             path = Path(query)
@@ -182,7 +183,7 @@ class PxTable:
             )
 
         if isinstance(query, str):
-            if self._is_path(query):
+            if self.__is_path(query):
                 with open(query, mode="r", encoding="utf-8") as read_file:
                     self.__query = json.load(read_file)
             else:
@@ -194,3 +195,82 @@ class PxTable:
                     ) from err
         else:
             self.__query = query
+
+    def __send_request(self, method: HttpMethod, context: Context) -> dict:
+        if not self.url:
+            raise Exception("No URL is set.")
+
+        if method == HttpMethod.GET:
+            response = requests.get(self.url, timeout=10)
+        elif method == HttpMethod.POST:
+            response = requests.post(self.url, json=self.query, timeout=10)
+
+        if response.status_code == 200:
+            return response.json()
+        else:
+            raise Exception(
+                f"Failed to {context.value}: {response.status_code}: {response.reason}"
+            )
+
+    def create_query(self, query: dict[str, list[str]]) -> str | None:
+        """
+        Serializes a dict to a query in JSON structure that returns data JSON-stat format.
+        This function assumes the keys with list of values are the textual display names and will convert them into the identifier code and values
+        that the API expects.
+
+        Parameters
+        ----------
+        query : dict[str, list[str]]
+            A dict where each key represents a variable name and its values is a list of values to filter.
+        """
+        json_data = self.__send_request(HttpMethod.GET, Context.QUERY)
+        conversion_mapping = {}
+
+        # TODO Handle possible key errors
+        for variable in json_data["variables"]:
+            text = variable["text"]
+            code = variable["code"]
+            value_texts = variable["valueTexts"]
+            values = variable["values"]
+
+            conversion_mapping[text] = {
+                "code": code,
+                "values": {
+                    value_text: value for value_text, value in zip(value_texts, values)
+                },
+            }
+
+        conversion = []
+
+        for key, values in query.items():
+            if key in conversion_mapping:
+                code = conversion_mapping[key]["code"]
+                value_map = conversion_mapping[key]["values"]
+                converted_values = [value_map[value] for value in values]
+                conversion.append(
+                    {
+                        "code": code,
+                        "selection": {
+                            # TODO Support filtering
+                            "filter": "item",
+                            "values": converted_values,
+                        },
+                    }
+                )
+        return json.dumps({"query": conversion, "response": {"format": "json-stat2"}})
+
+    def get_table_variables(self) -> dict | None:
+        """
+        Returns a dict of variables and the respective values from the table.
+        """
+        json_data = self.__send_request(HttpMethod.GET, Context.VARIABLES)
+
+        result = {}
+
+        for var in json_data["variables"]:
+            text = var["text"]
+            values = var["valueTexts"]
+            if text and values:
+                result[text] = values
+
+        return result
