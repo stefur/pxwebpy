@@ -1,6 +1,7 @@
 """Tests"""
 
 import json
+from unittest.mock import MagicMock
 
 import pytest
 from pxwebpy.table import PxTable
@@ -84,14 +85,6 @@ def test_query_setter_with_invalid_type():
         PxTable(url=URL, query=[QUERY])
 
 
-def test_get_data():
-    """Getting data"""
-    table = PxTable(url=URL, query=QUERY)
-    assert table.dataset is None
-    table.get_data()
-    assert table.dataset is not None
-
-
 def test_get_data_failure():
     """Invalid URL should raise a ValueError"""
     with pytest.raises(ValueError):
@@ -107,21 +100,22 @@ def test_mock_responses():
     for query in query_data["queries"]:
         url = query["url"]
         query_params = query["query"]
-        expected_response = query["expected_response"]
-        expected_result = query["expected_result"]
+        response_json = query["expected_response"]
+        result_json = query["expected_result"]
 
-        mock_api = PxTable("api.example.com", QUERY)
+        with open(result_json, "r") as result_file:
+            expected_result = json.load(result_file)
 
-        # Load the expected response data from the referenced file
-        with open(expected_response, mode="r", encoding="utf-8") as response_file:
+        with open(response_json, mode="r", encoding="utf-8") as response_file:
             mock_response = json.load(response_file)
 
-        unpacked_response = mock_api._unpack_data(mock_response)
+        # Set up an instance of a table and set the request method to return a mock response
+        tbl = PxTable()
+        tbl._PxTable__send_request = MagicMock()
+        tbl._PxTable__send_request.return_value = mock_response
+        tbl.get_data()
 
-        with open(expected_result, "r") as result_file:
-            mock_result = json.load(result_file)
-
-        # Compare the unpacked response wi data with the mock r response data
+        # Compare the dataset with the expected result
         assert (
-            unpacked_response == mock_result
+            tbl.dataset == expected_result
         ), f"Response does not match for query: {url}, {query_params}"
