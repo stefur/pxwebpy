@@ -198,11 +198,13 @@ class PxTable:
 
     def __send_request(self, method: HttpMethod, context: Context) -> dict:
         if not self.url:
-            raise Exception("No URL is set.")
+            raise ValueError("No URL is set.")
 
         if method == HttpMethod.GET:
             response = requests.get(self.url, timeout=10)
         elif method == HttpMethod.POST:
+            if not self.query:
+                raise ValueError("No query is set.")
             response = requests.post(self.url, json=self.query, timeout=10)
 
         if response.status_code == 200:
