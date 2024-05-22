@@ -1,7 +1,7 @@
 """Tests"""
 
 import json
-from unittest.mock import MagicMock
+from unittest.mock import Mock, patch
 
 import pytest
 from pxwebpy.table import PxTable
@@ -59,41 +59,48 @@ QUERY = """
 
 def test_query_setter_with_string():
     """The query should be able to handle a string representing a JSON structure"""
-    table = PxTable(url=URL, query=QUERY)
+    table = PxTable(query=QUERY)
     json_query = json.loads(QUERY)
     assert table.query == json_query
 
 
 def test_query_setter_with_file():
     """The query should be able to handle a string representing a path to a file containing a JSON structure"""
-    table = PxTable(url=URL, query="tests/valid_query.json")
+    table = PxTable(query="tests/valid_query.json")
     with open("tests/valid_query.json", mode="r", encoding="utf-8") as read_file:
         json_query = json.load(read_file)
 
     assert table.query == json_query
 
 
+def test_query_setter_with_dict():
+    """The query should be able to handle a dict representing a JSON structure"""
+    json_query = json.loads(QUERY)
+    table = PxTable(query=QUERY)
+    assert table.query == json_query
+
+
 def test_query_setter_with_invalid_json():
     """Invalid query should produce an error"""
     with pytest.raises(ValueError):
-        PxTable(url=URL, query="tests/invalid_query.json")
+        PxTable(query="tests/invalid_query.json")
 
 
 def test_query_setter_with_invalid_type():
     """Wrong data type should raise a TypeError"""
     with pytest.raises(TypeError):
-        PxTable(url=URL, query=[QUERY])
+        PxTable(query=[QUERY])
 
 
-def test_get_data_failure():
+def test_get_data_invalid_url():
     """Invalid URL should raise a ValueError"""
     with pytest.raises(ValueError):
         table = PxTable(url="invalid_url", query=QUERY)
         table.get_data()
 
 
-def test_mock_responses():
-    """This test checks functionality against mock Px Web API responses"""
+def test_get_data():
+    """Checks functionality of get_data() against mock Px Web API responses"""
     with open("tests/queries.json", "r") as queries:
         query_data = json.load(queries)
 
@@ -109,13 +116,16 @@ def test_mock_responses():
         with open(response_json, mode="r", encoding="utf-8") as response_file:
             mock_response = json.load(response_file)
 
-        # Set up an instance of a table and set the request method to return a mock response
-        tbl = PxTable()
-        tbl._PxTable__send_request = MagicMock()
-        tbl._PxTable__send_request.return_value = mock_response
-        tbl.get_data()
+        # Patch requests post method with a mock response
+        with patch("requests.post") as mock_post:
+            mock_post.return_value = Mock(status_code=200)
+            mock_post.return_value.json.return_value = mock_response
 
-        # Compare the dataset with the expected result
-        assert (
-            tbl.dataset == expected_result
-        ), f"Response does not match for query: {url}, {query_params}"
+            # PxTable expects a URL and a query to get data
+            table = PxTable(url=url, query=query_params)
+            table.get_data()
+
+            # Compare the dataset with the expected result
+            assert (
+                table.dataset == expected_result
+            ), f"Dataset does not match expected result for query: {url}, {query_params}"
