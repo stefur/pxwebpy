@@ -259,7 +259,7 @@ class PxTable:
                         },
                     }
                 )
-        return json.dumps({"query": conversion, "response": {"format": "json-stat2"}})
+        self.query = {"query": conversion, "response": {"format": "json-stat2"}}
 
     def get_table_variables(self) -> dict | None:
         """
