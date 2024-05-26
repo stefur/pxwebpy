@@ -214,7 +214,7 @@ class PxTable:
                 f"Failed to {context.value}: {response.status_code}: {response.reason}"
             )
 
-    def create_query(self, query: dict[str, list[str]]) -> str | None:
+    def create_query(self, query: dict[str, list[str]]) -> None:
         """
         Serializes a dict to a query in JSON structure that returns data JSON-stat format.
         This function assumes the keys with list of values are the textual display names and will convert them into the identifier code and values
@@ -224,6 +224,20 @@ class PxTable:
         ----------
         query : dict[str, list[str]]
             A dict where each key represents a variable name and its values is a list of values to filter.
+
+        Example
+        --------
+        Creating a simple query:
+
+        >>> tbl = PxTable(url="https://api.scb.se/OV0104/v1/doris/sv/ssd/START/ME/ME0104/ME0104D/ME0104T4")
+
+        >>> tbl.create_query({"valår": ["2014", "2018", "2022"], "region": "Riket")
+
+        >>> tbl.query
+
+        {'query': [{'code': 'Region',
+        'selection': {'filter': 'item', 'values': ['00']}}],
+        'response': {'format': 'json-stat2'}}
         """
         json_data = self.__send_request(HttpMethod.GET, Context.QUERY)
         conversion_mapping = {}
