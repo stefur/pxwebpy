@@ -239,6 +239,17 @@ class PxTable:
         'selection': {'filter': 'item', 'values': ['00']}}],
         'response': {'format': 'json-stat2'}}
         """
+
+        # Check that the query structure holds up
+        for key, value in query.items():
+            if not isinstance(key, str):
+                raise ValueError("Keys in the query must be `string`.")
+
+            if not isinstance(value, list) or not all(
+            isinstance(v, str) for v in value
+            ):
+                raise ValueError("Values in the quest must be a `list` of `strings`.")
+
         json_data = self.__send_request(HttpMethod.GET, Context.QUERY)
         conversion_mapping = {}
 
