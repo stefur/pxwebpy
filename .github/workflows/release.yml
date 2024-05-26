@@ -16,7 +16,7 @@ jobs:
       - name: Install and setup rye
         run: | 
           python_version=$(cat .python-version)
-          curl -sSf https://rye-up.com/get | RYE_VERSION="0.33.0" RYE_TOOLCHAIN_VERSION="$python_version" RYE_INSTALL_OPTION="--yes" bash
+          curl -sSf https://rye.astral.sh/get | RYE_VERSION="0.34.0" RYE_TOOLCHAIN_VERSION="$python_version" RYE_INSTALL_OPTION="--yes" bash
           echo "$HOME/.rye/shims" >> $GITHUB_PATH
 
       - name: Build for distribution

@@ -20,7 +20,7 @@ jobs:
     
     - name: Install and setup rye
       run: | 
-        curl -sSf https://rye-up.com/get | RYE_VERSION="0.33.0" RYE_TOOLCHAIN_VERSION="${{ matrix.python-version }}" RYE_INSTALL_OPTION="--yes" bash
+        curl -sSf https://rye.astral.sh/get | RYE_VERSION="0.34.0" RYE_TOOLCHAIN_VERSION="${{ matrix.python-version }}" RYE_INSTALL_OPTION="--yes" bash
         echo "$HOME/.rye/shims" >> $GITHUB_PATH
 
     - name: Pin ${{ matrix.python-version }}
