@@ -68,9 +68,9 @@ data3.get_data()
 
 # The get_data() function can be used to refresh data as well
 
-# Everytime get_data() is called, the field "last_refresh"
+# Everytime get_data() is called, the field "fetched"
 # is updated with a timestamp (datetime).
-data3.last_refresh
+data3.fetched
 
 # The objects also contain the metadata of the PxTable table
 # such as "label", "source" and "updated".

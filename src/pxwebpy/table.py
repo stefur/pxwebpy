@@ -39,32 +39,18 @@ class PxTable:
     >>> from pxwebpy import PxTable
     >>> import pandas as pd
 
-    >>> URL = "https://api.scb.se/OV0104/v1/doris/sv/ssd/START/HE/HE0110/HE0110A/SamForvInk1"
+    >>> tbl = PxTable(url="https://api.scb.se/OV0104/v1/doris/sv/ssd/START/HE/HE0110/HE0110A/SamForvInk1")
 
-    >>> QUERY = {
-                "query": [
-                    {
-                    "code": "Tid",
-                    "selection": {
-                        "filter": "item",
-                        "values": [
-                        "2021"
-                        ]
-                    }
-                    }
-                ],
-                "response": {
-                    "format": "json-stat2"
-                }
-            }
+    >>> tbl.create_query({"år": ["2021"]})
 
-    >>> tbl = PxTable(URL, QUERY)
+    >>> tbl.get_data()
+
     >>> print(tbl)
 
     PxTable(url='https://api.scb.se/OV0104/v1/doris/sv/ssd/START/HE/HE0110/HE0110A/SamForvInk1',
         query={'query': [{'code': 'Tid', 'selection': {'filter': 'item', 'values': ['2021']}}], 'response': {'format': 'json-stat2'}},
         metadata={'label': 'Sammanräknad förvärvsinkomst för boende i Sverige hela året efter ålder, tabellinnehåll och år', 'source': 'SCB', 'updated': '2023-01-10T10:42:00Z'},
-        last_refresh=2023-10-29 14:21:57.628639,
+        fetched=2023-10-29 14:21:57.628639,
         dataset=[{'ålder': 'totalt 16+ år', 'tabellinnehåll': 'Medelinkomst, tkr', 'år': '2021' ...
 
     >>> df = pd.DataFrame(tbl.dataset)
@@ -92,7 +78,7 @@ class PxTable:
         self.metadata: dict = {
             key: None for key in ["label", "note", "source", "updated"]
         }
-        self.last_refresh: datetime | None = None
+        self.fetched: datetime | None = None
 
         if query:
             try:
@@ -111,7 +97,7 @@ class PxTable:
         return f"""PxTable(url='{self.url}',
         query={self.query},
         metadata={self.metadata},
-        last_refresh={self.last_refresh},
+        fetched={self.fetched},
         dataset={self.dataset})"""
 
     def get_data(self) -> None:
@@ -126,7 +112,7 @@ class PxTable:
             key: json_data.get(key) for key in metadata_keys
         }
 
-        self.last_refresh = datetime.now()
+        self.fetched = datetime.now()
 
     def __unpack_data(self, response: dict) -> list[dict]:
         """
@@ -136,22 +122,20 @@ class PxTable:
         if response is None:
             raise ValueError("response cannot be None.")
 
-        response_dims = response["dimension"]
-
-        category_labels = {}
-        for dim in response_dims:
-            label = response_dims[dim]["category"]["label"]
-            category_labels.update({response_dims[dim]["label"]: label.values()})
+        category_labels = {
+            response["dimension"][dim]["label"]: response["dimension"][dim]["category"][
+                "label"
+            ].values()
+            for dim in response["dimension"]
+        }
 
         result = [
             dict(zip(category_labels.keys(), x))
             for x in itertools.product(*category_labels.values())
         ]
 
-        all_values = response["value"]
-
-        for value, dict_row in zip(all_values, result):
-            dict_row.update({"value": value})
+        for value, dict_row in zip(response["value"], result):
+            dict_row["value"] = value
 
         return result
 
@@ -216,7 +200,6 @@ class PxTable:
 
     def create_query(self, query: dict[str, list[str]]) -> None:
         """
-        Serializes a dict to a query in JSON structure that returns data JSON-stat format.
         This function assumes the keys with list of values are the textual display names and will convert them into the identifier code and values
         that the API expects.
 
@@ -253,7 +236,7 @@ class PxTable:
         json_data = self.__send_request(HttpMethod.GET, Context.QUERY)
         conversion_mapping = {}
 
-        # TODO Handle possible key errors
+        # TODO Handle possible key errors. Also cache code responses.
         for variable in json_data["variables"]:
             text = variable["text"]
             code = variable["code"]
