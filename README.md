@@ -15,8 +15,10 @@ It has been tested with [Statistics Sweden](https://scb.se), [Statistics Finland
 >>> from pxwebpy.table import PxTable
 >>> import pandas as pd
 
+# Create a table object, setting up a URL for a table
 >>> tbl = PxTable(url="https://api.scb.se/OV0104/v1/doris/sv/ssd/START/HE/HE0110/HE0110A/SamForvInk1")
 
+# Check out the table variables that we can use
 >>> tbl.get_table_variables()
 {'region': ['Riket',
   'Stockholms län',
@@ -56,8 +58,10 @@ It has been tested with [Statistics Sweden](https://scb.se), [Statistics Finland
   '2021',
   '2022']}
 
+# Construct a query using a selection of variables we're interested in
 >>> tbl.create_query({"tabellinnehåll": ["Medianinkomst, tkr"], "ålder": ["totalt 16+ år"]})
 
+# Now we can get the data
 >>> tbl.get_data()
 
 >>> tbl
@@ -68,6 +72,7 @@ PxTable(url='https://api.scb.se/OV0104/v1/doris/sv/ssd/START/HE/HE0110/HE0110A/S
         fetched=2024-06-16 10:30:34.085020,
         dataset=[{'ålder': 'totalt 16+ år', 'tabellinnehåll': 'Medianinkomst, tkr', 'år': '1999', 'value': 159.4}, {'ålder': 'totalt 16+ år', 'tabellinnehåll': 'Medianinkomst, tkr', 'år': '2000', 'value': 165.3}, ...])
 
+# Using the dataset we can then create a Pandas dataframe
 >>> df = pd.DataFrame(tbl.dataset)
 >>> print(df)
 
