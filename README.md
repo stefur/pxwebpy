@@ -17,17 +17,56 @@ It has been tested with [Statistics Sweden](https://scb.se), [Statistics Finland
 
 >>> tbl = PxTable(url="https://api.scb.se/OV0104/v1/doris/sv/ssd/START/HE/HE0110/HE0110A/SamForvInk1")
 
+>>> tbl.get_table_variables()
+{'region': ['Riket',
+  'Stockholms län',
+  'Upplands Väsby',
+  'Vallentuna',
+...
+  'Piteå',
+  'Haparanda',
+  'Kiruna'],
+ 'kön': ['män', 'kvinnor', 'totalt'],
+ 'ålder': ['totalt 16+ år',
+  '16-19 år',
+  'totalt 20+ år',
+  '20-64 år',
+  '65+ år',
+  '20-24 år',
+  '25-29 år',
+...
+  '75-79 år',
+  '80-84 år',
+  '85+ år'],
+ 'inkomstklass': ['totalt',
+  '0',
+  '1-19 tkr',
+  '20-39 tkr',
+...
+  '600-799 tkr',
+  '800-999 tkr',
+  '1000+ tkr'],
+ 'tabellinnehåll': ['Medelinkomst, tkr',
+  'Medianinkomst, tkr',
+  'Totalsumma, mnkr',
+  'Antal personer'],
+ 'år': ['1999',
+  '2000',
+...
+  '2021',
+  '2022']}
+
 >>> tbl.create_query({"tabellinnehåll": ["Medianinkomst, tkr"], "ålder": ["totalt 16+ år"]})
 
 >>> tbl.get_data()
 
->>> print(tbl)
+>>> tbl
 
 PxTable(url='https://api.scb.se/OV0104/v1/doris/sv/ssd/START/HE/HE0110/HE0110A/SamForvInk1',
-    query={'query': [{'code': 'Tid', 'selection': {'filter': 'item', 'values': ['2021']}}], 'response': {'format': 'json-stat2'}},
-    metadata={'label': 'Sammanräknad förvärvsinkomst för boende i Sverige hela året efter ålder, tabellinnehåll och år', 'source': 'SCB', 'updated': '2023-01-10T10:42:00Z'},
-    fetched=2023-10-29 14:21:57.628639,
-    dataset=[{'ålder': 'totalt 16+ år', 'tabellinnehåll': 'Medelinkomst, tkr', 'år': '2021' ...
+        query={'query': [{'code': 'ContentsCode', 'selection': {'filter': 'item', 'values': ['HE0110J8']}}, {'code': 'Alder', 'selection': {'filter': 'item', 'values': ['tot16+']}}], 'response': {'format': 'json-stat2'}},
+        metadata={'label': 'Sammanräknad förvärvsinkomst, medianinkomst för boende i Sverige hela året, tkr efter ålder, tabellinnehåll och år', 'note': None, 'source': 'SCB', 'updated': '2024-01-12T05:52:00Z'},
+        fetched=2024-06-16 10:30:34.085020,
+        dataset=[{'ålder': 'totalt 16+ år', 'tabellinnehåll': 'Medianinkomst, tkr', 'år': '1999', 'value': 159.4}, {'ålder': 'totalt 16+ år', 'tabellinnehåll': 'Medianinkomst, tkr', 'år': '2000', 'value': 165.3}, ...])
 
 >>> df = pd.DataFrame(tbl.dataset)
 >>> print(df)
