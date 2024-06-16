@@ -99,6 +99,57 @@ def test_get_data_invalid_url():
         table.get_data()
 
 
+def test_create_query():
+    """Creating a query requires a specific format"""
+    table = PxTable()
+
+    # Values must always be strings
+    with pytest.raises(ValueError):
+        table.create_query({"År": [2023, 2024, 2025]})
+
+    # Values must be in a list
+    with pytest.raises(ValueError):
+        table.create_query({"Län": "Stockholms län"})
+
+
+def test_invalid_table_variables():
+    """Invalid JSON structure in response should raise a KeyError"""
+    table = PxTable(url=URL)
+
+    with pytest.raises(KeyError):
+        with patch("requests.get") as mock_get:
+            mock_get.return_value = Mock(status_code=200)
+            # Just a blank return value
+            mock_get.return_value.json.return_value = {"key": "value"}
+
+            table.get_table_variables()
+
+
+def test_get_table_variables():
+    """Getting table variables should return a dict"""
+    table = PxTable(url=URL)
+    with open("tests/mock/response_table_variables.json", "r") as expected_response:
+        mock_response = json.load(expected_response)
+
+    with patch("requests.get") as mock_get:
+        mock_get.return_value = Mock(status_code=200)
+        mock_get.return_value.json.return_value = mock_response
+
+    variables = table.get_table_variables()
+    assert isinstance(variables, dict)
+
+
+def test_send_request():
+    """Sending a request and receiving an error response should raise an exception"""
+    table = PxTable(url=URL)
+
+    with pytest.raises(Exception):
+        with patch("requests.get") as mock_get:
+            mock_get.return_value = Mock(status_code=404)
+
+            table.get_table_variables()
+
+
 def test_get_data():
     """Checks functionality of get_data() against mock Px Web API responses"""
     with open("tests/queries.json", "r") as queries:

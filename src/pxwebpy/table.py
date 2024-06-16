@@ -88,10 +88,8 @@ class PxTable:
                         f"""Response format must be 'json-stat2', \
                         got '{self.query["response"]["format"]}'."""
                     )
-            # TODO This should be a proper exception.
-            except Exception as err:
-                print(f"An error occured: {err}")
-                raise Exception("Invalid query format.") from err
+            except KeyError as err:
+                raise KeyError(f"Missing key: {err}") from err
 
     def __repr__(self) -> str:
         return f"""PxTable(url='{self.url}',
@@ -119,8 +117,6 @@ class PxTable:
         Takes the response json-stat2 and turns it into a list of dicts that can
         be used to convert into a dataframe, using either pandas or polars.
         """
-        if response is None:
-            raise ValueError("response cannot be None.")
 
         category_labels = {
             response["dimension"][dim]["label"]: response["dimension"][dim]["category"][
@@ -181,6 +177,7 @@ class PxTable:
             self.__query = query
 
     def __send_request(self, method: HttpMethod, context: Context) -> dict:
+        """Send either a GET or POST request to the API"""
         if not self.url:
             raise ValueError("No URL is set.")
 
@@ -191,12 +188,14 @@ class PxTable:
                 raise ValueError("No query is set.")
             response = requests.post(self.url, json=self.query, timeout=10)
 
-        if response.status_code == 200:
-            return response.json()
-        else:
+        try:
+            response.raise_for_status()
+        except requests.exceptions.HTTPError:
             raise Exception(
                 f"Failed to {context.value}: {response.status_code}: {response.reason}"
-            )
+            ) from None
+
+        return response.json()
 
     def create_query(self, query: dict[str, list[str]]) -> None:
         """
@@ -229,7 +228,7 @@ class PxTable:
                 raise ValueError("Keys in the query must be `string`.")
 
             if not isinstance(value, list) or not all(
-            isinstance(v, str) for v in value
+                isinstance(v, str) for v in value
             ):
                 raise ValueError("Values in the quest must be a `list` of `strings`.")
 
@@ -261,7 +260,6 @@ class PxTable:
                     {
                         "code": code,
                         "selection": {
-                            # TODO Support filtering
                             "filter": "item",
                             "values": converted_values,
                         },
@@ -274,13 +272,15 @@ class PxTable:
         Returns a dict of variables and the respective values from the table.
         """
         json_data = self.__send_request(HttpMethod.GET, Context.VARIABLES)
+        try:
+            result = {}
 
-        result = {}
+            for var in json_data["variables"]:
+                text = var["text"]
+                values = var["valueTexts"]
+                if text and values:
+                    result[text] = values
 
-        for var in json_data["variables"]:
-            text = var["text"]
-            values = var["valueTexts"]
-            if text and values:
-                result[text] = values
-
-        return result
+            return result
+        except KeyError as err:
+            raise KeyError(f"Failed to unpack, missing key: {err}") from err

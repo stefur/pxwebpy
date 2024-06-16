@@ -97,7 +97,7 @@ traitlets==5.14.3
     # via matplotlib-inline
 types-pytz==2024.1.0.20240417
     # via pandas-stubs
-types-requests==2.31.0.20240406
+types-requests==2.32.0.20240602
 tzdata==2024.1
     # via pandas
 urllib3==2.2.1

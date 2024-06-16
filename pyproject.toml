@@ -35,7 +35,7 @@ build-backend = "hatchling.build"
 [tool.rye]
 managed = true
 dev-dependencies = [
-    "types-requests>=2.31.0.20240125",
+    "types-requests>=2.32.0.20240602",
     "polars>=0.20.7",
     "pandas>=2.2.0",
     "pandas-stubs>=2.1.4.231227",
