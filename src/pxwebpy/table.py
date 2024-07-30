@@ -112,25 +112,67 @@ class PxTable:
 
         self.fetched = datetime.now()
 
-    def __unpack_data(self, response: dict) -> list[dict]:
+    def __unpack_data(self, json_data: dict) -> list[dict]:
         """
-        Takes the response json-stat2 and turns it into a list of dicts that can
+        Takes the json-stat2 and turns it into a list of dicts that can
         be used to convert into a dataframe, using either pandas or polars.
         """
 
-        category_labels = {
-            response["dimension"][dim]["label"]: response["dimension"][dim]["category"][
-                "label"
-            ].values()
-            for dim in response["dimension"]
-        }
+        dimension_categories = {}
 
+        # Go over each dimension
+        for dim in json_data["dimension"]:
+            # If the dimension has extension data along with a key for show, use
+            # that to determine the values shown in the output
+            try:
+                match json_data["dimension"][dim]["extension"]["show"]:
+                    case "code_value":
+                        values = [
+                            str(k) + " " + str(v)
+                            for k, v in json_data["dimension"][dim]["category"][
+                                "label"
+                            ].items()
+                        ]
+
+                    case "code":
+                        values = [
+                            str(k)
+                            for k in json_data["dimension"][dim]["category"][
+                                "label"
+                            ].keys()
+                        ]
+
+                    case "value":
+                        values = [
+                            str(v)
+                            for v in json_data["dimension"][dim]["category"][
+                                "label"
+                            ].values()
+                        ]
+
+                    # Raise an error if we hit some value in the show key that we don't know how to handle
+                    case _:
+                        raise ValueError(
+                            f"""Unexpected show value. Expected "code", "value" or "code_value", got: {json_data["dimension"][dim]["extension"]["show"]}"""
+                        )
+
+            # If there's no show key at all we default to using the label values
+            except KeyError:
+                values = [
+                    str(v)
+                    for v in json_data["dimension"][dim]["category"]["label"].values()
+                ]
+
+            dimension_categories.update({json_data["dimension"][dim]["label"]: values})
+
+        # The result is a list of dicts with the dimension as key and product of the category labels for values
         result = [
-            dict(zip(category_labels.keys(), x))
-            for x in itertools.product(*category_labels.values())
+            dict(zip(dimension_categories.keys(), x))
+            for x in itertools.product(*dimension_categories.values())
         ]
 
-        for value, dict_row in zip(response["value"], result):
+        # Finally add the value for each dict representing a row
+        for value, dict_row in zip(json_data["value"], result):
             dict_row["value"] = value
 
         return result
