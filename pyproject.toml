@@ -21,7 +21,7 @@ readme = "README.md"
 requires-python = ">= 3.11"
 
 [project.urls]
-"Issue tracker" = "https://github.com/stefur/pxwebpy/issues"
+Repository = "https://github.com/stefur/pxwebpy"
 
 [project.optional-dependencies]
 ci = [
@@ -32,8 +32,7 @@ ci = [
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[tool.rye]
-managed = true
+[tool.uv]
 dev-dependencies = [
     "types-requests>=2.32.0.20240602",
     "polars>=0.20.7",
@@ -42,9 +41,3 @@ dev-dependencies = [
     "pytest>=8.2.0",
     "ipykernel>=6.29.4",
 ]
-
-[tool.hatch.metadata]
-allow-direct-references = true
-
-[tool.hatch.build.targets.wheel]
-packages = ["src/pxwebpy"]
