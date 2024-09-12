@@ -1,4 +1,11 @@
 name: release
+
+env:
+  UV_VERSION: "0.4.9"
+  UV_LINK_MODE: copy
+  TWINE_USERNAME: __token__
+  TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+
 on:
   release:
     types: [published]
@@ -13,16 +20,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install and setup rye
-        run: | 
-          python_version=$(cat .python-version)
-          curl -sSf https://rye.astral.sh/get | RYE_VERSION="0.37.0" RYE_TOOLCHAIN_VERSION="$python_version" RYE_INSTALL_OPTION="--yes" bash
-          echo "$HOME/.rye/shims" >> $GITHUB_PATH
+      - name: Set up uv ${{ env.UV_VERSION }}
+        run: curl -LsSf https://astral.sh/uv/${{ env.UV_VERSION }}/install.sh | sh
 
       - name: Build for distribution
-        run: |
-          rye build
+        run: uv build
     
       - name: Publish to PyPI
-        run: |
-          rye publish --token ${{ secrets.PYPI_TOKEN }} --yes
+        run: uvx twine upload dist/*

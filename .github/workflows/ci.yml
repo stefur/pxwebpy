@@ -1,7 +1,7 @@
 name: ci
 
 env:
-  UV_VERSION: "0.3.0"
+  UV_VERSION: "0.4.9"
   UV_CACHE_DIR: /tmp/.uv-cache
   UV_LINK_MODE: copy
 
@@ -56,7 +56,7 @@ jobs:
     - name: Run tests & build
       run: |
         uv run pytest tests
-        uvx --from build pyproject-build --installer uv
+        uv build
 
     - name: Minimize uv cache
       run: uv cache prune --ci
