@@ -179,10 +179,11 @@ class PxTable:
 
     def __is_path(self, query: str) -> bool:
         """Check if query is a path or not"""
-        if not isinstance(query, str):
+        try:
+            path = Path(query)
+            return path.exists()
+        except OSError:
             return False
-        path = Path(query)
-        return path.exists()
 
     @property
     def query(self) -> dict:
