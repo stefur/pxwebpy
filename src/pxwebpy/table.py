@@ -5,6 +5,7 @@ import json
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
+from typing import Optional, Union
 
 import requests
 
@@ -72,13 +73,13 @@ class PxTable:
     """
 
     def __init__(self, url=None, query=None) -> None:
-        self.url: str | None = url
-        self.query: dict | None = query
-        self.dataset: list[dict] | None = None
+        self.url: Optional[str] = url
+        self.query: Optional[dict] = query
+        self.dataset: Optional[list[dict]] = None
         self.metadata: dict = {
             key: None for key in ["label", "note", "source", "updated"]
         }
-        self.fetched: datetime | None = None
+        self.fetched: Optional[datetime] = None
 
         if query:
             try:
@@ -192,12 +193,20 @@ class PxTable:
         return self.__query
 
     @query.setter
-    def query(self, query: str | dict | None) -> None:
+    def query(
+        self,
+        query: Optional[
+            Union[
+                str,
+                dict,
+            ]
+        ],
+    ) -> None:
         """
         Set the JSON query from a string representing a path or a JSON structure that is either a string or a dict.
         """
 
-        if not isinstance(query, str | dict | None):
+        if not isinstance(query, (str, dict, type(None))):
             raise TypeError(
                 f"""Invalid input for `query`.
                 Expected `str`, `dict` or `None`, got {type(query)!r}."""
@@ -308,7 +317,7 @@ class PxTable:
                 )
         self.query = {"query": conversion, "response": {"format": "json-stat2"}}
 
-    def get_table_variables(self) -> dict | None:
+    def get_table_variables(self) -> Union[dict, None]:
         """
         Returns a dict of variables and the respective values from the table.
         """
