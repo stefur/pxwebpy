@@ -3,8 +3,6 @@ name: release
 env:
   UV_VERSION: "0.4.9"
   UV_LINK_MODE: copy
-  TWINE_USERNAME: __token__
-  TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
 
 on:
   release:
@@ -14,9 +12,12 @@ jobs:
   build-release:
 
     runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      id-token: write
     strategy:
       fail-fast: false
-    
+
     steps:
       - uses: actions/checkout@v4
 
@@ -25,6 +26,6 @@ jobs:
 
       - name: Build for distribution
         run: uv build
-    
-      - name: Publish to PyPI
-        run: uvx twine upload dist/*
+
+      - name: Publish to PyPI      
+        uses: pypa/gh-action-pypi-publish@release/v1

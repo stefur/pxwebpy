@@ -179,11 +179,10 @@ class PxTable:
 
     def __is_path(self, query: str) -> bool:
         """Check if query is a path or not"""
-        try:
-            path = Path(query)
-            return path.exists()
-        except Exception:
+        if not isinstance(query, str):
             return False
+        path = Path(query)
+        return path.exists()
 
     @property
     def query(self) -> dict:
@@ -211,7 +210,7 @@ class PxTable:
             else:
                 try:
                     self.__query = json.loads(query)
-                except Exception as err:
+                except json.JSONDecodeError as err:
                     raise ValueError(
                         "Provided value could not be decoded as JSON."
                     ) from err
@@ -233,9 +232,9 @@ class PxTable:
         try:
             response.raise_for_status()
         except requests.exceptions.HTTPError:
-            raise Exception(
+            raise RuntimeError(
                 f"Failed to {context.value}: {response.status_code}: {response.reason}"
-            ) from None
+            )
 
         return response.json()
 

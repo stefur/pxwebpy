@@ -3,7 +3,7 @@
 ![PyPI - Version](https://img.shields.io/pypi/v/pxwebpy?style=flat-square)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pxwebpy?style=flat-square)
 [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json&style=flat-square)](https://github.com/astral-sh/uv)
-[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json&style=flat-square)](https://github.com/astral-sh/ruff)   
+[![ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json&style=flat-square)](https://github.com/astral-sh/ruff)   
 Easily get data from the PxWeb API and into either a polars or pandas dataframe.  
   
 Pxwebpy parses the PxWeb table data as well as metadata using the json-stat2 response format. 
