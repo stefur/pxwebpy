@@ -125,36 +125,35 @@ class PxTable:
             # If the dimension has extension data along with a key for show, use
             # that to determine the values shown in the output
             try:
-                match json_data["dimension"][dim]["extension"]["show"]:
-                    case "code_value":
-                        values = [
-                            str(k) + " " + str(v)
-                            for k, v in json_data["dimension"][dim]["category"][
-                                "label"
-                            ].items()
-                        ]
+                show_value = json_data["dimension"][dim]["extension"]["show"]
 
-                    case "code":
-                        values = [
-                            str(k)
-                            for k in json_data["dimension"][dim]["category"][
-                                "label"
-                            ].keys()
-                        ]
+                if show_value == "code_value":
+                    values = [
+                        str(k) + " " + str(v)
+                        for k, v in json_data["dimension"][dim]["category"][
+                            "label"
+                        ].items()
+                    ]
 
-                    case "value":
-                        values = [
-                            str(v)
-                            for v in json_data["dimension"][dim]["category"][
-                                "label"
-                            ].values()
-                        ]
+                elif show_value == "code":
+                    values = [
+                        str(k)
+                        for k in json_data["dimension"][dim]["category"]["label"].keys()
+                    ]
 
+                elif show_value == "value":
+                    values = [
+                        str(v)
+                        for v in json_data["dimension"][dim]["category"][
+                            "label"
+                        ].values()
+                    ]
                     # Raise an error if we hit some value in the show key that we don't know how to handle
-                    case _:
-                        raise ValueError(
-                            f"""Unexpected show value. Expected "code", "value" or "code_value", got: {json_data["dimension"][dim]["extension"]["show"]}"""
-                        )
+
+                else:
+                    raise ValueError(
+                        f"""Unexpected show value. Expected "code", "value" or "code_value", got: {show_value}"""
+                    )
 
             # If there's no show key at all we default to using the label values
             except KeyError:
