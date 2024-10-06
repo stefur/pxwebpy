@@ -23,8 +23,7 @@ class HttpMethod(Enum):
 
 class PxTable:
     """
-    A table object to get data from the PxWeb API.
-    The table dataset is collected as a long format.
+    A table object to retrieve data from the PxWeb API.
 
     Parameters
     ----------
@@ -100,7 +99,7 @@ class PxTable:
         dataset={self.dataset})"""
 
     def get_data(self) -> None:
-        """Get data from the API"""
+        """Get data from the API, modifying the object in-place."""
         json_data = self.__send_request(HttpMethod.POST, Context.DATA)
 
         self.dataset = self.__unpack_data(json_data)
@@ -249,8 +248,9 @@ class PxTable:
 
     def create_query(self, query: dict[str, list[str]]) -> None:
         """
-        This function assumes the keys with list of values are the textual display names and will convert them into the identifier code and values
+        This function will convert any textual display names of variables and value into the identifier code and values
         that the API expects.
+        The creation of a query modifies the object in-place.
 
         Parameters
         ----------
@@ -280,57 +280,117 @@ class PxTable:
             if not isinstance(value, list) or not all(
                 isinstance(v, str) for v in value
             ):
-                raise ValueError("Values in the quest must be a `list` of `strings`.")
+                raise ValueError("Values in the query must be a `list` of `strings`.")
 
+        # Get the table variables and values
         json_data = self.__send_request(HttpMethod.GET, Context.QUERY)
-        conversion_mapping = {}
 
-        # TODO Handle possible key errors. Also cache code responses.
+        # Set up a dictionary to use for conversion between value and valueText
+        value_mapping = {}
+
         for variable in json_data["variables"]:
             text = variable["text"]
             code = variable["code"]
             value_texts = variable["valueTexts"]
             values = variable["values"]
 
-            conversion_mapping[text] = {
-                "code": code,
-                "values": {
-                    value_text: value for value_text, value in zip(value_texts, values)
-                },
+            value_mapping[(code, text)] = {
+                "values": [
+                    (value, value_text)
+                    for value, value_text in zip(values, value_texts)
+                ],
             }
 
-        conversion = []
+        query_content = []
 
-        for key, values in query.items():
-            if key in conversion_mapping:
-                code = conversion_mapping[key]["code"]
-                value_map = conversion_mapping[key]["values"]
-                converted_values = [value_map[value] for value in values]
-                conversion.append(
-                    {
-                        "code": code,
-                        "selection": {
-                            "filter": "item",
-                            "values": converted_values,
-                        },
-                    }
-                )
-        self.query = {"query": conversion, "response": {"format": "json-stat2"}}
+        for variable, values in query.items():
+            # Go over the selected variables, a match can be either code or text
+            matching_variable = next(
+                (
+                    code_text
+                    for code_text in value_mapping.keys()
+                    if variable in code_text
+                ),
+                None,
+            )
+            # Extract the code from the matching variable tuple
+            if matching_variable:
+                code = matching_variable[0]
+
+                # Handle wild card filtering
+                if "*" in values[0] and len(values) == 1:
+                    query_content.append(
+                        {
+                            "code": code,
+                            "selection": {
+                                "filter": "all",
+                                "values": values,
+                            },
+                        }
+                    )
+                else:
+                    # Select the values to map
+                    value_tuples = value_mapping[matching_variable]["values"]
+
+                    converted_values = []
+
+                    # Go over the values and convert any provided valueTexts to values
+                    for value in values:
+                        # Try to find a match within either code
+                        matching_value = next(
+                            (
+                                value_valuetext
+                                for value_valuetext in value_tuples
+                                if value in value_valuetext
+                            ),
+                            None,
+                        )
+                        # If we find a match we append the value that the API wants
+                        if matching_value:
+                            converted_values.append(matching_value[0])
+                        else:
+                            # Raise an error if the value is not found in the variable
+                            raise KeyError(
+                                f"Value '{value}' not found in variable '{key}'."
+                            )
+
+                    query_content.append(
+                        {
+                            "code": code,
+                            "selection": {
+                                "filter": "item",
+                                "values": converted_values,
+                            },
+                        }
+                    )
+            else:
+                raise KeyError(f"Variable '{key}' not found in table.")
+
+        self.query = {"query": query_content, "response": {"format": "json-stat2"}}
 
     def get_table_variables(self) -> Union[dict, None]:
         """
-        Returns a dict of variables and the respective values from the table.
+        Returns a dict of variables and the respective values with texts from the table.
         """
         json_data = self.__send_request(HttpMethod.GET, Context.VARIABLES)
         try:
             result = {}
 
             for var in json_data["variables"]:
-                text = var["text"]
-                values = var["valueTexts"]
-                if text and values:
-                    result[text] = values
+                code = var.get("code")
+                value_texts = var.get("valueTexts")
+                values = var.get("values")
+                elimination = var.get("elimination", False)
+
+                # Print values as tuples if the valueText is different from the value
+                result[code] = {
+                    "values": [
+                        v if v == vt else (v, vt) for v, vt in zip(values, value_texts)
+                    ],
+                    # Flip the logic :)
+                    "mandatory": not elimination,
+                }
 
             return result
         except KeyError as err:
-            raise KeyError(f"Failed to unpack, missing key: {err}") from err
+            raise KeyError(f"Failed to unpack, missing key: {err}") from None
