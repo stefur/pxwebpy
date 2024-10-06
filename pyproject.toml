@@ -25,11 +25,6 @@ requires-python = ">= 3.9"
 [project.urls]
 Repository = "https://github.com/stefur/pxwebpy"
 
-[project.optional-dependencies]
-ci = [
-    "pytest>=8.2.0",
-]
-
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
@@ -41,5 +36,4 @@ dev-dependencies = [
     "pandas>=2.2.0",
     "pandas-stubs>=2.1.4.231227",
     "pytest>=8.2.0",
-    "ipykernel>=6.29.4",
 ]
