@@ -1,3 +1,3 @@
-"""Namespace flattening"""
+from .table import PxTable
 
-from pxwebpy.table import *  # noqa
+__all__ = ["PxTable"]

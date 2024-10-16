@@ -1,8 +1,9 @@
 """pxwebpy pulling some data to Pandas and Polars respectively"""
 
 import pandas as pd
-import polars as pl  # type: ignore
-from pxwebpy.table import PxTable
+import polars as pl
+
+from pxwebpy import PxTable
 
 URL = "https://api.scb.se/OV0104/v1/doris/sv/ssd/START/HE/HE0110/HE0110A/SamForvInk1"
 
@@ -66,7 +67,8 @@ data3 = PxTable(URL, QUERY)
 # We can fetch the data later on
 data3.get_data()
 
-# The get_data() function can be used to refresh data as well
+# The get_data() function can be used to refresh data as well.
+# Though data is cached for 10 minutes.
 
 # Everytime get_data() is called, the field "fetched"
 # is updated with a timestamp (datetime).

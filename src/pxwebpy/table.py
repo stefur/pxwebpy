@@ -1,24 +1,14 @@
-"""Helper to make fetching data from PxWeb a bit easier"""
+"""M<ake fetching data from PxWeb a bit easier"""
 
-import itertools
 import json
 from datetime import datetime
-from enum import Enum
 from pathlib import Path
+from tempfile import gettempdir
 from typing import Optional, Union
 
-import requests
+from requests_cache import CachedSession
 
-
-class Context(Enum):
-    QUERY = "create a query"
-    VARIABLES = "get variables"
-    DATA = "get data"
-
-
-class HttpMethod(Enum):
-    GET = "GET"
-    POST = "POST"
+from . import _api, _data
 
 
 class PxTable:
@@ -27,7 +17,7 @@ class PxTable:
 
     Parameters
     ----------
-    url : str | None
+    url : str
         The PxWeb API URL for the table to query.
     query :  str | dict | None
         The query must be a JSON structure, supplied either as a dict, string or a string representing a path to a file.
@@ -41,44 +31,49 @@ class PxTable:
 
     >>> tbl = PxTable(url="https://api.scb.se/OV0104/v1/doris/sv/ssd/START/HE/HE0110/HE0110A/SamForvInk1")
 
-    >>> tbl.create_query({"år": ["2021"]})
+    >>> tbl.create_query({"region": ["17*"], "år": ["*"], "ålder": ["totalt 16+ år"], "ContentsCode": ["Medianinkomst, tkr"]})
 
     >>> tbl.get_data()
 
     >>> print(tbl)
 
     PxTable(url='https://api.scb.se/OV0104/v1/doris/sv/ssd/START/HE/HE0110/HE0110A/SamForvInk1',
-        query={'query': [{'code': 'Tid', 'selection': {'filter': 'item', 'values': ['2021']}}], 'response': {'format': 'json-stat2'}},
-        metadata={'label': 'Sammanräknad förvärvsinkomst för boende i Sverige hela året efter ålder, tabellinnehåll och år', 'source': 'SCB', 'updated': '2023-01-10T10:42:00Z'},
-        fetched=2023-10-29 14:21:57.628639,
-        dataset=[{'ålder': 'totalt 16+ år', 'tabellinnehåll': 'Medelinkomst, tkr', 'år': '2021' ...
+            query={'query': [{'code': 'Region', 'selection': {'filter': 'all', 'values': ['17*']}}, {'code': 'Tid', 'selection': {'filter': 'all', 'values': ['*']}}, {'code': 'Alder', 'selection': {'filter': 'item', 'values': ['tot16+']}}, {'code': 'ContentsCode', 'selection': {'filter': 'item', 'values': ['HE0110J8']}}], 'response': {'format': 'json-stat2'}},
+            metadata={'label': 'Sammanräknad förvärvsinkomst, medianinkomst för boende i Sverige hela året, tkr efter region, ålder, tabellinnehåll och år', 'note': None, 'source': 'SCB', 'updated': '2024-01-12T05:52:00Z'},
+            fetched=2024-10-11 20:13:35.475254,
+            dataset=[{'region': '17 Värmlands län', 'ålder': 'totalt 16+ år', 'tabellinnehåll': 'Medianinkomst, tkr', 'år': '1999', 'value': 153.4}, {'region': '17 Värmlands län', 'ålder': 'totalt 16+ år', 'tabellinnehåll': 'Medianinkomst, tkr', 'år': '2000', 'value': 157.7}, {'region': '17 Värmlands län', 'ålder': 'totalt 16+ år', 'tabellinnehåll': 'Medianinkomst, tkr', 'år': '2001', 'value': 163.2}, ...
 
     >>> df = pd.DataFrame(tbl.dataset)
     >>> print(df)
-                ålder      tabellinnehåll    år      value
-    0   totalt 16+ år   Medelinkomst, tkr  2021      331.5
-    1   totalt 16+ år  Medianinkomst, tkr  2021      301.5
-    2   totalt 16+ år    Totalsumma, mnkr  2021  2779588.9
-    3   totalt 16+ år      Antal personer  2021  8383640.0
-    4        16-19 år   Medelinkomst, tkr  2021       28.1
-    ..            ...                 ...   ...        ...
-    71       80-84 år      Antal personer  2021   290684.0
-    72         85+ år   Medelinkomst, tkr  2021      214.4
-    73         85+ år  Medianinkomst, tkr  2021      200.1
-    74         85+ år    Totalsumma, mnkr  2021    57529.3
-    75         85+ år      Antal personer  2021   268320.0
 
-    [76 rows x 4 columns]
+                region          ålder      tabellinnehåll    år  value
+    0    17 Värmlands län  totalt 16+ år  Medianinkomst, tkr  1999  153.4
+    1    17 Värmlands län  totalt 16+ år  Medianinkomst, tkr  2000  157.7
+    2    17 Värmlands län  totalt 16+ år  Medianinkomst, tkr  2001  163.2
+    3    17 Värmlands län  totalt 16+ år  Medianinkomst, tkr  2002  170.0
+    4    17 Värmlands län  totalt 16+ år  Medianinkomst, tkr  2003  176.8
+    ..                ...            ...                 ...   ...    ...
+    403       1785 Säffle  totalt 16+ år  Medianinkomst, tkr  2018  239.8
+    404       1785 Säffle  totalt 16+ år  Medianinkomst, tkr  2019  246.3
+    405       1785 Säffle  totalt 16+ år  Medianinkomst, tkr  2020  250.1
+    406       1785 Säffle  totalt 16+ år  Medianinkomst, tkr  2021  255.5
+    407       1785 Säffle  totalt 16+ år  Medianinkomst, tkr  2022  273.4
+
+    [408 rows x 5 columns]
     """
 
-    def __init__(self, url=None, query=None) -> None:
-        self.url: Optional[str] = url
+    _tmp_dir = gettempdir()
+    _cache = Path(_tmp_dir) / "pxwebpy_cache"
+
+    def __init__(self, url, query=None) -> None:
+        self.url: str = url
         self.query: Optional[dict] = query
         self.dataset: Optional[list[dict]] = None
         self.metadata: dict = {
             key: None for key in ["label", "note", "source", "updated"]
         }
         self.fetched: Optional[datetime] = None
+        self.__session = CachedSession(cache_name=self._cache, ttl=600)
 
         if query:
             try:
@@ -100,9 +95,10 @@ class PxTable:
 
     def get_data(self) -> None:
         """Get data from the API, modifying the object in-place."""
-        json_data = self.__send_request(HttpMethod.POST, Context.DATA)
 
-        self.dataset = self.__unpack_data(json_data)
+        json_data = _api.call(session=self.__session, url=self.url, query=self.query)
+
+        self.dataset = _data.unpack_table_data(json_data)
 
         metadata_keys = ["label", "note", "source", "updated"]
 
@@ -111,70 +107,6 @@ class PxTable:
         }
 
         self.fetched = datetime.now()
-
-    def __unpack_data(self, json_data: dict) -> list[dict]:
-        """
-        Takes the json-stat2 and turns it into a list of dicts that can
-        be used to convert into a dataframe, using either pandas or polars.
-        """
-
-        dimension_categories = {}
-
-        # Go over each dimension
-        for dim in json_data["dimension"]:
-            # If the dimension has extension data along with a key for show, use
-            # that to determine the values shown in the output
-            try:
-                show_value = json_data["dimension"][dim]["extension"]["show"]
-
-                if show_value == "code_value":
-                    values = [
-                        str(k) + " " + str(v)
-                        for k, v in json_data["dimension"][dim]["category"][
-                            "label"
-                        ].items()
-                    ]
-
-                elif show_value == "code":
-                    values = [
-                        str(k)
-                        for k in json_data["dimension"][dim]["category"]["label"].keys()
-                    ]
-
-                elif show_value == "value":
-                    values = [
-                        str(v)
-                        for v in json_data["dimension"][dim]["category"][
-                            "label"
-                        ].values()
-                    ]
-                    # Raise an error if we hit some value in the show key that we don't know how to handle
-
-                else:
-                    raise ValueError(
-                        f"""Unexpected show value. Expected "code", "value" or "code_value", got: {show_value}"""
-                    )
-
-            # If there's no show key at all we default to using the label values
-            except KeyError:
-                values = [
-                    str(v)
-                    for v in json_data["dimension"][dim]["category"]["label"].values()
-                ]
-
-            dimension_categories.update({json_data["dimension"][dim]["label"]: values})
-
-        # The result is a list of dicts with the dimension as key and product of the category labels for values
-        result = [
-            dict(zip(dimension_categories.keys(), x))
-            for x in itertools.product(*dimension_categories.values())
-        ]
-
-        # Finally add the value for each dict representing a row
-        for value, dict_row in zip(json_data["value"], result):
-            dict_row["value"] = value
-
-        return result
 
     def __is_path(self, query: str) -> bool:
         """Check if query is a path or not"""
@@ -225,28 +157,7 @@ class PxTable:
         else:
             self.__query = query
 
-    def __send_request(self, method: HttpMethod, context: Context) -> dict:
-        """Send either a GET or POST request to the API"""
-        if not self.url:
-            raise ValueError("No URL is set.")
-
-        if method == HttpMethod.GET:
-            response = requests.get(self.url, timeout=10)
-        elif method == HttpMethod.POST:
-            if not self.query:
-                raise ValueError("No query is set.")
-            response = requests.post(self.url, json=self.query, timeout=10)
-
-        try:
-            response.raise_for_status()
-        except requests.exceptions.HTTPError:
-            raise RuntimeError(
-                f"Failed to {context.value}: {response.status_code}: {response.reason}"
-            )
-
-        return response.json()
-
-    def create_query(self, query: dict[str, list[str]]) -> None:
+    def create_query(self, query_struct: dict[str, list[str]]) -> None:
         """
         This function will convert any textual display names of variables and value into the identifier code and values
         that the API expects.
@@ -263,17 +174,17 @@ class PxTable:
 
         >>> tbl = PxTable(url="https://api.scb.se/OV0104/v1/doris/sv/ssd/START/ME/ME0104/ME0104D/ME0104T4")
 
-        >>> tbl.create_query({"valår": ["2014", "2018", "2022"], "region": "Riket")
+        >>> tbl.create_query({"valår": ["*"], "region": ["Riket"]})
 
         >>> tbl.query
 
-        {'query': [{'code': 'Region',
-        'selection': {'filter': 'item', 'values': ['00']}}],
+        {'query': [{'code': 'Tid', 'selection': {'filter': 'all', 'values': ['*']}},
+        {'code': 'Region', 'selection': {'filter': 'item', 'values': ['00']}}],
         'response': {'format': 'json-stat2'}}
         """
 
         # Check that the query structure holds up
-        for key, value in query.items():
+        for key, value in query_struct.items():
             if not isinstance(key, str):
                 raise ValueError("Keys in the query must be `string`.")
 
@@ -283,114 +194,16 @@ class PxTable:
                 raise ValueError("Values in the query must be a `list` of `strings`.")
 
         # Get the table variables and values
-        json_data = self.__send_request(HttpMethod.GET, Context.QUERY)
+        json_data = _api.call(session=self.__session, url=self.url)
 
-        # Set up a dictionary to use for conversion between value and valueText
-        value_mapping = {}
+        query = _data.build_query(json_data=json_data, query=query_struct)
 
-        for variable in json_data["variables"]:
-            text = variable["text"]
-            code = variable["code"]
-            value_texts = variable["valueTexts"]
-            values = variable["values"]
-
-            value_mapping[(code, text)] = {
-                "values": [
-                    (value, value_text)
-                    for value, value_text in zip(values, value_texts)
-                ],
-            }
-
-        query_content = []
-
-        for variable, values in query.items():
-            # Go over the selected variables, a match can be either code or text
-            matching_variable = next(
-                (
-                    code_text
-                    for code_text in value_mapping.keys()
-                    if variable in code_text
-                ),
-                None,
-            )
-            # Extract the code from the matching variable tuple
-            if matching_variable:
-                code = matching_variable[0]
-
-                # Handle wild card filtering
-                if "*" in values[0] and len(values) == 1:
-                    query_content.append(
-                        {
-                            "code": code,
-                            "selection": {
-                                "filter": "all",
-                                "values": values,
-                            },
-                        }
-                    )
-                else:
-                    # Select the values to map
-                    value_tuples = value_mapping[matching_variable]["values"]
-
-                    converted_values = []
-
-                    # Go over the values and convert any provided valueTexts to values
-                    for value in values:
-                        # Try to find a match within either code
-                        matching_value = next(
-                            (
-                                value_valuetext
-                                for value_valuetext in value_tuples
-                                if value in value_valuetext
-                            ),
-                            None,
-                        )
-                        # If we find a match we append the value that the API wants
-                        if matching_value:
-                            converted_values.append(matching_value[0])
-                        else:
-                            # Raise an error if the value is not found in the variable
-                            raise KeyError(
-                                f"Value '{value}' not found in variable '{key}'."
-                            )
-
-                    query_content.append(
-                        {
-                            "code": code,
-                            "selection": {
-                                "filter": "item",
-                                "values": converted_values,
-                            },
-                        }
-                    )
-            else:
-                raise KeyError(f"Variable '{key}' not found in table.")
-
-        self.query = {"query": query_content, "response": {"format": "json-stat2"}}
+        self.query = {"query": query, "response": {"format": "json-stat2"}}
 
     def get_table_variables(self) -> Union[dict, None]:
         """
         Returns a dict of variables and the respective values with texts from the table.
         """
-        json_data = self.__send_request(HttpMethod.GET, Context.VARIABLES)
-        try:
-            result = {}
+        json_data = _api.call(session=self.__session, url=self.url)
 
-            for var in json_data["variables"]:
-                code = var.get("code")
-                value_texts = var.get("valueTexts")
-                values = var.get("values")
-                elimination = var.get("elimination", False)
-
-                # Print values as tuples if the valueText is different from the value
-                result[code] = {
-                    "values": [
-                        v if v == vt else (v, vt) for v, vt in zip(values, value_texts)
-                    ],
-                    # Flip the logic :)
-                    "mandatory": not elimination,
-                }
-
-            return result
-        except KeyError as err:
-            raise KeyError(f"Failed to unpack, missing key: {err}") from None
+        return _data.unpack_table_variables(json_data)

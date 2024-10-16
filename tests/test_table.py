@@ -1,12 +1,14 @@
 """Tests"""
 
 import json
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
 import pytest
-from pxwebpy.table import PxTable
+from requests.exceptions import HTTPError
 
-URL = "https://api.scb.se/OV0104/v1/doris/sv/ssd/START/HE/HE0110/HE0110A/SamForvInk1"
+from pxwebpy import PxTable
+
+URL = "https://www.example.com"
 
 QUERY = """
 {
@@ -59,14 +61,14 @@ QUERY = """
 
 def test_query_setter_with_string():
     """The query should be able to handle a string representing a JSON structure"""
-    table = PxTable(query=QUERY)
+    table = PxTable(url=URL, query=QUERY)
     json_query = json.loads(QUERY)
     assert table.query == json_query
 
 
 def test_query_setter_with_file():
     """The query should be able to handle a string representing a path to a file containing a JSON structure"""
-    table = PxTable(query="tests/valid_query.json")
+    table = PxTable(url=URL, query="tests/valid_query.json")
     with open("tests/valid_query.json", mode="r", encoding="utf-8") as read_file:
         json_query = json.load(read_file)
 
@@ -76,20 +78,20 @@ def test_query_setter_with_file():
 def test_query_setter_with_dict():
     """The query should be able to handle a dict representing a JSON structure"""
     json_query = json.loads(QUERY)
-    table = PxTable(query=QUERY)
+    table = PxTable(url=URL, query=QUERY)
     assert table.query == json_query
 
 
 def test_query_setter_with_invalid_json():
     """Invalid query should produce an error"""
     with pytest.raises(ValueError):
-        PxTable(query="tests/invalid_query.json")
+        PxTable(url=URL, query="tests/invalid_query.json")
 
 
 def test_query_setter_with_invalid_type():
     """Wrong data type should raise a TypeError"""
     with pytest.raises(TypeError):
-        PxTable(query=[QUERY])
+        PxTable(url=URL, query=[QUERY])
 
 
 def test_get_data_invalid_url():
@@ -101,7 +103,7 @@ def test_get_data_invalid_url():
 
 def test_create_query():
     """Creating a query requires a specific format"""
-    table = PxTable()
+    table = PxTable(url=URL)
 
     # Values must always be strings
     with pytest.raises(ValueError):
@@ -111,15 +113,23 @@ def test_create_query():
     with pytest.raises(ValueError):
         table.create_query({"Län": "Stockholms län"})
 
+    # Create a query
+    with open("tests/mock/response_table_variables.json", "r") as expected_response:
+        mock_response = json.load(expected_response)
+
+    with patch("requests_cache.CachedSession.get") as mock_get:
+        mock_get.return_value.ok = True
+        mock_get.return_value.json.return_value = mock_response
+        table.create_query({"Region": ["Riket"], "Tid": ["*"]})
+
 
 def test_invalid_table_variables():
     """Invalid JSON structure in response should raise a KeyError"""
     table = PxTable(url=URL)
 
     with pytest.raises(KeyError):
-        with patch("requests.get") as mock_get:
-            mock_get.return_value = Mock(status_code=200)
-            # Just a blank return value
+        with patch("requests_cache.CachedSession.get") as mock_get:
+            mock_get.return_value.ok = True
             mock_get.return_value.json.return_value = {"key": "value"}
 
             table.get_table_variables()
@@ -131,21 +141,22 @@ def test_get_table_variables():
     with open("tests/mock/response_table_variables.json", "r") as expected_response:
         mock_response = json.load(expected_response)
 
-    with patch("requests.get") as mock_get:
-        mock_get.return_value = Mock(status_code=200)
+    with patch("requests_cache.CachedSession.get") as mock_get:
+        mock_get.return_value.ok = True
         mock_get.return_value.json.return_value = mock_response
 
-    variables = table.get_table_variables()
-    assert isinstance(variables, dict)
+        variables = table.get_table_variables()
+
+        assert isinstance(variables, dict)
 
 
 def test_send_request():
     """Sending a request and receiving an error response should raise an exception"""
     table = PxTable(url=URL)
 
-    with pytest.raises(Exception):
-        with patch("requests.get") as mock_get:
-            mock_get.return_value = Mock(status_code=404)
+    with pytest.raises(HTTPError):
+        with patch("requests_cache.CachedSession.get") as mock_get:
+            mock_get.return_value.ok = False
 
             table.get_table_variables()
 
@@ -168,8 +179,8 @@ def test_get_data():
             mock_response = json.load(response_file)
 
         # Patch requests post method with a mock response
-        with patch("requests.post") as mock_post:
-            mock_post.return_value = Mock(status_code=200)
+        with patch("requests_cache.CachedSession.post") as mock_post:
+            mock_post.return_value.ok = True
             mock_post.return_value.json.return_value = mock_response
 
             # PxTable expects a URL and a query to get data
