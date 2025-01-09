@@ -107,11 +107,11 @@ def test_create_query():
 
     # Values must always be strings
     with pytest.raises(ValueError):
-        table.create_query({"År": [2023, 2024, 2025]})
+        table.create_query({"År": [2023, 2024, 2025]})  # type: ignore
 
     # Values must be in a list
     with pytest.raises(ValueError):
-        table.create_query({"Län": "Stockholms län"})
+        table.create_query({"Län": "Stockholms län"})  # type: ignore
 
     # Create a query
     with open("tests/mock/response_table_variables.json", "r") as expected_response:
@@ -188,6 +188,6 @@ def test_get_data():
             table.get_data()
 
             # Compare the dataset with the expected result
-            assert (
-                table.dataset == expected_result
-            ), f"Dataset does not match expected result for query: {url}, {query_params}"
+            assert table.dataset == expected_result, (
+                f"Dataset does not match expected result for query: {url}, {query_params}"
+            )

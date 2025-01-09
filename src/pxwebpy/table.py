@@ -1,4 +1,4 @@
-"""M<ake fetching data from PxWeb a bit easier"""
+"""Make fetching data from PxWeb a bit easier"""
 
 import json
 from datetime import datetime
@@ -19,8 +19,11 @@ class PxTable:
     ----------
     url : str
         The PxWeb API URL for the table to query.
-    query :  str | dict | None
+    query : str | dict | None
         The query must be a JSON structure, supplied either as a dict, string or a string representing a path to a file.
+    timeout : int
+        The timeout (in seconds) for the query sent to the API. This defines the maximum time the client will wait
+        for the server to respond before a a `ReadTimeout` exception will be raised. Defaults to 30 seconds.
 
     Example
     --------
@@ -65,9 +68,10 @@ class PxTable:
     _tmp_dir = gettempdir()
     _cache = Path(_tmp_dir) / "pxwebpy_cache"
 
-    def __init__(self, url, query=None) -> None:
+    def __init__(self, url, query=None, timeout=30) -> None:
         self.url: str = url
-        self.query: Optional[dict] = query
+        self.query = query
+        self.timeout: int = timeout
         self.dataset: Optional[list[dict]] = None
         self.metadata: dict = {
             key: None for key in ["label", "note", "source", "updated"]
@@ -75,20 +79,10 @@ class PxTable:
         self.fetched: Optional[datetime] = None
         self.__session = CachedSession(cache_name=self._cache, ttl=600)
 
-        if query:
-            try:
-                response_format = self.query["response"]["format"]
-                if response_format != "json-stat2":
-                    raise TypeError(
-                        f"""Response format must be 'json-stat2', \
-                        got '{self.query["response"]["format"]}'."""
-                    )
-            except KeyError as err:
-                raise KeyError(f"Missing key: {err}") from err
-
     def __repr__(self) -> str:
         return f"""PxTable(url='{self.url}',
         query={self.query},
+        timeout={self.timeout},
         metadata={self.metadata},
         fetched={self.fetched},
         dataset={self.dataset})"""
@@ -96,7 +90,9 @@ class PxTable:
     def get_data(self) -> None:
         """Get data from the API, modifying the object in-place."""
 
-        json_data = _api.call(session=self.__session, url=self.url, query=self.query)
+        json_data = _api.call(
+            session=self.__session, url=self.url, query=self.query, timeout=self.timeout
+        )
 
         self.dataset = _data.unpack_table_data(json_data)
 
@@ -111,13 +107,12 @@ class PxTable:
     def __is_path(self, query: str) -> bool:
         """Check if query is a path or not"""
         try:
-            path = Path(query)
-            return path.exists()
+            return Path(query).is_file()
         except OSError:
             return False
 
     @property
-    def query(self) -> dict:
+    def query(self) -> Optional[dict]:
         """
         Getter for the query.
         """
@@ -137,11 +132,21 @@ class PxTable:
         Set the JSON query from a string representing a path or a JSON structure that is either a string or a dict.
         """
 
-        if not isinstance(query, (str, dict, type(None))):
+        if query is not None and not isinstance(query, (str, dict)):
             raise TypeError(
                 f"""Invalid input for `query`.
-                Expected `str`, `dict` or `None`, got {type(query)!r}."""
+                    Expected `str`, `dict` or `None`, got {type(query)!r}."""
             )
+
+        if isinstance(query, dict):
+            try:
+                if (response_format := query["response"]["format"]) != "json-stat2":
+                    raise TypeError(
+                        f"""Response format must be 'json-stat2', \
+                        got '{response_format}'."""
+                    )
+            except KeyError as err:
+                raise KeyError(f"Missing key: {err}") from err
 
         if isinstance(query, str):
             if self.__is_path(query):
@@ -194,7 +199,9 @@ class PxTable:
                 raise ValueError("Values in the query must be a `list` of `strings`.")
 
         # Get the table variables and values
-        json_data = _api.call(session=self.__session, url=self.url)
+        json_data = _api.call(
+            session=self.__session, url=self.url, timeout=self.timeout
+        )
 
         query = _data.build_query(json_data=json_data, query=query_struct)
 
@@ -204,6 +211,8 @@ class PxTable:
         """
         Returns a dict of variables and the respective values with texts from the table.
         """
-        json_data = _api.call(session=self.__session, url=self.url)
+        json_data = _api.call(
+            session=self.__session, url=self.url, timeout=self.timeout
+        )
 
         return _data.unpack_table_variables(json_data)
