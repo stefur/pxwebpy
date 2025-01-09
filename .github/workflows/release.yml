@@ -6,24 +6,23 @@ on:
 
 jobs:
   build-release:
-
     runs-on: ubuntu-latest
     environment: release
     permissions:
       id-token: write
-    strategy:
-      fail-fast: false
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v2
+        uses: astral-sh/setup-uv@v4
         with:
-          version: "0.4.18"
+          version: "0.5.16"
 
       - name: Build for distribution
         run: uv build
 
-      - name: Publish to PyPI      
+      - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
