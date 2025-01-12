@@ -8,102 +8,74 @@ from requests.exceptions import HTTPError
 
 from pxwebpy import PxTable
 
-URL = "https://www.example.com"
 
-QUERY = """
-{
-  "query": [
-    {
-      "code": "Region",
-      "selection": {
-        "filter": "vs:RegionKommun07EjAggr",
-        "values": [
-          "0180",
-          "1280",
-          "1480"
-        ]
-      }
-    },
-    {
-      "code": "Alder",
-      "selection": {
-        "filter": "item",
-        "values": [
-          "tot20+"
-        ]
-      }
-    },
-    {
-      "code": "ContentsCode",
-      "selection": {
-        "filter": "item",
-        "values": [
-          "HE0110J7"
-        ]
-      }
-    },
-    {
-      "code": "Tid",
-      "selection": {
-        "filter": "item",
-        "values": [
-          "2021"
-        ]
-      }
+@pytest.fixture
+def url():
+    return "api.some_pxweb.com"
+
+
+@pytest.fixture
+def query_dict():
+    return {
+        "query": [
+            {
+                "code": "Region",
+                "selection": {
+                    "filter": "vs:RegionKommun07EjAggr",
+                    "values": ["0180", "1280", "1480"],
+                },
+            },
+            {"code": "Alder", "selection": {"filter": "item", "values": ["tot20+"]}},
+            {
+                "code": "ContentsCode",
+                "selection": {"filter": "item", "values": ["HE0110J7"]},
+            },
+            {"code": "Tid", "selection": {"filter": "item", "values": ["2021"]}},
+        ],
+        "response": {"format": "json-stat2"},
     }
-  ],
-  "response": {
-    "format": "json-stat2"
-  }
-}
-"""
 
 
-def test_query_setter_with_string():
-    """The query should be able to handle a string representing a JSON structure"""
-    table = PxTable(url=URL, query=QUERY)
-    json_query = json.loads(QUERY)
-    assert table.query == json_query
+@pytest.fixture
+def query_str(query_dict):
+    return json.dumps(query_dict)
 
 
-def test_query_setter_with_file():
-    """The query should be able to handle a string representing a path to a file containing a JSON structure"""
-    table = PxTable(url=URL, query="tests/valid_query.json")
-    with open("tests/valid_query.json", mode="r", encoding="utf-8") as read_file:
-        json_query = json.load(read_file)
-
-    assert table.query == json_query
+@pytest.fixture
+def query_file():
+    return "tests/valid_query.json"
 
 
-def test_query_setter_with_dict():
-    """The query should be able to handle a dict representing a JSON structure"""
-    json_query = json.loads(QUERY)
-    table = PxTable(url=URL, query=QUERY)
-    assert table.query == json_query
+@pytest.mark.parametrize(
+    "query_fixture",
+    ["query_str", "query_dict", "query_file"],
+)
+def test_query_setter_valid(query_fixture, url, query_dict, request):
+    """The query should handle valid inputs correctly (string, file path, dict)"""
+    query = request.getfixturevalue(query_fixture)
+    table = PxTable(url=url, query=query)
+    assert table.query == query_dict
 
 
-def test_query_setter_with_invalid_json():
+def test_query_setter_invalid(url):
     """Invalid query should produce an error"""
     with pytest.raises(ValueError):
-        PxTable(url=URL, query="tests/invalid_query.json")
+        PxTable(url=url, query="tests/invalid_query.json")
 
-
-def test_query_setter_with_invalid_type():
-    """Wrong data type should raise a TypeError"""
     with pytest.raises(TypeError):
-        PxTable(url=URL, query=[QUERY])
+        PxTable(url=url, query=[1, 2, 3])
 
 
-def test_get_data_invalid_url():
+def test_get_data_invalid_url(query_dict):
     """Invalid URL should raise a ValueError"""
     with pytest.raises(ValueError):
-        table = PxTable(url="invalid_url", query=QUERY)
+        table = PxTable(url="invalid_url", query=query_dict)
         table.get_data()
 
 
-def test_create_query():
+def test_create_query(url, snapshot):
     """Creating a query requires a specific format"""
-    table = PxTable(url=URL)
+    table = PxTable(url=url)
 
     # Values must always be strings
     with pytest.raises(ValueError):
@@ -122,10 +94,12 @@ def test_create_query():
         mock_get.return_value.json.return_value = mock_response
         table.create_query({"Region": ["Riket"], "Tid": ["*"]})
 
+    assert snapshot == table.query, "Created query does not match expected."
 
-def test_invalid_table_variables():
+
+def test_invalid_table_variables(url):
     """Invalid JSON structure in response should raise a KeyError"""
-    table = PxTable(url=URL)
+    table = PxTable(url=url)
 
     with pytest.raises(KeyError):
         with patch("requests_cache.CachedSession.get") as mock_get:
@@ -135,9 +109,9 @@ def test_invalid_table_variables():
             table.get_table_variables()
 
 
-def test_get_table_variables():
+def test_get_table_variables(url):
     """Getting table variables should return a dict"""
-    table = PxTable(url=URL)
+    table = PxTable(url=url)
     with open("tests/mock/response_table_variables.json", "r") as expected_response:
         mock_response = json.load(expected_response)
 
@@ -150,9 +124,9 @@ def test_get_table_variables():
         assert isinstance(variables, dict)
 
 
-def test_send_request():
+def test_send_request(url):
     """Sending a request and receiving an error response should raise an exception"""
-    table = PxTable(url=URL)
+    table = PxTable(url=url)
 
     with pytest.raises(HTTPError):
         with patch("requests_cache.CachedSession.get") as mock_get:
@@ -161,33 +135,35 @@ def test_send_request():
             table.get_table_variables()
 
 
-def test_get_data():
+@pytest.mark.parametrize(
+    "api_endpoint",
+    [
+        "fi",  # https://statfin.stat.fi:443/PxWeb/api/v1/sv/StatFin/vaerak/statfin_vaerak_pxt_11rc.px
+        "gl",  # https://bank.stat.gl:443/api/v1/en/Greenland/UD/UD40/UD4040/UDXUMG3.px
+        "no",  # https://data.ssb.no/api/v0/no/table/07221/
+        "se",  # https://api.scb.se/OV0104/v1/doris/sv/ssd/START/HE/HE0110/HE0110A/SamForvInk1
+    ],
+)
+def test_get_data(url, snapshot, api_endpoint):
     """Checks functionality of get_data() against mock Px Web API responses"""
-    with open("tests/queries.json", "r") as queries:
-        query_data = json.load(queries)
+    with open(f"tests/queries/query_{api_endpoint}.json", mode="r") as json_file:
+        query = json.load(json_file)
 
-    for query in query_data["queries"]:
-        url = query["url"]
-        query_params = query["query"]
-        response_json = query["expected_response"]
-        result_json = query["expected_result"]
+    with open(
+        f"tests/mock/response_{api_endpoint}.json", mode="r", encoding="utf-8"
+    ) as response:
+        mock_response = json.load(response)
 
-        with open(result_json, "r") as result_file:
-            expected_result = json.load(result_file)
+    # Patch requests post method with a mock response
+    with patch("requests_cache.CachedSession.post") as mock_post:
+        mock_post.return_value.ok = True
+        mock_post.return_value.json.return_value = mock_response
 
-        with open(response_json, mode="r", encoding="utf-8") as response_file:
-            mock_response = json.load(response_file)
+        # PxTable expects a URL and a query to get data
+        table = PxTable(url=url, query=query)
+        table.get_data()
 
-        # Patch requests post method with a mock response
-        with patch("requests_cache.CachedSession.post") as mock_post:
-            mock_post.return_value.ok = True
-            mock_post.return_value.json.return_value = mock_response
-
-            # PxTable expects a URL and a query to get data
-            table = PxTable(url=url, query=query_params)
-            table.get_data()
-
-            # Compare the dataset with the expected result
-            assert table.dataset == expected_result, (
-                f"Dataset does not match expected result for query: {url}, {query_params}"
-            )
+        # Compare the dataset with the expected result
+        assert snapshot == table.dataset, (
+            f"Dataset does not match expected result for '{api_endpoint}'"
+        )

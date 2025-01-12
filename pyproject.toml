@@ -46,5 +46,6 @@ dev = [
     "pandas-stubs>=2.2.2.240807",
     "polars>=1.19.0",
     "pytest>=8.3.4",
+    "syrupy>=4.8.0",
     "types-requests>=2.32.0.20241016",
 ]

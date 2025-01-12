@@ -1,0 +1,54 @@
+{
+    "query": [
+        {
+            "code": "Region",
+            "selection": {
+                "filter": "vs:RegionRiket99",
+                "values": []
+            }
+        },
+        {
+            "code": "Kon",
+            "selection": {
+                "filter": "item",
+                "values": [
+                    "1",
+                    "2",
+                    "1+2"
+                ]
+            }
+        },
+        {
+            "code": "Alder",
+            "selection": {
+                "filter": "item",
+                "values": [
+                    "tot16+"
+                ]
+            }
+        },
+        {
+            "code": "ContentsCode",
+            "selection": {
+                "filter": "item",
+                "values": [
+                    "HE0110J8"
+                ]
+            }
+        },
+        {
+            "code": "Tid",
+            "selection": {
+                "filter": "item",
+                "values": [
+                    "2020",
+                    "2021",
+                    "2022"
+                ]
+            }
+        }
+    ],
+    "response": {
+        "format": "json-stat2"
+    }
+}

@@ -404,7 +404,7 @@ wheels = [
 
 [[package]]
 name = "pxwebpy"
-version = "0.3.0.post17+g3efe6ab.d20250109"
+version = "0.3.0.post18+g356efc3.d20250109"
 source = { editable = "." }
 dependencies = [
     { name = "requests" },
@@ -418,6 +418,7 @@ dev = [
     { name = "pandas-stubs", version = "2.2.3.241126", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
     { name = "polars" },
     { name = "pytest" },
+    { name = "syrupy" },
     { name = "types-requests" },
 ]
 
@@ -433,6 +434,7 @@ dev = [
     { name = "pandas-stubs", specifier = ">=2.2.2.240807" },
     { name = "polars", specifier = ">=1.19.0" },
     { name = "pytest", specifier = ">=8.3.4" },
+    { name = "syrupy", specifier = ">=4.8.0" },
     { name = "types-requests", specifier = ">=2.32.0.20241016" },
 ]
 
@@ -513,6 +515,18 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/94/e7/b2c673351809dca68a0e064b6af791aa332cf192da575fd474ed7d6f16a2/six-1.17.0.tar.gz", hash = "sha256:ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81", size = 34031 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/b7/ce/149a00dd41f10bc29e5921b496af8b574d8413afcd5e30dfa0ed46c2cc5e/six-1.17.0-py2.py3-none-any.whl", hash = "sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274", size = 11050 },
+]
+
+[[package]]
+name = "syrupy"
+version = "4.8.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pytest" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/57/54/07f40c1e9355c0eb6909b83abd8ea2c523a1e05b8257a575bbaa42df28de/syrupy-4.8.0.tar.gz", hash = "sha256:648f0e9303aaa8387c8365d7314784c09a6bab0a407455c6a01d6a4f5c6a8ede", size = 49526 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ed/c7/8cd6b5fa8cc4a5c025d3d36a014dff44436fda8b3003a471253931c77f1b/syrupy-4.8.0-py3-none-any.whl", hash = "sha256:544f4ec6306f4b1c460fdab48fd60b2c7fe54a6c0a8243aeea15f9ad9c638c3f", size = 49530 },
 ]
 
 [[package]]
