@@ -43,7 +43,7 @@ def query_str(query_dict):
 
 @pytest.fixture
 def query_file():
-    return "tests/valid_query.json"
+    return "tests/queries/valid_query.json"
 
 
 @pytest.mark.parametrize(
@@ -60,7 +60,7 @@ def test_query_setter_valid(query_fixture, url, query_dict, request):
 def test_query_setter_invalid(url):
     """Invalid query should produce an error"""
     with pytest.raises(ValueError):
-        PxTable(url=url, query="tests/invalid_query.json")
+        PxTable(url=url, query="tests/queries/invalid_query.json")
 
     with pytest.raises(TypeError):
         PxTable(url=url, query=[1, 2, 3])

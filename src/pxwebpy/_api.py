@@ -1,6 +1,6 @@
 from typing import Optional
 
-import requests
+from requests.exceptions import HTTPError
 from requests_cache import CachedSession
 
 
@@ -17,6 +17,4 @@ def call(
     if response.ok:
         return response.json()
     else:
-        raise requests.exceptions.HTTPError(
-            f"Error {response.status_code}: {response.reason}"
-        )
+        raise HTTPError(f"Error {response.status_code}: {response.reason}")
