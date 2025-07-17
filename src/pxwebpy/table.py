@@ -87,6 +87,12 @@ class PxTable:
         fetched={self.fetched},
         dataset={self.dataset})"""
 
+    def __len__(self) -> int:
+        return len(self.dataset)
+
+    def __eq__(self, other) -> bool:
+        return self.dataset == other
+
     def get_data(self) -> None:
         """Get data from the API, modifying the object in-place."""
 
