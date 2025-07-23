@@ -1,21 +1,16 @@
-# TODO
-# TABLE
-# Drop string import for queries, let any string query be handled by user / json
-# Query construction with kwargs
-# get_data() with option to turn off caching?
-# get_variables()
+from typing import Literal
 
-# API
-# Use the max cell count to batch a query for optimal size
-# Throttle according to timewindow and queries in window
-
-from typing import Literal, Union
-
-from pxwebpy import _api
-from pxwebpy.table import PxTable
+from ._api import PxApi
+from ._utils import (
+    build_query,
+    convert_wildcards,
+    count_data_cells,
+    map_value_codes,
+    split_query,
+    unpack_table_data,
+)
 
 KnownDatabase = Literal["scb"]
-PathOrLabel = Union[str, tuple[str]]
 
 _DATABASE_URLS: dict[KnownDatabase, str] = {
     "scb": "https://api.scb.se/ov0104/v2beta/api/v2",
@@ -23,18 +18,41 @@ _DATABASE_URLS: dict[KnownDatabase, str] = {
 
 
 class PxDatabase:
-    def __init__(self, api_url: str | KnownDatabase):
-        # TODO Should probably either clean trailing slashes or opt to add it
-        self._api = _api.PxApi(
-            _DATABASE_URLS.get(api_url, api_url)
+    """
+    An object representing a PxWeb database. Allows for exploring a database using its API.
+    """
+
+    def __init__(
+        self,
+        api_url: str | KnownDatabase,
+        language: str | None = None,
+        timeout: int = 30,
+    ):
+        self._api = PxApi(
+            url=_DATABASE_URLS.get(api_url, api_url),
+            language=language,
+            timeout=timeout,
         )  # Resolve the URL if known else assume it's a full URL
-        self._previous_location: list[str | None] = []
-        self._current_location = self._api.call(endpoint="/navigation")
+        self.previous_location: list[str | None] = []
+        self.current_location = self._api.call(endpoint="/navigation")
+
+    def get_config(self) -> str:
+        """Retrieve the configuration for the API"""
+        return self._api.call(
+            endpoint="/config",
+        )
+
+    def here(self) -> str:
+        """Retrieve the current location in the navigation"""
+        return self.current_location
 
     def reset(self):
+        """
+        Go back to the toplevel navigation of the database API.
+        """
         # Reset the trace
-        self._previous_location = []
-        self._current_location = self._api.call(
+        self.previous_location = []
+        self.current_location = self._api.call(
             endpoint="/navigation",
         )
 
@@ -43,7 +61,7 @@ class PxDatabase:
         Used to check path to the current location in the navigation tree.
         The current location is the last item in the list.
         """
-        return self._previous_location
+        return self.previous_location
 
     def back(self) -> None:
         """
@@ -59,15 +77,14 @@ class PxDatabase:
         db.back()
 
         ```
-
         """
         try:
-            previous = self._previous_location.pop()
+            previous = self.previous_location.pop()
         except IndexError:
             raise IndexError("Failed to go back. Already at the top of navigation.")
 
-        self._current_location = self._api.call(
-            endpoint=previous,
+        self.current_location = self._api.call(
+            endpoint=f"/navigation/{previous}",
         )
         return
 
@@ -75,44 +92,117 @@ class PxDatabase:
         """
         Shows the contents of the current location.
         """
-        folder_contents = self._current_location.get("folderContents")
+        folder_contents = self.current_location.get("folderContents")
+
+        information = ["id", "label"]
 
         folders = [
-            folder.get("label")
-            for folder in folder_contents
-            if folder.get("type") == "FolderInformation"
+            {k: item.get(k) for k in information}
+            for item in folder_contents
+            if item.get("type") == "FolderInformation"
         ]
         tables = [
-            folder.get("label")
-            for folder in folder_contents
-            if folder.get("type") == "Table"
+            {k: item.get(k) for k in information}
+            for item in folder_contents
+            if item.get("type") == "Table"
         ]
-        # TODO Likely a more usable way to do this
         return {"folders": folders, "tables": tables}
 
-    def get_table(self, *table: PathOrLabel) -> PxTable | None:
-        # This assumes the last item is the table name, if a tuple is supplied
-        if len(table) > 1:
-            path: list[str] = list(table)
-            table = path.pop()
-            self.go_to(*path)
-        else:
-            table = table[0]
+    def get_codelist(self, codelist_id) -> dict:
+        """Get the codelist information"""
+        return self._api.call(
+            endpoint=f"/codelists/{codelist_id}",
+        )
 
-        folder_contents = self._current_location.get("folderContents")
-        for folder in folder_contents:
-            if folder.get("label") == table and folder.get("type") == "Table":
-                id_ = folder.get("id")
-                return PxTable(url=f"{self._api.url}/tables/{id_}")
-                # TODO Instantiating a table should fetch metadata directly
-                # Setting a language should probably be done at a database level too, but possibility to switch
-        else:
-            # And if we can't find the table...
-            raise RuntimeError(f"The table '{table}' could not be found in the path.")
+    def get_table_metadata(self, table_id: str) -> dict:
+        """Get the complete set of metadata for a table"""
+        return self._api.call(
+            endpoint=f"/tables/{table_id}/metadata",
+        )
 
-    def go_to(self, *folder: PathOrLabel) -> None:
+    def get_table_variables(self, table_id: str) -> dict:
+        """Shorthand for getting the variables and values with their respective code and labels. Also includes information  whether a variable can be eliminated as well as the available codelists."""
+        dimensions = self._api.call(
+            endpoint=f"/tables/{table_id}/metadata",
+        ).get("dimension")
+        result = {}
+
+        # Trim the information
+        for key, value in dimensions.items():
+            out = {}
+            out["label"] = value.get("label", "")
+            if "category" in value and "label" in value["category"]:
+                out["category"] = {"label": value["category"]["label"]}
+            else:
+                out["category"] = {}
+            extension = value.get("extension", {})
+            out["elimination"] = extension.get("elimination", False)
+            code_lists = extension.get("codeLists", [])
+            out["codelists"] = [
+                {"id": cl.get("id"), "label": cl.get("label")}
+                for cl in code_lists
+                if "id" in cl and "label" in cl
+            ]
+            result[key] = out
+
+        return result
+
+    def get_table_data(
+        self,
+        table_id: str,
+        value_codes: dict = {},
+        code_list: dict | None = None,
+    ) -> list[dict]:
+        # TODO support output_values
+
+        # Make sure all selections provided are in a list, even if single values
+        value_codes = {
+            k: v if isinstance(v, (list, tuple, set)) else [v]
+            for k, v in value_codes.items()
+        }
+
+        # Pull in the all labels and codes
+        table_variables = self.get_table_variables(table_id)
+
+        # Perform conversion
+        value_codes = convert_wildcards(value_codes, table_variables)
+
+        # Ensure that only value_codes are use that match a code list, if one is used
+        if code_list:
+            # Use each variable and code list ID to first get the actual code list, then map the values
+            # So that we get a correct selection based on the list
+            for variable, code_list_id in code_list.items():
+                table_code_list = self.get_codelist(code_list_id)
+                value_codes = map_value_codes(variable, value_codes, table_code_list)
+
+        # Now count the data cells we're getting to check against the max allowed
+        if count_data_cells(value_codes) > self._api.max_data_cells:
+            result = []
+
+            # Split the query into several API calls
+            for sub_query in split_query(value_codes, self._api.max_data_cells):
+                query = build_query(sub_query, code_list)
+                response = self._api.call(
+                    endpoint=f"/tables/{table_id}/data?&outputFormat=json-stat2",
+                    query=query,
+                )
+                dataset = unpack_table_data(response)
+                result.extend(dataset)
+
+            return result
+        else:
+            query = build_query(value_codes, code_list)
+            response = self._api.call(
+                endpoint=f"/tables/{table_id}/data?&outputFormat=json-stat2",
+                query=query,
+            )
+            dataset = unpack_table_data(response)
+            return dataset
+
+    # TODO: accept optional id instead of folder to move directly to an endpoint
+    def go_to(self, *folder: str) -> None:
         """
-        Go to folder using a single string or move over a path by supplying multiple strings.ArithmeticError
+        Go to folder using a single string or move over a path by supplying multiple strings.
 
         Examples
         --------
@@ -123,36 +213,26 @@ class PxDatabase:
 
         db.back()
 
-        db.go_to("Befolkning", "Befolkningsstatistik", "Folkmängd")
+        db.go_to("Befolkning", "Befolkningsstatistik", "Folkmängd"
 
         ```
 
         """
         for element in folder:
-            link: str = next(
-                link["href"]
-                for link in self._current_location.get("links")
-                if link["rel"] == "self"
-            )
-
+            previous = self.current_location.get("id")
             # Trace our steps
-            self._previous_location.append(link)
+            self.previous_location.append(previous)
 
-            for item in self._current_location.get("folderContents"):
+            for item in self.current_location.get("folderContents"):
                 # Only move into folders
-                if (
-                    item.get("label") == element
-                    and item.get("type") == "FolderInformation"
-                ):
+                if element in (item.get("label"), item.get("id")):
                     # Update the location and then break the loop,
                     # moving to the next element in the path
-                    id_ = item.get("id")
-                    self._current_location = self._api.call(
-                        endpoint=f"/navigation/{id_}",
-                    )
+                    if item.get("type") == "FolderInformation":
+                        self.current_location = self._api.call(
+                            endpoint=f"/navigation/{item.get('id')}",
+                        )
                     break
             else:
                 # And if we can't find it...
-                raise RuntimeError(
-                    f"Folder '{element}' could not be found in the path."
-                )
+                raise ValueError(f"Folder '{element}' could not be found in the path.")

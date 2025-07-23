@@ -1,6 +1,6 @@
 import pytest
 
-from pxwebpy import PxDatabase, PxTable
+from pxwebpy import PxDatabase
 
 
 @pytest.fixture
@@ -28,10 +28,9 @@ def test_reset(db):
     db.go_to("Befolkning", "Befolkningsstatistik", "Folkmängd")
     db.reset()
 
-    # TODO Should be an attribute, or a getter function maybe
     link: str = next(
         link["href"]
-        for link in db._current_location.get("links")
+        for link in db.current_location.get("links")
         if link["rel"] == "self"
     )
 
@@ -39,7 +38,7 @@ def test_reset(db):
     assert link.find("navigation") > 0
 
     # And since we're back at the top, there should be no previous
-    assert len(db._previous_location) == 0
+    assert len(db.previous_location) == 0
 
 
 def test_back(db):
@@ -55,20 +54,8 @@ def test_get_contents(db):
     assert len(contents.get("folders")) > 0
 
 
-def test_get_table(db):
-    db.go_to("Befolkning", "Befolkningsstatistik", "Folkmängd")
-    table = db.get_table("Folkmängden efter ålder och kön. År 1860-2024")
+def test_get_table_data(db):
+    dataset = db.get_table_data(table="TAB6471")
 
-    assert isinstance(table, PxTable)
-
-    db.reset()
-
-    # Now go for the full path directly
-    table = db.get_table(
-        "Befolkning",
-        "Befolkningsstatistik",
-        "Folkmängd",
-        "Folkmängden efter ålder och kön. År 1860-2024",
-    )
-
-    assert isinstance(table, PxTable)
+    assert isinstance(dataset, list)
+    assert len(dataset) > 1
