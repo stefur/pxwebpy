@@ -30,49 +30,13 @@ def build_query(value_codes: dict, code_list: dict | None = None) -> dict:
     return {"selection": selection}
 
 
-def map_value_codes(variable: str, value_codes: dict, table_code_list: dict) -> dict:
-    """
-    Go over the value codes together with code_list for the given variable
-    """
-    result = value_codes.copy()
-    codes = value_codes.get(variable, [])
-
-    # Gather all aggregate codes
-    all_agg_codes = {entry["code"] for entry in table_code_list["values"]}
-
-    # Build acodes detailed map of aggregate codes and value codes included
-    value_to_aggcode = {}
-    for entry in table_code_list["values"]:
-        # Pick up each aggregate code
-        agg_code = entry["code"]
-        # And get each code from the value map as a key, and the aggregate code as value
-        for val in entry.get("valueMap", []):
-            value_to_aggcode[val] = agg_code
-
-    mapped_codes = []
-
-    for code in codes:
-        if code in all_agg_codes:
-            # Already an aggregate code (say age group), so keep as is
-            if code not in mapped_codes:
-                mapped_codes.append(code)
-        else:
-            # Try to map the code to an aggregate code using the lookup
-            agg_code = value_to_aggcode.get(code)
-            if agg_code and agg_code not in mapped_codes:
-                mapped_codes.append(agg_code)
-
-    result[variable] = mapped_codes
-    return result
-
-
-def split_query(query, max_cells) -> list[dict]:
+def split_query(query: dict, max_cells: int) -> list[dict]:
     """
     Recursively split a query to not go over API limit of max data cells allowed.
+    Will try to optimize the batch size for each split, minimizing the number of queries sent.
     """
     # Similar to count_data_cells, but here we keep the data cell size of each variable selection
     sizes = {k: len(v) for k, v in query.items()}
-
     total_cells = 1
     for size in sizes.values():
         total_cells *= size
@@ -82,48 +46,53 @@ def split_query(query, max_cells) -> list[dict]:
         return [query]
 
     # If there are still variables with multiple values, split further
+    # Basically splitting a variable with 1 value makes no difference
     split_variables = [k for k, v in sizes.items() if v > 1]
+
+    # If there are no such variables left, we reached the point where we can't be split
+    # any further, so just return the query in a list
     if not split_variables:
-        # In case all variables are down to a single value,
-        # but for some reason total_cells is still too high
         return [query]
 
-    # Pick the smallest dimension (fewest values) to split on
-    smallest_variable = min(split_variables, key=sizes.get)
+    # We go by largest-dimension-first, so choose variable with largest number of values (biggest "contributor" to the query being too large)
+    largest_variable = max(split_variables, key=sizes.get)
 
-    # For each value in that variable, keep that fixed and split the rest
+    # Figure out max chunk size for this variable
+    other_cell_count = total_cells // sizes[largest_variable]
+    max_chunk_size = max_cells // other_cell_count or 1
+
+    values = query[largest_variable]
     results = []
-    for i in range(sizes[smallest_variable]):
+
+    # Now split values into chunks of at most max_chunk_size
+    for i in range(0, len(values), max_chunk_size):
         new_query = query.copy()
-        # Only include the i-th value for this variable in the next query
-        new_query[smallest_variable] = [query[smallest_variable][i]]
-        # Recursively get subqueries from this split and add to results
-        sub_results = split_query(new_query, max_cells)
-        results.extend(sub_results)
+        new_query[largest_variable] = values[i : i + max_chunk_size]
+        results.extend(split_query(new_query, max_cells))
     return results
 
 
-def convert_wildcards(value_codes: dict, table_variables) -> dict:
+def expand_wildcards(value_codes: dict, source: dict) -> dict:
     """
-    Convert any single wildcards to actual values so that we can calculate the
-    number of data cells
+    Expand wildcards in value_codes using the provided source.
+    'source' is either a dict with either code list or table_variables.
     """
-    # TODO handle wildcards like '01*' etc.
     result = {}
-
-    for variable, value_code in value_codes.items():
-        if (
-            variable in table_variables.keys()
-            and "*" in value_code
-            and len(value_code) == 1
-        ):
-            # Replace '*' with all codes from the category
-            result[variable] = list(
-                table_variables[variable]["category"]["label"].keys()
-            )
+    for variable, codes in value_codes.items():
+        if isinstance(codes, (list, tuple, set)) and codes == ["*"]:
+            # Expand using the source
+            if "values" in source.get(variable, {}):
+                # Code list structure
+                result[variable] = [
+                    entry["code"] for entry in source[variable]["values"]
+                ]
+            elif "category" in source.get(variable, {}):
+                # Table variables structure
+                result[variable] = list(source[variable]["category"]["label"].keys())
+            else:
+                result[variable] = codes
         else:
-            # Keep the original value(s)
-            result[variable] = value_code
+            result[variable] = codes
 
     return result
 

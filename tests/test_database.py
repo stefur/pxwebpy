@@ -55,7 +55,7 @@ def test_get_contents(db):
 
 
 def test_get_table_data(db):
-    dataset = db.get_table_data(table="TAB6471")
+    dataset = db.get_table_data(table_id="TAB6471")
 
     assert isinstance(dataset, list)
     assert len(dataset) > 1

@@ -3,9 +3,8 @@ from typing import Literal
 from ._api import PxApi
 from ._utils import (
     build_query,
-    convert_wildcards,
     count_data_cells,
-    map_value_codes,
+    expand_wildcards,
     split_query,
     unpack_table_data,
 )
@@ -48,7 +47,7 @@ class PxDatabase:
 
     def reset(self):
         """
-        Go back to the toplevel navigation of the database API.
+        Go back to the toplevel navigation of the database.
         """
         # Reset the trace
         self.previous_location = []
@@ -161,19 +160,31 @@ class PxDatabase:
             for k, v in value_codes.items()
         }
 
-        # Pull in the all labels and codes
-        table_variables = self.get_table_variables(table_id)
+        # Check if any wildcards exist in the value_codes
+        wildcard_in_codelist_variables = [
+            variable
+            for variable, codes in value_codes.items()
+            if code_list and variable in code_list and codes == ["*"]
+        ]
 
-        # Perform conversion
-        value_codes = convert_wildcards(value_codes, table_variables)
+        value_codes_has_wildcard: bool = any(
+            (isinstance(codes, (list, tuple, set)) and "*" in codes)
+            for variable, codes in value_codes.items()
+            # Don't include a variable that is using a codelist to avoid double lookups
+            if variable not in wildcard_in_codelist_variables
+        )
 
-        # Ensure that only value_codes are use that match a code list, if one is used
-        if code_list:
-            # Use each variable and code list ID to first get the actual code list, then map the values
-            # So that we get a correct selection based on the list
-            for variable, code_list_id in code_list.items():
-                table_code_list = self.get_codelist(code_list_id)
-                value_codes = map_value_codes(variable, value_codes, table_code_list)
+        # Get the codelists if there's a wildcard
+        if code_list and wildcard_in_codelist_variables:
+            code_lists = {var: self.get_codelist(cid) for var, cid in code_list.items()}
+            value_codes = expand_wildcards(value_codes, code_lists)
+
+        if value_codes_has_wildcard:
+            # Pull in the all labels and codes
+            table_variables = self.get_table_variables(table_id)
+
+            # Perform wildcard expansion
+            value_codes = expand_wildcards(value_codes, table_variables)
 
         # Now count the data cells we're getting to check against the max allowed
         if count_data_cells(value_codes) > self._api.max_data_cells:
