@@ -15,32 +15,41 @@ class PxApi:
         self.url: str = url
         self.timeout: int = timeout
 
-        # Run the init without rate limiting since it's not set up yet
-        configuration = self.call(endpoint="/config", rate_limit=False)
+        # Setting up params used for every query
+        self.params: dict = {"lang": language, "outputFormat": "json-stat2"}
 
-        self.language = language or configuration.get("defaultLanguage")
-        self.max_data_cells = configuration.get("maxDataCells")
-        self.rate_limit = ApiRateLimiter(
-            configuration.get("maxCallsPerTimeWindow"), configuration.get("timeWindow")
-        )
+        # Run the init without rate limiting since it's not set up yet
+        configuration = self.call(endpoint="/config", enforce_rate_limit=False)
+
+        self.max_data_cells: int = configuration.get("maxDataCells")
+        self.max_calls: int = configuration.get("maxCallsPerTimeWindow")
+        self.time_window: int = configuration.get("timeWindow")
+        self.call_timestamps: list[float] = []
+
+        # Now that we have the configuration set up, get the language if needed
+        self.params["lang"] = language or configuration.get("defaultLanguage", None)
 
     def call(
-        self, endpoint: str, query: dict | None = None, rate_limit: bool = True
+        self, endpoint: str, query: dict | None = None, enforce_rate_limit: bool = True
     ) -> dict:
         """Call the API using the table URL and optional query"""
-        if rate_limit:
+        if enforce_rate_limit:
             # Wait if needed
-            self.rate_limit.wait()
+            self.rate_limit()
+
         if query:
             response = self.session.post(
-                self.url + endpoint, json=query, timeout=self.timeout
+                self.url + endpoint,
+                json=query,
+                timeout=self.timeout,
+                params=self.params,
             )
         else:
-            response = self.session.get(self.url + endpoint, timeout=self.timeout)
-
-        # Count the API call towards the limit
-        if rate_limit:
-            self.rate_limit.count()
+            response = self.session.get(
+                self.url + endpoint,
+                timeout=self.timeout,
+                params=self.params,
+            )
 
         if response.ok:
             return response.json()
@@ -54,36 +63,35 @@ class PxApi:
                 f"""Error {response.status_code}: {response.reason}\nType: {response_body.get("type")}\nTitle: {response_body.get("title")}\nStatus: {response_body.get("status")}\nDetail: {response_body.get("detail")}\nInstance: {response_body.get("instance")}"""
             )
 
-
-class ApiRateLimiter:
-    """A helper to ensure that the number of calls follow the rate limit of the API"""
-
-    def __init__(self, max_calls: int, time_window: int):
-        self.max_calls = max_calls
-        self.time_window = time_window
-        self.call_count = 0
-        self.window_start = time.time()
-
-    def allow_call(self) -> bool:
-        """Check whether another call to the API can be allowed given the rate limit"""
+    def rate_limit(self) -> None:
         now = time.time()
 
-        if now - self.window_start > self.time_window:
-            # Start a new window if enough time has passed
-            self.window_start = now
-            self.call_count = 0
+        # Only keep timestamps within the time window
+        self.remove_old_timestamps(now)
 
-        return self.call_count < self.max_calls
+        # Check to see if we've hit the max number of calls
+        if len(self.call_timestamps) >= self.max_calls:
+            # Get the sleep time by comparing now and the oldest timestamp
+            sleep_time = self.time_window - (now - self.call_timestamps[0])
+            if sleep_time > 0:
+                time.sleep(sleep_time)
 
-    def count(self) -> None:
-        """Count the calls made"""
-        self.call_count += 1
+        # Do another time check
+        now = time.time()
 
-    def wait(self) -> None:
-        """Wait until enough time has passed for another call to the API to be made"""
-        while not self.allow_call():
-            time_to_wait = self.time_window - (time.time() - self.window_start)
-            time.sleep(max(0.1, time_to_wait))
+        # And then another run to ensure keeping relevant timestamps
+        self.remove_old_timestamps(now)
+
+        # And lastly add the timestamp for this call
+        self.call_timestamps.append(now)
+
+    def remove_old_timestamps(self, now: float) -> None:
+        """Discard timestamps older than the time window."""
+        self.call_timestamps = [
+            timestamp
+            for timestamp in self.call_timestamps
+            if now - timestamp < self.time_window
+        ]
 
 
 def call(

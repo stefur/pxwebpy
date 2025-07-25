@@ -41,6 +41,16 @@ class PxDatabase:
             endpoint="/config",
         )
 
+    @property
+    def language(self):
+        """Get the current language."""
+        return self._api.params["lang"]
+
+    @language.setter
+    def language(self, value):
+        """Set the current language."""
+        self._api.params["lang"] = value
+
     def here(self) -> str:
         """Retrieve the current location in the navigation"""
         return self.current_location
@@ -194,7 +204,7 @@ class PxDatabase:
             for sub_query in split_query(value_codes, self._api.max_data_cells):
                 query = build_query(sub_query, code_list)
                 response = self._api.call(
-                    endpoint=f"/tables/{table_id}/data?&outputFormat=json-stat2",
+                    endpoint=f"/tables/{table_id}/data",
                     query=query,
                 )
                 dataset = unpack_table_data(response)
@@ -204,7 +214,7 @@ class PxDatabase:
         else:
             query = build_query(value_codes, code_list)
             response = self._api.call(
-                endpoint=f"/tables/{table_id}/data?&outputFormat=json-stat2",
+                endpoint=f"/tables/{table_id}/data",
                 query=query,
             )
             dataset = unpack_table_data(response)
