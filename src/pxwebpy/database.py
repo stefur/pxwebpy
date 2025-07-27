@@ -1,3 +1,4 @@
+from concurrent.futures import ThreadPoolExecutor
 from typing import Literal
 
 from ._api import PxApi
@@ -198,27 +199,37 @@ class PxDatabase:
 
         # Now count the data cells we're getting to check against the max allowed
         if count_data_cells(value_codes) > self._api.max_data_cells:
-            result = []
+            # Split the query into several subqueries for API calls
+            subqueries = [
+                build_query(sub_query, code_list)
+                for sub_query in split_query(value_codes, self._api.max_data_cells)
+            ]
 
-            # Split the query into several API calls
-            for sub_query in split_query(value_codes, self._api.max_data_cells):
-                query = build_query(sub_query, code_list)
-                response = self._api.call(
-                    endpoint=f"/tables/{table_id}/data",
-                    query=query,
-                )
-                dataset = unpack_table_data(response)
-                result.extend(dataset)
+            dataset = []
 
-            return result
+            # Use threading for the subqueries
+            with ThreadPoolExecutor() as executor:
+                # Map() so that we yield results in order
+                for result in executor.map(
+                    lambda subquery: unpack_table_data(
+                        self._api.call(
+                            endpoint=f"/tables/{table_id}/data", query=subquery
+                        )
+                    ),
+                    subqueries,
+                ):
+                    dataset.extend(result)
+
         else:
+            # No batching needed so we just go ahead with the query as is
             query = build_query(value_codes, code_list)
             response = self._api.call(
                 endpoint=f"/tables/{table_id}/data",
                 query=query,
             )
             dataset = unpack_table_data(response)
-            return dataset
+
+        return dataset
 
     # TODO: accept optional id instead of folder to move directly to an endpoint
     def go_to(self, *folder: str) -> None:

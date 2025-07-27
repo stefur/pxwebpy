@@ -1,19 +1,21 @@
 import time
-from pathlib import Path
-from tempfile import gettempdir
+from threading import Lock
 from typing import Optional
 
 from requests.exceptions import HTTPError, JSONDecodeError
-from requests_cache import CachedSession
+from requests_cache import CachedSession, Request
 
 
 class PxApi:
     def __init__(self, url: str, timeout: int, language: str | None = None):
-        _tmp_dir = gettempdir()
-        _cache = Path(_tmp_dir) / "pxwebpy_cache"
-        self.session: CachedSession = CachedSession(cache_name=_cache, ttl=600)
+        self.session: CachedSession = CachedSession(
+            ttl=3600,
+            allowable_methods=("GET", "POST"),
+            backend="memory",
+        )
         self.url: str = url
         self.timeout: int = timeout
+        self.lock = Lock()
 
         # Setting up params used for every query
         self.params: dict = {"lang": language, "outputFormat": "json-stat2"}
@@ -30,68 +32,80 @@ class PxApi:
         self.params["lang"] = language or configuration.get("defaultLanguage", None)
 
     def call(
-        self, endpoint: str, query: dict | None = None, enforce_rate_limit: bool = True
+        self,
+        endpoint: str,
+        query: dict | None = None,
+        max_retries: int = 3,
+        enforce_rate_limit: bool = True,
     ) -> dict:
         """Call the API using the table URL and optional query"""
+
+        # Set up the request and prepare it for being sent
+        request = Request(
+            method="POST" if query else "GET",
+            url=self.url + endpoint,
+            json=query or None,
+            params=self.params,
+        ).prepare()
+
+        # Use the request as the cache key so we can look it up first
+        cache_key = self.session.cache.create_key(request)
+
+        # If there's a cache, go ahead without rate limiting
+        if cache_key in self.session.cache.responses:
+            return self.session.send(request).json()
+
+        # Otherwise rate limit first
         if enforce_rate_limit:
             # Wait if needed
             self.rate_limit()
 
-        if query:
-            response = self.session.post(
-                self.url + endpoint,
-                json=query,
-                timeout=self.timeout,
-                params=self.params,
-            )
-        else:
-            response = self.session.get(
-                self.url + endpoint,
-                timeout=self.timeout,
-                params=self.params,
-            )
+        # We do a set number of retries. This is because
+        # the API can sometimes respond with 429 (too many requests) given
+        # a heavy number of subqueries. The response contains a retry-after in the headers
+        # so we basically back off and then go again
+        for attempt in range(max_retries + 1):
+            response = self.session.send(request)
+            if response.ok:
+                return response.json()
 
-        if response.ok:
-            return response.json()
+            # If we get this response, despite rate limiting, we basically
+            # need to "back off" and then retry
+            elif response.status_code == 429 and attempt < max_retries:
+                retry_after = response.headers.get("Retry-After", "1")
+                time.sleep(int(retry_after))
+                # Then continue to do another attempt
+                continue
+            else:
+                # Try to extract any response body for more meaningful errors
+                try:
+                    response_body = response.json()
+                except JSONDecodeError:
+                    response_body = {}
+                raise HTTPError(
+                    f"""Error {response.status_code}: {response.reason}\nType: {response_body.get("type")}\nTitle: {response_body.get("title")}\nStatus: {response_body.get("status")}\nDetail: {response_body.get("detail")}\nInstance: {response_body.get("instance")}"""
+                )
         else:
-            # Try to extract any response body for more meaningful errors
-            try:
-                response_body = response.json()
-            except JSONDecodeError:
-                response_body = {}
-            raise HTTPError(
-                f"""Error {response.status_code}: {response.reason}\nType: {response_body.get("type")}\nTitle: {response_body.get("title")}\nStatus: {response_body.get("status")}\nDetail: {response_body.get("detail")}\nInstance: {response_body.get("instance")}"""
-            )
+            raise HTTPError("Reached max amount of retries.")
 
     def rate_limit(self) -> None:
-        now = time.time()
-
-        # Only keep timestamps within the time window
-        self.remove_old_timestamps(now)
-
-        # Check to see if we've hit the max number of calls
-        if len(self.call_timestamps) >= self.max_calls:
-            # Get the sleep time by comparing now and the oldest timestamp
+        """Ensure we respect the rate limit of the API"""
+        with self.lock:
+            now = time.monotonic()
+            # Drop old timstamps no longer in the window
+            self.call_timestamps = [
+                timestamp
+                for timestamp in self.call_timestamps
+                if now - timestamp < self.time_window
+            ]
+            # If we still have slots in the window, stop blocking and proceed
+            if len(self.call_timestamps) < self.max_calls:
+                self.call_timestamps.append(now)
+                return None
+            # Otherise there have been to many calls, so we need to sleep
             sleep_time = self.time_window - (now - self.call_timestamps[0])
-            if sleep_time > 0:
-                time.sleep(sleep_time)
-
-        # Do another time check
-        now = time.time()
-
-        # And then another run to ensure keeping relevant timestamps
-        self.remove_old_timestamps(now)
-
-        # And lastly add the timestamp for this call
-        self.call_timestamps.append(now)
-
-    def remove_old_timestamps(self, now: float) -> None:
-        """Discard timestamps older than the time window."""
-        self.call_timestamps = [
-            timestamp
-            for timestamp in self.call_timestamps
-            if now - timestamp < self.time_window
-        ]
+            # This way we hold the lock so other threads queue up
+            time.sleep(sleep_time)
 
 
 def call(
