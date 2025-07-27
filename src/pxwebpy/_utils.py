@@ -74,25 +74,44 @@ def split_query(query: dict, max_cells: int) -> list[dict]:
 
 def expand_wildcards(value_codes: dict, source: dict) -> dict:
     """
-    Expand wildcards in value_codes using the provided source.
-    'source' is either a dict with either code list or table_variables.
+    Expand wildcards in value_codes using the provided `source`.
+    `source` is either a `dict` with either wcode list or table_variables.
     """
     result = {}
     for variable, codes in value_codes.items():
-        if isinstance(codes, (list, tuple, set)) and codes == ["*"]:
-            # Expand using the source
-            if "values" in source.get(variable, {}):
-                # Code list structure
-                result[variable] = [
-                    entry["code"] for entry in source[variable]["values"]
-                ]
-            elif "category" in source.get(variable, {}):
-                # Table variables structure
-                result[variable] = list(source[variable]["category"]["label"].keys())
-            else:
-                result[variable] = codes
+        # Expand the items using the source
+        if "values" in source.get(variable, {}):
+            # Code list structure
+            items = [entry["code"] for entry in source[variable]["values"]]
+        elif "category" in source.get(variable, {}):
+            # Table variables structure
+            items = list(source[variable]["category"]["label"].keys())
         else:
-            result[variable] = codes
+            items = codes
+
+        expanded = []
+        # Now start expanding the wildcards
+        for value in codes:
+            # TODO Probably use match case when 3.9 is dropped
+            if value == "*":
+                expanded.extend(items)
+            elif value.endswith("*") and not value.startswith("*"):
+                expanded.extend(
+                    [code for code in items if code.startswith(value[:-1])]
+                )  # Drop the asterisk
+            elif value.startswith("*") and not value.endswith("*"):
+                expanded.extend(
+                    [code for code in items if code.endswith(value[1:])]
+                )  # Same here
+            elif value.startswith("*") and value.endswith("*"):
+                expanded.extend(
+                    [code for code in items if value[1:-1] in code]
+                )  # And here!
+            else:
+                # Just default if no wildcard
+                expanded.append(value)
+
+        result[variable] = expanded
 
     return result
 

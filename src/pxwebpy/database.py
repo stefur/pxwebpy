@@ -172,29 +172,43 @@ class PxDatabase:
     def get_table_data(
         self,
         table_id: str,
-        value_codes: dict = {},
-        code_list: dict | None = None,
+        value_codes: dict[str, list[str]] = {},
+        code_list: dict[str, str] | None = None,
     ) -> list[dict]:
         # TODO support output_values
 
         # Make sure all selections provided are in a list, even if single values
-        value_codes = {
-            k: v if isinstance(v, (list, tuple, set)) else [v]
-            for k, v in value_codes.items()
-        }
+        for variable in list(value_codes.keys()):
+            if not isinstance(variable, str):
+                raise ValueError("All variables must be strings.")
+
+            value_code = value_codes[variable]
+
+            if isinstance(value_code, str):
+                value_codes[variable] = [value_code]  # Coerce single strings to list
+            elif isinstance(value_code, list):
+                if not all(isinstance(v, str) for v in value_code):
+                    raise ValueError(
+                        f"All value codes in list for variable '{variable}' must be strings."
+                    )
+            else:
+                raise ValueError(
+                    f"Value codes for variable '{variable}' must be a string or a list of strings."
+                )
 
         # Check if any wildcards exist in the value_codes
         wildcard_in_codelist_variables = [
             variable
             for variable, codes in value_codes.items()
-            if code_list and variable in code_list and codes == ["*"]
+            if code_list and variable in code_list and any(s for s in codes if "*" in s)
         ]
 
         value_codes_has_wildcard: bool = any(
-            (isinstance(codes, (list, tuple, set)) and "*" in codes)
+            "*" in code
             for variable, codes in value_codes.items()
             # Don't include a variable that is using a codelist to avoid double lookups
             if variable not in wildcard_in_codelist_variables
+            for code in codes
         )
 
         # Get the codelists if there's a wildcard
