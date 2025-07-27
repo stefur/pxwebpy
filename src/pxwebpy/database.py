@@ -26,13 +26,15 @@ class PxDatabase:
         self,
         api_url: str | KnownDatabase,
         language: str | None = None,
+        disable_cache: bool = False,
         timeout: int = 30,
     ):
         self._api = PxApi(
             url=_DATABASE_URLS.get(api_url, api_url),
             language=language,
             timeout=timeout,
-        )  # Resolve the URL if known else assume it's a full URL
+            disable_cache=disable_cache,
+        )  # Resolve the name if known else assume it's a full URL
         self.previous_location: list[str | None] = []
         self.current_location = self._api.call(endpoint="/navigation")
 
@@ -41,6 +43,16 @@ class PxDatabase:
         return self._api.call(
             endpoint="/config",
         )
+
+    @property
+    def disable_cache(self):
+        """Get the cache setting."""
+        return self._api.session.settings.disabled
+
+    @disable_cache.setter
+    def disable_cache(self, value):
+        """Set the cache setting."""
+        self._api.session.settings.disabled = value
 
     @property
     def language(self):

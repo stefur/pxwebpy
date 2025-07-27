@@ -3,15 +3,18 @@ from threading import Lock
 from typing import Optional
 
 from requests.exceptions import HTTPError, JSONDecodeError
-from requests_cache import CachedSession, Request
+from requests_cache import CachedSession, CacheSettings, Request
 
 
 class PxApi:
-    def __init__(self, url: str, timeout: int, language: str | None = None):
+    def __init__(
+        self, url: str, timeout: int, disable_cache: bool, language: str | None = None
+    ):
         self.session: CachedSession = CachedSession(
             ttl=3600,
             allowable_methods=("GET", "POST"),
             backend="memory",
+            settings=CacheSettings(disabled=disable_cache),
         )
         self.url: str = url
         self.timeout: int = timeout
@@ -48,12 +51,14 @@ class PxApi:
             params=self.params,
         ).prepare()
 
-        # Use the request as the cache key so we can look it up first
-        cache_key = self.session.cache.create_key(request)
+        # Handle cache settings
+        if not self.session.settings.disabled:
+            # Use the request as the cache key so we can look it up first
+            cache_key = self.session.cache.create_key(request)
 
-        # If there's a cache, go ahead without rate limiting
-        if cache_key in self.session.cache.responses:
-            return self.session.send(request).json()
+            # If there's a cache, go ahead without rate limiting
+            if cache_key in self.session.cache.responses:
+                return self.session.send(request).json()
 
         # Otherwise rate limit first
         if enforce_rate_limit:
