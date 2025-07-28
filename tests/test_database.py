@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta, timezone
+
 import pytest
 
 from pxwebpy import PxDatabase
@@ -11,13 +13,13 @@ def db():
 def test_go_to(db):
     """Go around some paths"""
     # This should path lead to a folder with tables only
-    db.go_to("Befolkning", "Befolkningsstatistik", "Folkmängd")
+    db.go_to("BE", "BE0101", "BE0101A")
     assert len(db.get_contents().get("tables")) > 0
     assert len(db.get_contents().get("folders")) == 0
 
     # Resetting and going again, this time a single step from the top node
     db.reset()
-    db.go_to("Arbetsmarknad")
+    db.go_to("AM")
 
     # Should list a bunch of subfolders
     assert len(db.get_contents().get("folders")) > 0
@@ -25,7 +27,7 @@ def test_go_to(db):
 
 
 def test_reset(db):
-    db.go_to("Befolkning", "Befolkningsstatistik", "Folkmängd")
+    db.go_to("BE", "BE0101", "BE0101A")
     db.reset()
 
     link: str = next(
@@ -45,6 +47,19 @@ def test_back(db):
     """Going back from the nagivation toplevel should raise an error"""
     with pytest.raises(IndexError):
         db.back()
+
+
+def test_search(db):
+    """Check that all results are within 30 days"""
+    search_result = db.search(query="befolkning", past_days=30)
+
+    timestamps = [
+        datetime.fromisoformat(table["updated"]) for table in search_result["tables"]
+    ]
+
+    now = datetime.now(tz=timezone.utc)
+
+    assert all((now - timestamp) <= timedelta(days=30) for timestamp in timestamps)
 
 
 def test_get_contents(db):
