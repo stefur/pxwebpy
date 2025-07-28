@@ -4,6 +4,8 @@ __pycache__/
 dist/
 .pytest_cache
 .ruff_cache
+.coverage
+htmlcov
 
 # Generated version files
 _version.py
