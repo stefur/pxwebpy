@@ -6,7 +6,7 @@ from ._utils import (
     build_query,
     count_data_cells,
     expand_wildcards,
-    split_query,
+    split_value_codes,
     unpack_table_data,
 )
 
@@ -254,7 +254,9 @@ class PxDatabase:
             # Split the query into several subqueries for API calls
             subqueries = [
                 build_query(sub_query, code_list)
-                for sub_query in split_query(value_codes, self._api.max_data_cells)
+                for sub_query in split_value_codes(
+                    value_codes, self._api.max_data_cells
+                )
             ]
 
             dataset = []

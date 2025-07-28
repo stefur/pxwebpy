@@ -30,20 +30,20 @@ def build_query(value_codes: dict, code_list: dict | None = None) -> dict:
     return {"selection": selection}
 
 
-def split_query(query: dict, max_cells: int) -> list[dict]:
+def split_value_codes(value_codes: dict, max_cells: int) -> list[dict]:
     """
     Recursively split a query to not go over API limit of max data cells allowed.
     Will try to optimize the batch size for each split, minimizing the number of queries sent.
     """
     # Similar to count_data_cells, but here we keep the data cell size of each variable selection
-    sizes = {k: len(v) for k, v in query.items()}
+    sizes = {k: len(v) for k, v in value_codes.items()}
     total_cells = 1
     for size in sizes.values():
         total_cells *= size
 
     # If it's within the allowed batch size, return this query in a list
     if total_cells <= max_cells:
-        return [query]
+        return [value_codes]
 
     # If there are still variables with multiple values, split further
     # Basically splitting a variable with 1 value makes no difference
@@ -52,7 +52,7 @@ def split_query(query: dict, max_cells: int) -> list[dict]:
     # If there are no such variables left, we reached the point where we can't be split
     # any further, so just return the query in a list
     if not split_variables:
-        return [query]
+        return [value_codes]
 
     # We go by largest-dimension-first, so choose variable with largest number of values (biggest "contributor" to the query being too large)
     largest_variable = max(split_variables, key=sizes.get)
@@ -61,14 +61,14 @@ def split_query(query: dict, max_cells: int) -> list[dict]:
     other_cell_count = total_cells // sizes[largest_variable]
     max_chunk_size = max_cells // other_cell_count or 1
 
-    values = query[largest_variable]
+    values = value_codes[largest_variable]
     results = []
 
     # Now split values into chunks of at most max_chunk_size
     for i in range(0, len(values), max_chunk_size):
-        new_query = query.copy()
+        new_query = value_codes.copy()
         new_query[largest_variable] = values[i : i + max_chunk_size]
-        results.extend(split_query(new_query, max_cells))
+        results.extend(split_value_codes(new_query, max_cells))
     return results
 
 
