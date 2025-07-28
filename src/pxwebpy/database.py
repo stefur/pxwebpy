@@ -64,6 +64,32 @@ class PxDatabase:
         """Set the current language."""
         self._api.params["lang"] = value
 
+    def search(
+        self,
+        query: str | None = None,
+        past_days: int | None = None,
+        include_discontinued: bool | None = None,
+        page_size: int | None = None,
+    ) -> dict:
+        """
+        Search for tables in the database.
+        """
+        parameters = {
+            "query": query,
+            "pastDays": past_days,
+            "includeDiscontinued": include_discontinued,
+            "pageSize": page_size,
+        }
+
+        # Build the endpoint for the table search
+        endpoint = "&".join([k + "=" + str(v) for k, v in parameters.items() if v])
+
+        # TODO Some nicer ux for multi page responses?
+
+        return self._api.call(
+            endpoint=f"/tables?{endpoint}",
+        )
+
     def here(self) -> str:
         """Retrieve the current location in the navigation"""
         return self.current_location
@@ -94,7 +120,7 @@ class PxDatabase:
 
         ```python
 
-        db.go_to("Befolkning", "Befolkningsstatistik")
+        db.go_to("BE", "BE0101")
 
         db.back()
 
@@ -257,39 +283,40 @@ class PxDatabase:
 
         return dataset
 
-    # TODO: accept optional id instead of folder to move directly to an endpoint
-    def go_to(self, *folder: str) -> None:
+    def go_to(self, *folder_id: str) -> None:
         """
-        Go to folder using a single string or move over a path by supplying multiple strings.
+        Go to folder using an ID as a single string or move over a path by supplying multiple strings.
 
         Examples
         --------
         ```python
         db = PxDatabase("scb")
 
-        db.go_to("Befolkning")
+        db.go_to("AM")
 
         db.back()
 
-        db.go_to("Befolkning", "Befolkningsstatistik", "Folkmängd"
+        db.go_to("BE", "BE0101", "BE0101A")
 
         ```
 
         """
-        for element in folder:
+        for element in folder_id:
             previous = self.current_location.get("id")
             # Trace our steps
             self.previous_location.append(previous)
 
             for item in self.current_location.get("folderContents"):
                 # Only move into folders
-                if element in (item.get("label"), item.get("id")):
+                if (
+                    element == item.get("id")
+                    and item.get("type") == "FolderInformation"
+                ):
                     # Update the location and then break the loop,
                     # moving to the next element in the path
-                    if item.get("type") == "FolderInformation":
-                        self.current_location = self._api.call(
-                            endpoint=f"/navigation/{item.get('id')}",
-                        )
+                    self.current_location = self._api.call(
+                        endpoint=f"/navigation/{item.get('id')}",
+                    )
                     break
             else:
                 # And if we can't find it...
