@@ -1,0 +1,238 @@
+---
+title: Examples
+jupyter: python3
+---
+
+```{python}
+# | echo: false
+from IPython import get_ipython
+from rich.pretty import pretty_repr
+
+
+# Define some nicer formatting for code output
+def plain_pretty_formatter(value):
+    return pretty_repr(value, max_depth=3, max_length=5, max_string=50, expand_all=True)
+
+
+ip = get_ipython()
+ip.display_formatter.formatters["text/plain"] = plain_pretty_formatter
+
+```
+
+::: {.callout-note}
+This library is not affiliated with the PxWeb project. These examples do not go into detail about how the PxWeb API behaves or responds. For more information about the API itself, check out the [specs](https://github.com/PxTools/PxApiSpecs/blob/master/specs.md).
+:::
+
+## Basic setup and navigation
+The first step is to set up a PxDatabase object to use.
+
+```{python}
+from pxwebpy import PxDatabase
+
+# Use the builtin known database instead of a URL
+db = PxDatabase("scb")
+
+db
+```
+
+We can check out information about the API, including languages supported, by using `~~.PxDatabase.get_config()`.
+
+```{python}
+db.get_config()
+```
+
+If we want to change the language, we can do so by changing an attribute of the `PxDatabase` object like so:
+`db.language = "en"`
+This will change the response language for all subsequent queries to the API.
+
+From here we can also use different methods to browse around and get data. Setting up a new object will always drop into the root level of the database.
+
+```{python}
+db.get_contents()
+```
+
+We can see that there are no tables at the toplevel, but plenty of folders to choose from. Using the `~~.PxDatabase.go_to()` method we can enter a folder.
+
+```{python}
+# Move into "Demokrati"
+db.go_to("ME")
+
+# And run another check of the contents
+db.get_contents()
+```
+
+Still plenty of folders, so fast-forwarding into a folder with some tables of election results.
+
+```{python}
+db.go_to("ME0104C")
+
+db.get_contents()
+```
+
+While browsing around like this we can check our trace by calling `~~.PxDatabase.history()`.
+
+```{python}
+# The first item in the list, the empty string, represents the root level
+db.history()
+```
+
+Going back one step just requires calling `~~.PxDatabase.back()`.
+
+It's also possible to check all the information of our current location by calling `~~.PxDatabase.here()`. Since the response is the `dict` coming from the API response, you can directly grab a key as well. For example, getting just the ID of the current location:
+
+```{python}
+db.here().get("id")
+```
+
+Using this ID we can jump directly into this folder if we want to, there is no need to go over the other folders.
+
+Finally, to clear the history and go back to the root level, we can call the `~~.PxDatabase.reset()` method.
+
+## Searching for tables
+It's also possible to search for tables in the database using the `~~.PxDatabase.search()` method.
+
+```{python}
+# Keeping it simple and just look for tables updated in the past 30 days matching the query string
+results = db.search(query="energi", past_days=30)
+
+# Checking how many tables there are in the results
+len(results.get("tables"))
+```
+We can also get the labels and ID's to find out what tables there.
+```{python}
+[
+    {k: v for k, v in table.items() if k in ("id", "label")}
+    for table in results.get("tables")
+]
+```
+
+## Getting table metadata
+There are two methods to get table metadata. You can get the full metadata information by simply calling `~~.PxDatabase.get_table_metadata()`.
+
+If you're interested in the details about variables of a table you can also use `~~.PxDatabase.get_table_variables()`. This method returns information in a more condensed way which may be easier to overview.
+
+```{python}
+# Use the table ID
+tab_vars = db.get_table_variables("TAB2706")
+
+# Let's check out Region
+tab_vars.get("Region")
+``` 
+
+As can be seen above `elimination` is `True` for `"Region"`, so the variable can be skipped over. But there's also a few code lists associated with the variable.
+
+### Code lists
+Getting information about code lists can be done with `~~.PxDatabase.get_code_list()`. 
+
+```{python}
+# Fetching and unpacking 'values' of 'vs_RegionValkrets99'
+db.get_code_list("vs_RegionValkrets99").get("values")
+```
+
+The codes can then be used in a query for a selection based on the code list. More on that in [Getting table data](#getting-table-data).
+
+## Getting table data
+To get data with `~~.PxDatabase.get_table_data()`  we need a few things.
+
+- A table ID
+- A selection of value codes from variables
+- A code list (optional)
+
+```{python}
+# Getting some election results for specific regions, using a code list to match value codes
+dataset = db.get_table_data(
+    "TAB2706",
+    value_codes={
+        "ContentsCode": "ME0104B6",
+        "Tid": "2022",
+        "Region": ["VR2", "VR3"],
+        "Partimm": [
+            "M",
+            "C",
+            "FP",
+            "KD",
+            "MP",
+            "S",
+            "V",
+            "SD",
+            "ÖVRIGA",
+            "OGILTIGA",
+            "VALSKOLKARE",
+        ],
+    },
+    code_list={"Region": "vs_RegionValkrets99"},
+)
+
+# A finished dataset looks like this
+dataset
+```
+### Loading into dataframes
+The native format of the returned dataset can now easily be loaded into a dataframe.
+
+For instance `polars`:
+```{python}
+import polars as pl
+
+pl.DataFrame(dataset)
+```
+
+But also `pandas` and `pyarrow`:
+```{python}
+import pandas as pd
+
+pd.DataFrame(dataset)
+```
+
+```{python}
+import pyarrow as pa
+
+pa.Table.from_pylist(dataset)
+```
+
+### Using wildcards
+Wildcards are useful, and here is an example using wildcards for a larger query.
+
+```{python}
+# Using wildcards here to get all the municipalities in Stockholm, all months of 2024, all genders and 5-year age groups.
+# The somewhat cryptic ContentsCode represents count
+population_data = db.get_table_data(
+    "TAB5444",
+    value_codes={
+        "Alder": "*",
+        "Region": "01*",
+        "Tid": "2024*",
+        "Kon": "*",
+        "ContentsCode": "000003O5",
+    },
+    code_list={"Alder": "agg_Ålder5år", "Region": "vs_RegionKommun07"},
+)
+
+# This returns over ten thousand rows of data
+len(population_data)
+
+```
+
+### Large queries and batching
+pxwebpy allows for very large queries by using automatic batching to stay within the rate limits of the API. 
+
+Consider the following query for population per year (`"TAB1267"`):
+
+```{python}
+codes = {"ContentsCode": "BE0101A9", "Region": "*", "Alder": "*", "Kon": "*", "Tid": "*"}
+lists = {"Region": "vs_RegionKommun07", "Alder": "vs_Ålder1årA"}
+```
+
+This query would produce over 1 million data cells, overshooting the data cell limit of the API (150 000 in this case). 
+
+To handle this pxwebpy will break up the query into several subqueries to stay within the limit of data cells while also respecting the rate limit of the number of queries allowed within a give time window. Calls are multithreaded to fetch results as fast as possible.
+
+```{python}
+# Executing the large query
+data = db.get_table_data("TAB1267", value_codes=codes, code_list=lists)
+
+# And then loading the result into a dataframe
+pl.DataFrame(data)
+```
+
+### In-memory caching
+By default pxwebpy uses in-memory caching for API responses, which can be useful for exploration and iterative use. Caching both reduces the load on the API and speeds up execution. However it can be turned off if needed simply by setting the attribute `disable_cache` to `True`.

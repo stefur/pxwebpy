@@ -16,7 +16,7 @@ def value_codes():
         "ContentsCode": ["000003O5"],
         "Region": ["0114", "0115", "0117"],
         "Kon": ["1", "2"],
-        "Alder": ["0-9", "10-19", "20-29", "30-39"],
+        "Alder": ["-9", "10-19", "20-29", "30-39"],
         "Tid": ["2024M01", "2024M02", "2024M03"],
     }
 
@@ -62,6 +62,7 @@ def test_split_query(value_codes):
     ["tests/code_list_agg_Ålder10årJ.json", "tests/table_variables_TAB5444.json"],
 )
 def test_expand_wildcards(source, value_codes_wildcard, snapshot):
+    """Wildcards should expand correctly"""
     with open(source, "r") as file:
         source_loaded = json.load(file)
 

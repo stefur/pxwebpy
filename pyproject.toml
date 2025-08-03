@@ -43,11 +43,16 @@ file = "src/pxwebpy/_version.py"
 [dependency-groups]
 dev = [
     "ipykernel>=6.29.5",
+    "nbclient>=0.10.2",
+    "nbformat>=5.10.4",
     "pandas>=2.2.3",
     "pandas-stubs>=2.2.2.240807",
     "polars>=1.19.0",
+    "pyarrow>=21.0.0",
     "pytest>=8.3.4",
     "pytest-cov>=6.2.1",
+    "quartodoc>=0.11.1",
+    "rich>=14.1.0",
     "syrupy>=4.8.0",
     "types-requests>=2.32.0.20241016",
 ]

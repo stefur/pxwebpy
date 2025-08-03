@@ -1,0 +1,25 @@
+/* Fix for tables */
+td:first-child {
+    text-wrap: nowrap;
+    text-size-adjust: 100%;
+}
+
+td:first-child a {
+    word-break: normal;
+}
+
+/* Constrain the width */
+@media (min-width: 1200px) {
+    .navbar-container {
+        max-width: 1140px;
+    }
+}
+
+/* Style the code cell output */
+div.cell-output {
+    background-color: transparent;
+    border: 1px solid #ddd;
+    padding: 0.5em;
+    border-radius: 4px;
+    margin-bottom: 1.3em;
+}
