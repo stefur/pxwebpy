@@ -94,5 +94,5 @@ def test_get_table_data_coerce_to_list(db):
 def test_get_table_variables(db):
     variables = db.get_table_variables(table_id="TAB6471")
     # TODO Improve testing by targeting the expected structure instead
-    assert isinstance(dict, variables)
+    assert isinstance(variables, dict)
     assert len(variables) > 0
