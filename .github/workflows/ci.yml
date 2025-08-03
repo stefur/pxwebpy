@@ -21,6 +21,8 @@ jobs:
       fail-fast: false
 
     runs-on: ${{ matrix.os }}
+    env:
+      UV_MANAGED_PYTHON: false
 
     steps:
       - uses: actions/checkout@v4
