@@ -97,7 +97,10 @@ class PxTable:
         """Get data from the API, modifying the object in-place."""
 
         json_data = _api.call(
-            session=self.__session, url=self.url, query=self.query, timeout=self.timeout
+            session=self.__session,
+            url=self.url,
+            query=self.query,
+            timeout=self.timeout,
         )
 
         self.dataset = _data.unpack_table_data(json_data)
@@ -146,7 +149,9 @@ class PxTable:
 
         if isinstance(query, dict):
             try:
-                if (response_format := query["response"]["format"]) != "json-stat2":
+                if (
+                    response_format := query["response"]["format"]
+                ) != "json-stat2":
                     raise TypeError(
                         f"""Response format must be 'json-stat2', \
                         got '{response_format}'."""
@@ -202,7 +207,9 @@ class PxTable:
             if not isinstance(value, list) or not all(
                 isinstance(v, str) for v in value
             ):
-                raise ValueError("Values in the query must be a `list` of `strings`.")
+                raise ValueError(
+                    "Values in the query must be a `list` of `strings`."
+                )
 
         # Get the table variables and values
         json_data = _api.call(

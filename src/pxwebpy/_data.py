@@ -14,7 +14,8 @@ def build_query(json_data: dict, query: dict) -> list:
 
         value_mapping[(code, text)] = {
             "values": [
-                (value, value_text) for value, value_text in zip(values, value_texts)
+                (value, value_text)
+                for value, value_text in zip(values, value_texts)
             ],
         }
 
@@ -23,7 +24,11 @@ def build_query(json_data: dict, query: dict) -> list:
     for variable, values in query.items():
         # Go over the selected variables, a match can be either code or text
         matching_variable = next(
-            (code_text for code_text in value_mapping.keys() if variable in code_text),
+            (
+                code_text
+                for code_text in value_mapping.keys()
+                if variable in code_text
+            ),
             None,
         )
         # Extract the code from the matching variable tuple
@@ -96,7 +101,8 @@ def unpack_table_variables(json_data: dict) -> dict:
             # Print values as tuples if the valueText is different from the value
             result[code] = {
                 "values": [
-                    v if v == vt else (v, vt) for v, vt in zip(values, value_texts)
+                    v if v == vt else (v, vt)
+                    for v, vt in zip(values, value_texts)
                 ],
                 # Flip the logic :)
                 "mandatory": not elimination,
@@ -125,19 +131,25 @@ def unpack_table_data(json_data: dict) -> list[dict]:
             if show_value == "code_value":
                 values = [
                     " ".join([str(k), str(v)])
-                    for k, v in json_data["dimension"][dim]["category"]["label"].items()
+                    for k, v in json_data["dimension"][dim]["category"][
+                        "label"
+                    ].items()
                 ]
 
             elif show_value == "code":
                 values = [
                     str(k)
-                    for k in json_data["dimension"][dim]["category"]["label"].keys()
+                    for k in json_data["dimension"][dim]["category"][
+                        "label"
+                    ].keys()
                 ]
 
             elif show_value == "value":
                 values = [
                     str(v)
-                    for v in json_data["dimension"][dim]["category"]["label"].values()
+                    for v in json_data["dimension"][dim]["category"][
+                        "label"
+                    ].values()
                 ]
                 # Raise an error if we hit some value in the show key that we don't know how to handle
 
@@ -150,10 +162,14 @@ def unpack_table_data(json_data: dict) -> list[dict]:
         except KeyError:
             values = [
                 str(v)
-                for v in json_data["dimension"][dim]["category"]["label"].values()
+                for v in json_data["dimension"][dim]["category"][
+                    "label"
+                ].values()
             ]
 
-        dimension_categories.update({json_data["dimension"][dim]["label"]: values})
+        dimension_categories.update(
+            {json_data["dimension"][dim]["label"]: values}
+        )
 
     # The result is a list of dicts with the dimension as key and product of the category labels for values
     result = [

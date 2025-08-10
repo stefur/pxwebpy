@@ -8,7 +8,11 @@ from requests_cache import CachedSession, CacheSettings, Request
 
 class PxApi:
     def __init__(
-        self, url: str, timeout: int, disable_cache: bool, language: str | None = None
+        self,
+        url: str,
+        timeout: int,
+        disable_cache: bool,
+        language: str | None = None,
     ):
         self.session: CachedSession = CachedSession(
             ttl=3600,
@@ -32,7 +36,9 @@ class PxApi:
         self.call_timestamps: list[float] = []
 
         # Now that we have the configuration set up, get the language if needed
-        self.params["lang"] = language or configuration.get("defaultLanguage", None)
+        self.params["lang"] = language or configuration.get(
+            "defaultLanguage", None
+        )
 
     def call(
         self,

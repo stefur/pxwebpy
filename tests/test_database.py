@@ -56,12 +56,15 @@ def test_search(db):
     search_result = db.search(query="befolkning", past_days=30)
 
     timestamps = [
-        datetime.fromisoformat(table["updated"]) for table in search_result["tables"]
+        datetime.fromisoformat(table["updated"])
+        for table in search_result["tables"]
     ]
 
     now = datetime.now(tz=timezone.utc)
 
-    assert all((now - timestamp) <= timedelta(days=30) for timestamp in timestamps)
+    assert all(
+        (now - timestamp) <= timedelta(days=30) for timestamp in timestamps
+    )
 
 
 def test_get_contents(db):
@@ -85,14 +88,20 @@ def test_get_table_data_only_list_or_strings(db):
 
 def test_get_table_data_only_strings_in_list(db):
     with pytest.raises(ValueError):
-        db.get_table_data(table_id="TAB6471", value_codes={"some_var": ["1", "2", 42]})
+        db.get_table_data(
+            table_id="TAB6471", value_codes={"some_var": ["1", "2", 42]}
+        )
 
 
 def test_get_table_data_coerce_to_list(db):
     # Tid and ContentsCode should get coerced
     db.get_table_data(
         table_id="TAB6471",
-        value_codes={"Alder": ["25"], "Tid": "2025M01", "ContentsCode": "000007SF"},
+        value_codes={
+            "Alder": ["25"],
+            "Tid": "2025M01",
+            "ContentsCode": "000007SF",
+        },
     )
 
 

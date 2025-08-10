@@ -166,7 +166,9 @@ class PxDatabase:
         }
 
         # Build the endpoint for the table search
-        endpoint = "&".join([k + "=" + str(v) for k, v in parameters.items() if v])
+        endpoint = "&".join(
+            [k + "=" + str(v) for k, v in parameters.items() if v]
+        )
 
         # TODO Some nicer ux for multi page responses?
 
@@ -476,7 +478,9 @@ class PxDatabase:
             value_code = value_codes[variable]
 
             if isinstance(value_code, str):
-                value_codes[variable] = [value_code]  # Coerce single strings to list
+                value_codes[variable] = [
+                    value_code
+                ]  # Coerce single strings to list
             elif isinstance(value_code, list):
                 if not all(isinstance(v, str) for v in value_code):
                     raise ValueError(
@@ -491,7 +495,9 @@ class PxDatabase:
         wildcard_in_codelist_variables = [
             variable
             for variable, codes in value_codes.items()
-            if code_list and variable in code_list and any(s for s in codes if "*" in s)
+            if code_list
+            and variable in code_list
+            and any(s for s in codes if "*" in s)
         ]
 
         # And the same for value codes if the variable is not already included above
@@ -575,7 +581,9 @@ class PxDatabase:
             )
         # The API raises an error if the folder ID is incorrect
         except HTTPError as error:
-            raise Exception(f"'{folder_id}' appears to not be a folder.") from error
+            raise Exception(
+                f"'{folder_id}' appears to not be a folder."
+            ) from error
 
         previous = self._current_location.get("id")
         # Trace our steps

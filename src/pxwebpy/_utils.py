@@ -134,19 +134,25 @@ def unpack_table_data(json_data: dict) -> list[dict]:
             if show_value == "code_value":
                 values = [
                     " ".join([str(k), str(v)])
-                    for k, v in json_data["dimension"][dim]["category"]["label"].items()
+                    for k, v in json_data["dimension"][dim]["category"][
+                        "label"
+                    ].items()
                 ]
 
             elif show_value == "code":
                 values = [
                     str(k)
-                    for k in json_data["dimension"][dim]["category"]["label"].keys()
+                    for k in json_data["dimension"][dim]["category"][
+                        "label"
+                    ].keys()
                 ]
 
             elif show_value == "value":
                 values = [
                     str(v)
-                    for v in json_data["dimension"][dim]["category"]["label"].values()
+                    for v in json_data["dimension"][dim]["category"][
+                        "label"
+                    ].values()
                 ]
                 # Raise an error if we hit some value in the show key that we don't know how to handle
 
@@ -159,10 +165,14 @@ def unpack_table_data(json_data: dict) -> list[dict]:
         except KeyError:
             values = [
                 str(v)
-                for v in json_data["dimension"][dim]["category"]["label"].values()
+                for v in json_data["dimension"][dim]["category"][
+                    "label"
+                ].values()
             ]
 
-        dimension_categories.update({json_data["dimension"][dim]["label"]: values})
+        dimension_categories.update(
+            {json_data["dimension"][dim]["label"]: values}
+        )
 
     # The result is a list of dicts with the dimension as key and product of the category labels for values
     result = [

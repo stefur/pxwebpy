@@ -59,7 +59,10 @@ def test_split_query(value_codes):
 
 @pytest.mark.parametrize(
     "source",
-    ["tests/code_list_agg_Ålder10årJ.json", "tests/table_variables_TAB5444.json"],
+    [
+        "tests/code_list_agg_Ålder10årJ.json",
+        "tests/table_variables_TAB5444.json",
+    ],
 )
 def test_expand_wildcards(source, value_codes_wildcard, snapshot):
     """Wildcards should expand correctly"""
