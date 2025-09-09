@@ -71,7 +71,7 @@ class PxDatabase:
             disable_cache=disable_cache,
         )  # Resolve the name if known else assume it's a full URL
         self._previous_location: list[str | None] = []
-        self._current_location: dict = self._api.call(endpoint="/navigation")
+        self._current_location: dict = self._api.call(endpoint="/tables")
 
     def __repr__(self) -> str:
         return f"""PxDatabase(api_url='{self._api.url}',
@@ -187,7 +187,7 @@ class PxDatabase:
         # Reset the trace
         self._previous_location = []
         self._current_location = self._api.call(
-            endpoint="/navigation",
+            endpoint="/tables",
         )
 
     def history(self) -> list[str]:
@@ -213,7 +213,7 @@ class PxDatabase:
             raise IndexError("Failed to go back, no previous location.")
 
         self._current_location = self._api.call(
-            endpoint=f"/navigation/{previous}",
+            endpoint=f"/{previous}",
         )
         return
 
@@ -577,7 +577,7 @@ class PxDatabase:
 
         try:
             target = self._api.call(
-                endpoint=f"/navigation/{folder_id}",
+                endpoint=f"/{folder_id}",
             )
         # The API raises an error if the folder ID is incorrect
         except HTTPError as error:
