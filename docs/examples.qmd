@@ -20,10 +20,10 @@ ip.display_formatter.formatters["text/plain"] = plain_pretty_formatter
 ```
 
 ::: {.callout-note}
-This library is not affiliated with the PxWeb project. These examples do not go into detail about how the PxWeb API behaves or responds. For more information about the API itself, check out the [specs](https://github.com/PxTools/PxApiSpecs/blob/master/specs.md).
+This library is not affiliated with the PxWeb project. These examples do not go into detail about how the PxWeb API behaves or responds. For more information about the API itself, check out the official [specification](https://github.com/PxTools/PxApiSpecs).
 :::
 
-## Basic setup and navigation
+## Basic setup and exploration
 The first step is to set up a PxDatabase object to use.
 
 ```{python}
@@ -45,6 +45,29 @@ If we want to change the language, we can do so by changing an attribute of the 
 `db.language = "en"`
 This will change the response language for all subsequent queries to the API.
 
+From here we can also browse around and get data. Checking out all tables available is doable `~~.PxDatabase.all_tables()`, but probably a bit overwhelming.
+
+```{python}
+db.all_tables()
+```
+
+Tables are organised into categories, or `paths`.
+```{python}
+db.get_paths()
+```
+
+It's also possible to filter the paths, for example to get all paths related to "Befolkning".
+
+```{python}
+db.get_paths(path_id="BE")
+```
+
+To get all tables that's in a specific path like "Folkmängd", use `~~.PxDatabase.tables_in_path()`.
+
+```{python}
+db.tables_in_path(path_id="BE0101A")
+```
+
 ## Searching for tables
 It's also possible to search for tables in the database using the `~~.PxDatabase.search()` method.
 
@@ -55,7 +78,7 @@ results = db.search(query="energi", past_days=30)
 # Checking how many tables there are in the results
 len(results.get("tables"))
 ```
-We can also get the labels and ID's to find out what tables there.
+We can also get the labels and ID's, or any other metadata, to find out more.
 ```{python}
 [
     {k: v for k, v in table.items() if k in ("id", "label")}
