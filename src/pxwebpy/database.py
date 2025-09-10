@@ -15,6 +15,7 @@ KnownDatabase = Literal["scb"]
 
 _DATABASE_URLS: dict[KnownDatabase, str] = {
     "scb": "https://api.scb.se/ov0104/v2beta/api/v2",
+    "ssb": "https://data.ssb.no/api/pxwebapi/v2-beta",
 }
 
 
@@ -70,11 +71,17 @@ class PxDatabase:
             disable_cache=disable_cache,
         )  # Resolve the name if known else assume it's a full URL
 
+        # Pull in the total number of elements (tables) available in the database
+        self.number_of_tables: int | None = (
+            self._api.call(endpoint="/tables").get("page").get("totalElements")
+        )
+
     def __repr__(self) -> str:
         return f"""PxDatabase(api_url='{self._api.url}',
         language={self._api.params.get("lang")},
         disable_cache={self._api.session.settings.disabled},
-        timeout={self._api.timeout})"""
+        timeout={self._api.timeout},
+        number_of_tables={self.number_of_tables})"""
 
     def __eq__(self, other) -> bool:
         return self._api.url == other
@@ -482,7 +489,7 @@ class PxDatabase:
             All tables.
         """
         return self._api.call(
-            endpoint="/tables",
+            endpoint="/tables", params={"pageSize": self.number_of_tables}
         ).get("tables")
 
     def tables_in_path(self, path_id: str) -> list[dict[str, str]]:
@@ -527,6 +534,7 @@ class PxDatabase:
         # TODO Consider doing this once during init instead
         tables = self.all_tables()
 
+        # FIXME The solution here is not pretty
         paths = []
         seen = set()
         for table in tables:
