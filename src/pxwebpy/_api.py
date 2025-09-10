@@ -35,15 +35,21 @@ class PxApi:
         self.time_window: int = configuration.get("timeWindow")
         self.call_timestamps: list[float] = []
 
-        # Now that we have the configuration set up, get the language if needed
-        self.params["lang"] = language or configuration.get(
-            "defaultLanguage", None
+        # Pull in the total number of elements (tables) available
+        # Dirty workaround to avoid pagination
+        total_elements: int | None = (
+            self.call(endpoint="/tables").get("page").get("totalElements")
         )
+
+        # Now that we have the configuration set up, get the language if needed
+        self.params["lang"] = language or configuration.get("defaultLanguage", None)
+        self.params["pageSize"] = total_elements
 
     def call(
         self,
         endpoint: str,
         query: dict | None = None,
+        params: dict | None = None,
         max_retries: int = 3,
         enforce_rate_limit: bool = True,
     ) -> dict:
@@ -54,7 +60,7 @@ class PxApi:
             method="POST" if query else "GET",
             url=self.url + endpoint,
             json=query or None,
-            params=self.params,
+            params=self.params.update(params) if params else self.params,
         ).prepare()
 
         # Handle cache settings

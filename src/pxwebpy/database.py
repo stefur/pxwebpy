@@ -1,7 +1,6 @@
 from concurrent.futures import ThreadPoolExecutor
 from typing import Literal
 
-from requests.exceptions import HTTPError
 
 from ._api import PxApi
 from ._utils import (
@@ -70,8 +69,6 @@ class PxDatabase:
             timeout=timeout,
             disable_cache=disable_cache,
         )  # Resolve the name if known else assume it's a full URL
-        self._previous_location: list[str | None] = []
-        self._current_location: dict = self._api.call(endpoint="/tables")
 
     def __repr__(self) -> str:
         return f"""PxDatabase(api_url='{self._api.url}',
@@ -166,93 +163,13 @@ class PxDatabase:
         }
 
         # Build the endpoint for the table search
-        endpoint = "&".join(
-            [k + "=" + str(v) for k, v in parameters.items() if v]
-        )
+        endpoint = "&".join([k + "=" + str(v) for k, v in parameters.items() if v])
 
         # TODO Some nicer ux for multi page responses?
 
         return self._api.call(
             endpoint=f"/tables?{endpoint}",
         )
-
-    def here(self) -> str:
-        """Retrieve the full information about current location in the navigation."""
-        return self._current_location
-
-    def reset(self) -> None:
-        """
-        Reset navigation and go back to the toplevel of the database. This also resets history.
-        """
-        # Reset the trace
-        self._previous_location = []
-        self._current_location = self._api.call(
-            endpoint="/tables",
-        )
-
-    def history(self) -> list[str]:
-        """
-        Used to check the navigation history built up from using `~~.PxDatabase.go_to()`.
-        The current location is the last item in the list. Keeping a maximum of 20 items to prevent it from getting unwieldy.
-
-        Returns
-        -------
-        list of str
-            Folder ID's from the navigation history.
-        """
-        return self._previous_location
-
-    def back(self) -> None:
-        """
-        Go back one step in the navigation history.
-        """
-        try:
-            # Get the last item in the list
-            previous = self._previous_location[-1]
-        except IndexError:
-            raise IndexError("Failed to go back, no previous location.")
-
-        self._current_location = self._api.call(
-            endpoint=f"/{previous}",
-        )
-        return
-
-    def get_contents(self) -> dict:
-        """
-        Shows the contents of the current location.
-
-        Returns
-        -------
-        dict
-            A dict of the API response with the folder contents.
-
-        Examples
-        --------
-        >>> db.go_to("AM")
-        >>> db.get_contents()
-        {'folders': [
-        ...     {'id': 'AM0211', 'label': 'Anställningar'},
-        ...     {'id': 'AM0301', 'label': 'Arbetskostnadsindex för arbetare...'},
-        ...     {'id': 'AM0401', 'label': 'Arbetskraftsundersökningarna (AKU)'},
-        ...     ...
-        ],
-        ...  'tables': []}
-        """
-        folder_contents = self._current_location.get("folderContents")
-
-        information = ["id", "label"]
-
-        folders = [
-            {k: item.get(k) for k in information}
-            for item in folder_contents
-            if item.get("type") == "FolderInformation"
-        ]
-        tables = [
-            {k: item.get(k) for k in information}
-            for item in folder_contents
-            if item.get("type") == "Table"
-        ]
-        return {"folders": folders, "tables": tables}
 
     def get_code_list(self, code_list_id: str) -> dict:
         """
@@ -478,9 +395,7 @@ class PxDatabase:
             value_code = value_codes[variable]
 
             if isinstance(value_code, str):
-                value_codes[variable] = [
-                    value_code
-                ]  # Coerce single strings to list
+                value_codes[variable] = [value_code]  # Coerce single strings to list
             elif isinstance(value_code, list):
                 if not all(isinstance(v, str) for v in value_code):
                     raise ValueError(
@@ -495,9 +410,7 @@ class PxDatabase:
         wildcard_in_codelist_variables = [
             variable
             for variable, codes in value_codes.items()
-            if code_list
-            and variable in code_list
-            and any(s for s in codes if "*" in s)
+            if code_list and variable in code_list and any(s for s in codes if "*" in s)
         ]
 
         # And the same for value codes if the variable is not already included above
@@ -559,38 +472,77 @@ class PxDatabase:
 
         return dataset
 
-    def go_to(self, folder_id: str) -> None:
+    def all_tables(self) -> list[dict[str, str]]:
         """
-        Go to folder using an ID.
+        Get a list of all tables available.
 
-        Parameters
-        ----------
-        folder_id : str
-            An ID of a folder.
+        Returns
+        -------
+        list[dict]
+            All tables.
+        """
+        return self._api.call(
+            endpoint="/tables",
+        ).get("tables")
+
+    def tables_in_path(self, path_id: str) -> list[dict[str, str]]:
+        """ """
+
+        tables = self.all_tables()
+
+        result = []
+
+        for table in tables:
+            # TODO Duplication
+            unpacked = [item for sublist in table.get("paths") for item in sublist]
+
+            if any(path["id"] == path_id for path in unpacked):
+                result.append(
+                    {
+                        "id": table.get("id"),
+                        "label": table.get("label"),
+                        "paths": table.get("paths"),
+                    }
+                )
+
+        return result
+
+    def get_paths(self, path_id: str | None = None) -> list[dict[str, str]]:
+        """
+        List all paths available to explore. Use the ID to list tables on a specific path with `~~.PxDatabase.tables_on_path()`.
 
         Examples
         --------
-        >>> db.go_to("BE0101A")
-        >>> db.here().get("label")
-        'Folkmängd'
+        >>> db.paths()
+        [
+        ... {'id': 'AA', 'label': 'Ämnesövergripande statistik'},
+        ... {'id': 'AA0003', 'label': 'Registerdata för integration'},
+        ... {'id': 'AA0003B', 'label': 'Statistik med inriktning mot arbetsmarknaden'},
+        ... {'id': 'AA0003C', 'label': 'Statistik med inriktning mot flyttmönster'},
+        ... {'id': 'AA0003D', 'label': 'Statistik med inriktning mot boende'},
+        ... ...
+        ]
         """
 
-        try:
-            target = self._api.call(
-                endpoint=f"/{folder_id}",
-            )
-        # The API raises an error if the folder ID is incorrect
-        except HTTPError as error:
-            raise Exception(
-                f"'{folder_id}' appears to not be a folder."
-            ) from error
+        # TODO Consider doing this once during init instead
+        tables = self.all_tables()
 
-        previous = self._current_location.get("id")
-        # Trace our steps
-        # Check the length first though
-        if len(self._previous_location) >= 20:
-            self._previous_location.pop(0)
+        paths = []
+        seen = set()
+        for table in tables:
+            # Unpack the sublist, cause for whatever reason there's a list in a list
+            unpacked = [item for sublist in table.get("paths") for item in sublist]
 
-        self._previous_location.append(previous)
+            # If there's a path_id supplied, filter on it
+            if path_id and all(path["id"] != path_id for path in unpacked):
+                continue
 
-        self._current_location = target
+            # Proceed to unpack unique IDs
+            for path in unpacked:
+                if path["id"] not in seen:
+                    seen.add(path["id"])
+                    paths.append(path)
+
+        sorted_paths = sorted(paths, key=lambda x: x["id"])
+
+        return sorted_paths

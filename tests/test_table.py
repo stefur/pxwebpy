@@ -92,9 +92,7 @@ def test_create_query(url, snapshot):
         table.create_query({"Län": "Stockholms län"})  # type: ignore
 
     # Create a query
-    with open(
-        "tests/mock/response_table_variables.json", "r"
-    ) as expected_response:
+    with open("tests/mock/response_table_variables.json", "r") as expected_response:
         mock_response = json.load(expected_response)
 
     with patch("requests_cache.CachedSession.get") as mock_get:
@@ -120,9 +118,7 @@ def test_invalid_table_variables(url):
 def test_get_table_variables(url):
     """Getting table variables should return a dict"""
     table = PxTable(url=url)
-    with open(
-        "tests/mock/response_table_variables.json", "r"
-    ) as expected_response:
+    with open("tests/mock/response_table_variables.json", "r") as expected_response:
         mock_response = json.load(expected_response)
 
     with patch("requests_cache.CachedSession.get") as mock_get:
@@ -156,9 +152,7 @@ def test_send_request(url):
 )
 def test_get_data(url, snapshot, api_endpoint):
     """Checks functionality of get_data() against mock Px Web API responses"""
-    with open(
-        f"tests/queries/query_{api_endpoint}.json", mode="r"
-    ) as json_file:
+    with open(f"tests/queries/query_{api_endpoint}.json", mode="r") as json_file:
         query = json.load(json_file)
 
     with open(

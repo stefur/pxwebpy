@@ -45,49 +45,6 @@ If we want to change the language, we can do so by changing an attribute of the 
 `db.language = "en"`
 This will change the response language for all subsequent queries to the API.
 
-From here we can also use different methods to browse around and get data. Setting up a new object will always drop into the root level of the database.
-
-```{python}
-db.get_contents()
-```
-
-We can see that there are no tables at the toplevel, but plenty of folders to choose from. Using the `~~.PxDatabase.go_to()` method we can enter a folder.
-
-```{python}
-# Move into "Demokrati"
-db.go_to("ME")
-
-# And run another check of the contents
-db.get_contents()
-```
-
-Still plenty of folders, so fast-forwarding into a folder with some tables of election results.
-
-```{python}
-db.go_to("ME0104C")
-
-db.get_contents()
-```
-
-While browsing around like this we can check our trace by calling `~~.PxDatabase.history()`.
-
-```{python}
-# The first item in the list, the empty string, represents the root level
-db.history()
-```
-
-Going back one step just requires calling `~~.PxDatabase.back()`.
-
-It's also possible to check all the information of our current location by calling `~~.PxDatabase.here()`. Since the response is the `dict` coming from the API response, you can directly grab a key as well. For example, getting just the ID of the current location:
-
-```{python}
-db.here().get("id")
-```
-
-Using this ID we can jump directly into this folder if we want to, there is no need to go over the other folders.
-
-Finally, to clear the history and go back to the root level, we can call the `~~.PxDatabase.reset()` method.
-
 ## Searching for tables
 It's also possible to search for tables in the database using the `~~.PxDatabase.search()` method.
 
