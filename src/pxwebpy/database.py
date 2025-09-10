@@ -474,7 +474,7 @@ class PxDatabase:
 
     def all_tables(self) -> list[dict[str, str]]:
         """
-        Get a list of all tables available.
+        Get a list of all tables available with some basic metadata. Use `~~.PxDatabase.get_table_metadata()` for extensive metadata about a specific table.
 
         Returns
         -------

@@ -14,9 +14,9 @@ Easily get data from the PxWeb API and into a dataframe.
 - In-memory caching for quicker iterative use and exploration
 - Wildcard support in queries
 - BYODF (Bring Your Own DataFrame): native return formats for use with `pandas` or `polars`
-- API navigation tools: search for tables, browse the database, list contents, get metadata, and more
+- API querying tools: search for tables, browse and list tables, get metadata, and more
 
-It has been tested with [Statistics Sweden](https://scb.se), [Statistics Finland](https://www.stat.fi), [Statistics Greenland](https://stat.gl) and [Statistics Norway](https://www.ssb.no).  
+It has been tested with [Statistics Sweden](https://scb.se) and [Statistics Norway](https://www.ssb.no).  
 
 > [!NOTE] 
 > Note that pxwebpy only supports version 2.0 of the PxWeb API.

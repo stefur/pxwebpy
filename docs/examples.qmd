@@ -45,24 +45,25 @@ If we want to change the language, we can do so by changing an attribute of the 
 `db.language = "en"`
 This will change the response language for all subsequent queries to the API.
 
-From here we can also browse around and get data. Checking out all tables available is doable `~~.PxDatabase.all_tables()`, but probably a bit overwhelming.
+From here we can also browse around and get data. Checking out all tables available is doable with `~~.PxDatabase.all_tables()`, but probably a bit overwhelming.
 
 ```{python}
 db.all_tables()
 ```
 
-Tables are organised into categories, or `paths`.
+Tables are organised into subjects and are categorised into different `paths`. To see all paths available, use `~~.PxDatabase.get_paths()`.
+
 ```{python}
 db.get_paths()
 ```
 
-It's also possible to filter the paths, for example to get all paths related to "Befolkning".
+It's also possible to filter the paths, for example to get all paths related to a specific subject like "Befolkning".
 
 ```{python}
 db.get_paths(path_id="BE")
 ```
 
-To get all tables that's in a specific path like "Folkmängd", use `~~.PxDatabase.tables_in_path()`.
+To get all tables that are in specific path you can use `~~.PxDatabase.tables_in_path()`. Here we take a closer look at "Folkmängd".
 
 ```{python}
 db.tables_in_path(path_id="BE0101A")
