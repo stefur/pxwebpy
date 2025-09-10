@@ -169,14 +169,9 @@ class PxDatabase:
             "pageSize": page_size,
         }
 
-        # Build the endpoint for the table search
-        endpoint = "&".join([k + "=" + str(v) for k, v in parameters.items() if v])
-
         # TODO Some nicer ux for multi page responses?
 
-        return self._api.call(
-            endpoint=f"/tables?{endpoint}",
-        )
+        return self._api.call(endpoint="/tables", params=parameters)
 
     def get_code_list(self, code_list_id: str) -> dict:
         """
