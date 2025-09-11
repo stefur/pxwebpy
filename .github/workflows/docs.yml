@@ -3,9 +3,10 @@ name: docs
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 jobs:
-  build-release:
+  build-docs:
     runs-on: ubuntu-latest
     environment: release
     permissions:
@@ -38,6 +39,7 @@ jobs:
         uses: quarto-dev/quarto-actions/publish@v2
         with:
           target: gh-pages
+          path: docs
         env:
           QUARTO_PYTHON: ${{ github.workspace }}/.venv/bin/python
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
