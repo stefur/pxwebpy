@@ -11,7 +11,7 @@ from ._utils import (
     unpack_table_data,
 )
 
-KnownDatabase = Literal["scb"]
+KnownDatabase = Literal["scb", "ssb"]
 
 _DATABASE_URLS: dict[KnownDatabase, str] = {
     "scb": "https://api.scb.se/ov0104/v2beta/api/v2",
