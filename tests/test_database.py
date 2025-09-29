@@ -62,3 +62,13 @@ def test_get_table_variables(db):
     # TODO Improve testing by targeting the expected structure instead
     assert isinstance(variables, dict)
     assert len(variables) > 0
+
+def test_get_paths(db):
+    subpaths = db.get_paths("AM0101")
+    assert isinstance(subpaths, list)
+    assert len(subpaths) > 0
+
+def test_tables_on_path(db):
+    tables = db.tables_on_path("AM0101C")
+    assert isinstance(tables, list)
+    assert len(tables) > 0
