@@ -1,5 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor
-from typing import Literal
+from typing import Literal, TypeAlias
 
 
 from ._api import PxApi
@@ -11,7 +11,8 @@ from ._utils import (
     unpack_table_data,
 )
 
-KnownDatabase = Literal["scb", "ssb"]
+KnownDatabase: TypeAlias = Literal["scb", "ssb"]
+"""Selectable databases with a preconfigured API URL"""
 
 _DATABASE_URLS: dict[KnownDatabase, str] = {
     "scb": "https://api.scb.se/ov0104/v2beta/api/v2",
@@ -487,18 +488,45 @@ class PxDatabase:
             endpoint="/tables", params={"pageSize": self.number_of_tables}
         ).get("tables")
 
-    def tables_in_path(self, path_id: str) -> list[dict[str, str]]:
-        """ """
+    def _unpack_paths(self, table: dict) -> list[dict]:
+        """Flatten the list of lists containing paths"""
+        return [item for sublist in table.get("paths", []) for item in sublist]
+
+    def tables_on_path(self, path_id: str) -> list[dict[str, str]]:
+        """
+        List all the tables available on the path.
+
+        Examples
+        --------
+        >>> db.tables_on_path("AM0101C")
+        [
+        ... {'id': 'TAB2566',
+        ...  'label': 'Genomsnittlig månadslön för tjänstemän, privat sektor (KLP) efter näringsgren SNI2002 ...'},
+        ... {'id': 'TAB2552',
+        ...  'label': 'Genomsnittlig timlön för arbetare, privat sektor (KLP) efter näringsgren SNI2002 ...'},
+        ... {'id': 'TAB386',
+        ...  'label': 'Antal arbetare inom industrin efter näringsgren SNI92 ...'},
+        ... {'id': 'TAB2565',
+        ...  'label': 'Genomsnittlig månadslön för tjänstemän, privat sektor (KLP) efter provision och näringsgren SNI92 ...'},
+        ... {'id': 'TAB2551',
+        ...  'label': 'Genomsnittlig timlön för arbetare, privat sektor (KLP) efter näringsgren SNI92 ...'},
+        ... ...
+        ]     
+        
+        Returns
+        -------
+        list[dict]
+            All tables on the path.
+        """
 
         tables = self.all_tables()
 
         result = []
 
         for table in tables:
-            # TODO Duplication
-            unpacked = [item for sublist in table.get("paths") for item in sublist]
+            paths = self._unpack_paths(table)
 
-            if any(path["id"] == path_id for path in unpacked):
+            if any(path["id"] == path_id for path in paths):
                 result.append(
                     {
                         "id": table.get("id"),
@@ -515,7 +543,7 @@ class PxDatabase:
 
         Examples
         --------
-        >>> db.paths()
+        >>> db.get_paths()
         [
         ... {'id': 'AA', 'label': 'Ämnesövergripande statistik'},
         ... {'id': 'AA0003', 'label': 'Registerdata för integration'},
@@ -524,28 +552,45 @@ class PxDatabase:
         ... {'id': 'AA0003D', 'label': 'Statistik med inriktning mot boende'},
         ... ...
         ]
+
+        You can also inspect a subpath by supplying a `path_id`.
+
+        >>> db.get_paths("AM0101")
+        [
+        ... {'id': 'AM', 'label': 'Arbetsmarknad'},
+        ... {'id': 'AM0101',
+        ...  'label': 'Konjunkturstatistik, löner för privat sektor (KLP)'},
+        ... {'id': 'AM0101A', 'label': 'Arbetare: Timlön efter näringsgren'},
+        ... {'id': 'AM0101B', 'label': 'Tjänstemän: Månadslön efter näringsgren'},
+        ... {'id': 'AM0101C', 'label': 'Äldre tabeller som inte uppdateras'},
+        ... {'id': 'AM0101X', 'label': 'Nyckeltal'},
+        ]
+        
+        Returns
+        -------
+        list[dict]
+            Paths available.
+
         """
 
-        # TODO Consider doing this once during init instead
         tables = self.all_tables()
 
-        # FIXME The solution here is not pretty
-        paths = []
+        result = []
         seen = set()
         for table in tables:
             # Unpack the sublist, cause for whatever reason there's a list in a list
-            unpacked = [item for sublist in table.get("paths") for item in sublist]
+            paths = self._unpack_paths(table)
 
             # If there's a path_id supplied, filter on it
-            if path_id and all(path["id"] != path_id for path in unpacked):
+            if path_id and all(path["id"] != path_id for path in paths):
                 continue
 
             # Proceed to unpack unique IDs
-            for path in unpacked:
+            for path in paths:
                 if path["id"] not in seen:
                     seen.add(path["id"])
-                    paths.append(path)
+                    result.append(path)
 
-        sorted_paths = sorted(paths, key=lambda x: x["id"])
+        result = sorted(result, key=lambda x: x["id"])
 
-        return sorted_paths
+        return result

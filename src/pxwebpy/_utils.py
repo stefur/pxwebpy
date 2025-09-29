@@ -75,7 +75,7 @@ def split_value_codes(value_codes: dict, max_cells: int) -> list[dict]:
 def expand_wildcards(value_codes: dict, source: dict) -> dict:
     """
     Expand wildcards in value_codes using the provided `source`.
-    `source` is either a `dict` with either wcode list or table_variables.
+    `source` is either a `dict` with either code list or table_variables.
     """
     result = {}
     for variable, codes in value_codes.items():
@@ -118,60 +118,43 @@ def expand_wildcards(value_codes: dict, source: dict) -> dict:
 
 def unpack_table_data(json_data: dict) -> list[dict]:
     """
-    Takes json-stat2 data and turns it into a list of dicts that can
+    Takes json-stat2 and flattens it into a list of dicts that can
     be used to convert into a dataframe, using either pandas or polars.
     """
 
-    dimension_categories = {}
+    dimensions = json_data["dimension"]
+    dimension_labels = {}
+    
+    # Go over each dimension by id, according to the spec it is an ordered list of the dimensions
+    for dim_id in json_data["id"]:
+            
+        dimension = dimensions[dim_id]
+        label = dimension["label"]
+        category_labels = dimension["category"]["label"]
 
-    # Go over each dimension
-    for dim in json_data["dimension"]:
+        show = dimension.get("extension", {}).get("show")
         # If the dimension has extension data along with a key for show, use
         # that to determine the values shown in the output
-        try:
-            show_value = json_data["dimension"][dim]["extension"]["show"]
-
-            if show_value == "code_value":
-                values = [
-                    " ".join([str(k), str(v)])
-                    for k, v in json_data["dimension"][dim]["category"]["label"].items()
-                ]
-
-            elif show_value == "code":
-                values = [
-                    str(k)
-                    for k in json_data["dimension"][dim]["category"]["label"].keys()
-                ]
-
-            elif show_value == "value":
-                values = [
-                    str(v)
-                    for v in json_data["dimension"][dim]["category"]["label"].values()
-                ]
+        match show:
+            case "code_value":
+                values = [f"{k} {v}" for k, v in category_labels.items()]
+            case "code":
+                values = list(category_labels.keys())
+            case "value":
+                values = list(category_labels.values())
+            case None:
+                # If there's no show key at all we default to using the label values
+                values = list(category_labels.values())
+            case _:
                 # Raise an error if we hit some value in the show key that we don't know how to handle
-
-            else:
                 raise ValueError(
-                    f"""Unexpected show value. Expected "code", "value" or "code_value", got: {show_value}"""
+                    f"""Unexpected show value. Expected "code", "value" or "code_value", got: {show}"""
                 )
 
-        # If there's no show key at all we default to using the label values
-        except KeyError:
-            values = [
-                str(v)
-                for v in json_data["dimension"][dim]["category"]["label"].values()
-            ]
+        dimension_labels[label] = values
 
-        dimension_categories.update({json_data["dimension"][dim]["label"]: values})
-
-    # The result is a list of dicts with the dimension as key and product of the category labels for values
-    result = [
-        dict(zip(dimension_categories.keys(), x))
-        for x in itertools.product(*dimension_categories.values())
-    ]
-
-    # Finally add the value for each dict representing a row
-    for value, dict_row in zip(json_data["value"], result):
-        dict_row["value"] = value
-
-    return result
+    # The result is a list of dicts with the dimension as key and product of the category labels for values, with the value as "value" for each row
+    return [
+    {**dict(zip(dimension_labels.keys(), combo)), "value": val}
+    for combo, val in zip(itertools.product(*dimension_labels.values()), json_data["value"])
+]
