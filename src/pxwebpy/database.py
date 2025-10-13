@@ -14,9 +14,9 @@ from ._utils import (
 KnownDatabase: TypeAlias = Literal["scb", "ssb"]
 """Selectable databases with a preconfigured API URL"""
 
-_DATABASE_URLS: dict[KnownDatabase, str] = {
+DATABASE_URLS: dict[KnownDatabase, str] = {
     "scb": "https://api.scb.se/ov0104/v2beta/api/v2",
-    "ssb": "https://data.ssb.no/api/pxwebapi/v2-beta",
+    "ssb": "https://data.ssb.no/api/pxwebapi/v2",
 }
 
 
@@ -29,7 +29,7 @@ def get_known_databases() -> dict[str, str]:
     dict
         A dictionary with the database shorthand names as keys and the URLs as values.
     """
-    return _DATABASE_URLS
+    return DATABASE_URLS
 
 
 class PxDatabase:
@@ -66,7 +66,7 @@ class PxDatabase:
         timeout: int = 30,
     ):
         self._api = PxApi(
-            url=_DATABASE_URLS.get(api_url, api_url),
+            url=DATABASE_URLS.get(api_url, api_url),
             language=language,
             timeout=timeout,
             disable_cache=disable_cache,
