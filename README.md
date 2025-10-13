@@ -20,3 +20,42 @@ It has been tested with [Statistics Sweden](https://scb.se) and [Statistics Norw
 
 > [!NOTE] 
 > Note that pxwebpy only supports version 2.0 of the PxWeb API.
+
+# Quick start
+```python
+>>> from pxwebpy import PxDatabase
+>>> import polars as pl
+
+# Prepare to get data from the Statistics Norway API by using the builtin URL
+>>> db = PxDatabase("ssb")
+
+# Set the language to english
+>>> db.language = "en"
+
+# Check the population per year in Norway during the 1990's
+>>> data = db.get_table_data("06913", value_codes={"Region": "0", "ContentsCode": "Folkemengde", "Tid": "199*"})
+
+# Turn it into a polars dataframe
+>>> df = pl.DataFrame(data)
+
+# A quick look at the result
+>>> print(df)
+
+shape: (10, 4)
+┌─────────────────────┬──────────────────────┬──────┬─────────┐
+│ region              ┆ contents             ┆ year ┆ value   │
+│ ---                 ┆ ---                  ┆ ---  ┆ ---     │
+│ str                 ┆ str                  ┆ str  ┆ i64     │
+╞═════════════════════╪══════════════════════╪══════╪═════════╡
+│ 0 The whole country ┆ Population 1 January ┆ 1990 ┆ 4233116 │
+│ 0 The whole country ┆ Population 1 January ┆ 1991 ┆ 4249830 │
+│ 0 The whole country ┆ Population 1 January ┆ 1992 ┆ 4273634 │
+│ 0 The whole country ┆ Population 1 January ┆ 1993 ┆ 4299167 │
+│ 0 The whole country ┆ Population 1 January ┆ 1994 ┆ 4324815 │
+│ 0 The whole country ┆ Population 1 January ┆ 1995 ┆ 4348410 │
+│ 0 The whole country ┆ Population 1 January ┆ 1996 ┆ 4369957 │
+│ 0 The whole country ┆ Population 1 January ┆ 1997 ┆ 4392714 │
+│ 0 The whole country ┆ Population 1 January ┆ 1998 ┆ 4417599 │
+│ 0 The whole country ┆ Population 1 January ┆ 1999 ┆ 4445329 │
+└─────────────────────┴──────────────────────┴──────┴─────────┘
+```
