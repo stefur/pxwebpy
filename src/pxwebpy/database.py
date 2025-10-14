@@ -3,7 +3,7 @@ from typing import Literal, TypeAlias
 
 
 from ._api import PxApi
-from ._utils import (
+from ._functions import (
     build_query,
     count_data_cells,
     expand_wildcards,
@@ -254,7 +254,7 @@ class PxDatabase:
 
     def get_table_variables(self, table_id: str) -> dict:
         """
-        Get the specific metadata for variables and values with their respective code and labels. Also includes information  whether a variable can be eliminated as well as the available code lists.
+        Get the specific metadata for variables and value codes. Also includes information  whether a variable can be eliminated as well as the available code lists.
         The information returned is unpacked and slightly more easily navigated than the output from the `~~.PxDatabase.get_table_metadata()` method.
 
         Parameters

@@ -8,7 +8,7 @@ Easily get data from the PxWeb API and into a dataframe.
 
 [Get started]() | [Examples]() | [Reference]()
 
-# Features
+## Features
 - Automatic query batching to handle large queries to respect rate limits
 - Multithreading for faster data fetching on large queries
 - In-memory caching for quicker iterative use and exploration
@@ -21,7 +21,7 @@ It has been tested with [Statistics Sweden](https://scb.se) and [Statistics Norw
 > [!NOTE] 
 > Note that pxwebpy only supports version 2.0 of the PxWeb API.
 
-# Quick start
+## Quick start
 ```python
 >>> from pxwebpy import PxDatabase
 >>> import polars as pl

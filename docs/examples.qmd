@@ -63,10 +63,10 @@ It's also possible to filter the paths, for example to get all paths related to 
 db.get_paths(path_id="BE")
 ```
 
-To get all tables that are in specific path you can use `~~.PxDatabase.tables_in_path()`. Here we take a closer look at "Folkmängd".
+To get all tables that are in specific path you can use `~~.PxDatabase.tables_on_path()`. Here we take a closer look at "Folkmängd".
 
 ```{python}
-db.tables_in_path(path_id="BE0101A")
+db.tables_on_path(path_id="BE0101A")
 ```
 
 ## Searching for tables

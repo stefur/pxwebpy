@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from pxwebpy._utils import (
+from pxwebpy._functions import (
     build_query,
     count_data_cells,
     expand_wildcards,
