@@ -4,7 +4,7 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pxwebpy?style=flat-square)
 [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json&style=flat-square)](https://github.com/astral-sh/uv)
 [![ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json&style=flat-square)](https://github.com/astral-sh/ruff)   
-Easily get data from the PxWeb API and into a dataframe.  
+Python bindings for the PxWeb API to easily get data into a dataframe.
 
 [Get started]() | [Examples]() | [Reference]()
 
@@ -14,7 +14,7 @@ Easily get data from the PxWeb API and into a dataframe.
 - In-memory caching for quicker iterative use and exploration
 - Wildcard support in queries
 - BYODF (Bring Your Own DataFrame): native return formats for use with `pandas` or `polars`
-- Querying tools: search for tables, browse and list tables, get metadata, and more
+- Search for tables, browse and list tables, get metadata, and more
 
 It has been tested with [Statistics Sweden](https://scb.se) and [Statistics Norway](https://www.ssb.no).  
 
