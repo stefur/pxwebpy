@@ -20,61 +20,61 @@ ip.display_formatter.formatters["text/plain"] = plain_pretty_formatter
 ```
 
 ::: {.callout-note}
-This library is not affiliated with the PxWeb project. These examples do not go into detail about how the PxWeb API behaves or responds. For more information about the API itself, check out the official [specification](https://github.com/PxTools/PxApiSpecs).
+This library provides bindings to the PxWeb API but is not affiliated with the PxWeb project. These examples do not go into detail about how the PxWeb API behaves or responds. For more information about the API itself, check out the official [specification](https://github.com/PxTools/PxApiSpecs).
 :::
 
 ## Basic setup and exploration
-The first step is to set up a PxDatabase object to use.
+The first step is to set up a PxWebApi object to use.
 
 ```{python}
-from pxwebpy import PxDatabase
+from pxweb import PxWebApi
 
-# Use the builtin known database instead of a URL
-db = PxDatabase("scb")
+# Use the builtin known API instead of a URL
+api = PxWebApi("scb")
 
-db
+api
 ```
 
-We can check out information about the API, including languages supported, by using `~~.PxDatabase.get_config()`.
+We can check out information about the API, including languages supported, by using `~~.PxWebApi.get_config()`.
 
 ```{python}
-db.get_config()
+api.get_config()
 ```
 
-If we want to change the language, we can do so by changing an attribute of the `PxDatabase` object like so:
-`db.language = "en"`
+If we want to change the language, we can do so by changing an attribute of the `PxWebApi` object like so:
+`api.language = "en"`
 This will change the response language for all subsequent queries to the API.
 
-From here we can also browse around and get data. Checking out all tables available is doable with `~~.PxDatabase.all_tables()`, but probably a bit overwhelming.
+From here we can also browse around and get data. Checking out all tables available is doable with `~~.PxWebApi.all_tables()`, but probably a bit overwhelming.
 
 ```{python}
-db.all_tables()
+api.all_tables()
 ```
 
-Tables are organised into subjects and are categorised into different `paths`. To see all paths available, use `~~.PxDatabase.get_paths()`.
+Tables are organised into subjects and are categorised into different `paths`. To see all paths available, use `~~.PxWebApi.get_paths()`.
 
 ```{python}
-db.get_paths()
+api.get_paths()
 ```
 
 It's also possible to filter the paths, for example to get all paths related to a specific subject like "Befolkning".
 
 ```{python}
-db.get_paths(path_id="BE")
+api.get_paths(path_id="BE")
 ```
 
-To get all tables that are in specific path you can use `~~.PxDatabase.tables_on_path()`. Here we take a closer look at "Folkmängd".
+To get all tables that are in specific path you can use `~~.PxWebApi.tables_on_path()`. Here we take a closer look at "Folkmängd".
 
 ```{python}
-db.tables_on_path(path_id="BE0101A")
+api.tables_on_path(path_id="BE0101A")
 ```
 
 ## Searching for tables
-It's also possible to search for tables in the database using the `~~.PxDatabase.search()` method.
+It's also possible to search for tables using the `~~.PxWebApi.search()` method.
 
 ```{python}
 # Keeping it simple and just look for tables updated in the past 30 days matching the query string
-results = db.search(query="energi", past_days=30)
+results = api.search(query="energi", past_days=30)
 
 # Checking how many tables there are in the results
 len(results.get("tables"))
@@ -88,13 +88,13 @@ We can also get the labels and ID's, or any other metadata, to find out more.
 ```
 
 ## Getting table metadata
-There are two methods to get table metadata. You can get the full metadata information by simply calling `~~.PxDatabase.get_table_metadata()`.
+There are two methods to get table metadata. You can get the full metadata information by simply calling `~~.PxWebApi.get_table_metadata()`.
 
-If you're interested in the details about variables of a table you can also use `~~.PxDatabase.get_table_variables()`. This method returns information in a more condensed way which may be easier to overview.
+If you're interested in the details about variables of a table you can also use `~~.PxWebApi.get_table_variables()`. This method returns information in a more condensed way which may be easier to overview.
 
 ```{python}
 # Use the table ID
-tab_vars = db.get_table_variables("TAB2706")
+tab_vars = api.get_table_variables("TAB2706")
 
 # Let's check out Region
 tab_vars.get("Region")
@@ -103,17 +103,17 @@ tab_vars.get("Region")
 As can be seen above `elimination` is `True` for `"Region"`, so the variable can be skipped over. But there's also a few code lists associated with the variable.
 
 ### Code lists
-Getting information about code lists can be done with `~~.PxDatabase.get_code_list()`. 
+Getting information about code lists can be done with `~~.PxWebApi.get_code_list()`. 
 
 ```{python}
 # Fetching and unpacking 'values' of 'vs_RegionValkrets99'
-db.get_code_list("vs_RegionValkrets99").get("values")
+api.get_code_list("vs_RegionValkrets99").get("values")
 ```
 
 The codes can then be used in a query for a selection based on the code list. More on that in [Getting table data](#getting-table-data).
 
 ## Getting table data
-To get data with `~~.PxDatabase.get_table_data()`  we need a few things.
+To get data with `~~.PxWebApi.get_table_data()`  we need a few things.
 
 - A table ID
 - A selection of value codes from variables
@@ -121,7 +121,7 @@ To get data with `~~.PxDatabase.get_table_data()`  we need a few things.
 
 ```{python}
 # Getting some election results for specific regions, using a code list to match value codes
-dataset = db.get_table_data(
+dataset = api.get_table_data(
     "TAB2706",
     value_codes={
         "ContentsCode": "ME0104B6",
@@ -176,7 +176,7 @@ Wildcards are useful, and here is an example using wildcards for a larger query.
 ```{python}
 # Using wildcards here to get all the municipalities in Stockholm, all months of 2024, all genders and 5-year age groups.
 # The somewhat cryptic ContentsCode represents count
-population_data = db.get_table_data(
+population_data = api.get_table_data(
     "TAB5444",
     value_codes={
         "Alder": "*",
@@ -209,11 +209,11 @@ To handle this pxwebpy will break up the query into several subqueries to stay w
 
 ```{python}
 # Executing the large query
-data = db.get_table_data("TAB1267", value_codes=codes, code_list=lists)
+data = api.get_table_data("TAB1267", value_codes=codes, code_list=lists)
 
 # And then loading the result into a dataframe
 pl.DataFrame(data)
 ```
 
 ### In-memory caching
-By default pxwebpy uses in-memory caching for API responses, which can be useful for exploration and iterative use. Caching both reduces the load on the API and speeds up execution. However it can be turned off if needed simply by setting the attribute `disable_cache` to `True`.
+By default `pxwebpy` uses in-memory caching for API responses, which can be useful for exploration and iterative use. Caching both reduces the load on the API and speeds up execution. However it can be turned off if needed simply by setting the attribute `disable_cache` to `True`.

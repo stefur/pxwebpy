@@ -5,7 +5,7 @@ from requests.exceptions import HTTPError, JSONDecodeError
 from requests_cache import CachedSession, CacheSettings, Request
 
 
-class PxApi:
+class Client:
     def __init__(
         self,
         url: str,
@@ -45,7 +45,7 @@ class PxApi:
         max_retries: int = 3,
         enforce_rate_limit: bool = True,
     ) -> dict:
-        """Call the API using the table URL and optional query"""
+        """Call the endpoint with optional query"""
 
         # Set up the request and prepare it for being sent
         request = Request(

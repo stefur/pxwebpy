@@ -1,7 +1,7 @@
 [project]
 name = "pxwebpy"
 dynamic = ["version"]
-description = "Get data from PxWeb API easily."
+description = "Python bindings for the PxWeb API to easily get data into a dataframe."
 license = "MIT"
 repository = "https://github.com/stefur/pxwebpy/"
 keywords = ["pxweb", "statistics", "dataframes", "pandas", "polars"]
@@ -34,10 +34,13 @@ build-backend = "hatchling.build"
 source = "versioningit"
 
 [tool.hatch.build]
-artifacts = ["src/pxwebpy/_version.py"]
+artifacts = ["src/pxweb/_version.py"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pxweb"]
 
 [tool.versioningit.write]
-file = "src/pxwebpy/_version.py"
+file = "src/pxweb/_version.py"
 
 [dependency-groups]
 dev = [

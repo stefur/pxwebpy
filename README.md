@@ -14,7 +14,7 @@ Easily get data from the PxWeb API and into a dataframe.
 - In-memory caching for quicker iterative use and exploration
 - Wildcard support in queries
 - BYODF (Bring Your Own DataFrame): native return formats for use with `pandas` or `polars`
-- API querying tools: search for tables, browse and list tables, get metadata, and more
+- Querying tools: search for tables, browse and list tables, get metadata, and more
 
 It has been tested with [Statistics Sweden](https://scb.se) and [Statistics Norway](https://www.ssb.no).  
 
@@ -23,17 +23,17 @@ It has been tested with [Statistics Sweden](https://scb.se) and [Statistics Norw
 
 ## Quick start
 ```python
->>> from pxwebpy import PxDatabase
+>>> from pxweb import PxWebApi
 >>> import polars as pl
 
 # Prepare to get data from the Statistics Norway API by using the builtin URL
->>> db = PxDatabase("ssb")
+>>> api = PxWebApi("ssb")
 
 # Set the language to english
->>> db.language = "en"
+>>> api.language = "en"
 
 # Check the population per year in Norway during the 1990's
->>> data = db.get_table_data("06913", value_codes={"Region": "0", "ContentsCode": "Folkemengde", "Tid": "199*"})
+>>> data = api.get_table_data("06913", value_codes={"Region": "0", "ContentsCode": "Folkemengde", "Tid": "199*"})
 
 # Turn it into a polars dataframe
 >>> df = pl.DataFrame(data)

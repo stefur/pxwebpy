@@ -2,8 +2,8 @@ from concurrent.futures import ThreadPoolExecutor
 from typing import Literal, TypeAlias
 
 
-from ._api import PxApi
-from ._functions import (
+from ._internal.client import Client
+from ._internal.functions import (
     build_query,
     count_data_cells,
     expand_wildcards,
@@ -11,48 +11,48 @@ from ._functions import (
     unpack_table_data,
 )
 
-KnownDatabase: TypeAlias = Literal["scb", "ssb"]
-"""Selectable databases with a preconfigured API URL"""
+KnownApi: TypeAlias = Literal["scb", "ssb"]
+"""Selectable APIs with a preconfigured URL"""
 
-DATABASE_URLS: dict[KnownDatabase, str] = {
+API_URLS: dict[KnownApi, str] = {
     "scb": "https://api.scb.se/ov0104/v2beta/api/v2",
     "ssb": "https://data.ssb.no/api/pxwebapi/v2",
 }
 
 
-def get_known_databases() -> dict[str, str]:
+def get_known_apis() -> dict[str, str]:
     """
-    Get all the known builtin databases, shorthand names as keys and corresponding API URL as value.
+    Get all the known builtin APIs, shorthand names as keys and corresponding URL as value.
 
     Returns
     -------
     dict
-        A dictionary with the database shorthand names as keys and the URLs as values.
+        A dictionary with the API shorthand names as keys and the URLs as values.
     """
-    return DATABASE_URLS
+    return API_URLS
 
 
-class PxDatabase:
+class PxWebApi:
     """
     A wrapper around the PxWeb API. Enables exploring available datasets interactively, getting table data, variables as well as other metadata.
 
     Parameters
     ----------
-    api_url : str | KnownDatabase
-        Either a shorthand name for a builtin database API, e.g. "scb". To check out avaiable databases, use `get_known_databases()`.
+    url : str | KnownApi
+        Either a shorthand name for a builtin API, e.g. "scb". To check out avaiable APIs, use `get_known_apis()`.
     language : str, optional
-        The language to be used with the API. You can check available languages using the `~~.PxDatabase.get_config()` method.
+        The language to be used with the API. You can check available languages using the `~~.PxWebApi.get_config()` method.
     disable_cache : bool
         Disable the in-memory cache that is used for API responses.
     timeout : int
-        The timeout in seconds to use when calling the database API.
+        The timeout in seconds to use when calling the API.
 
     Examples
     --------
-    Get the SCB database API using the shorthand:
-    >>> db = PxDatabase("scb")
-    >>> db
-    PxDatabase(api_url='https://api.scb.se/ov0104/v2beta/api/v2',
+    Get the SCB PxWeb API using the shorthand:
+    >>> api = PxWebApi("scb")
+    >>> api
+    PxWebApi(url='https://api.scb.se/ov0104/v2beta/api/v2',
                language='sv',
                disable_cache=False,
                timeout=30)
@@ -60,32 +60,32 @@ class PxDatabase:
 
     def __init__(
         self,
-        api_url: str | KnownDatabase,
+        url: str | KnownApi,
         language: str | None = None,
         disable_cache: bool = False,
         timeout: int = 30,
     ):
-        self._api = PxApi(
-            url=DATABASE_URLS.get(api_url, api_url),
+        self._client = Client(
+            url=API_URLS.get(url, url),
             language=language,
             timeout=timeout,
             disable_cache=disable_cache,
         )  # Resolve the name if known else assume it's a full URL
 
-        # Pull in the total number of elements (tables) available in the database
+        # Pull in the total number of elements (tables) available
         self.number_of_tables: int | None = (
-            self._api.call(endpoint="/tables").get("page").get("totalElements")
+            self._client.call(endpoint="/tables").get("page").get("totalElements")
         )
 
     def __repr__(self) -> str:
-        return f"""PxDatabase(api_url='{self._api.url}',
-        language={self._api.params.get("lang")},
-        disable_cache={self._api.session.settings.disabled},
-        timeout={self._api.timeout},
+        return f"""PxWebApi(url='{self._client.url}',
+        language={self._client.params.get("lang")},
+        disable_cache={self._client.session.settings.disabled},
+        timeout={self._client.timeout},
         number_of_tables={self.number_of_tables})"""
 
     def __eq__(self, other) -> bool:
-        return self._api.url == other
+        return self._client.url == other
 
     def get_config(self) -> dict:
         """
@@ -98,7 +98,7 @@ class PxDatabase:
 
         Examples
         --------
-        >>> conf = db.get_config()
+        >>> conf = api.get_config()
 
         Check the languages available.
 
@@ -106,29 +106,29 @@ class PxDatabase:
         [{'id': 'sv', 'label': 'Svenska'},
          {'id': 'en', 'label': 'English'}]
         """
-        return self._api.call(
+        return self._client.call(
             endpoint="/config",
         )
 
     @property
     def disable_cache(self) -> None:
         """Get the cache setting."""
-        return self._api.session.settings.disabled
+        return self._client.session.settings.disabled
 
     @disable_cache.setter
     def disable_cache(self, value) -> None:
         """Set the cache setting."""
-        self._api.session.settings.disabled = value
+        self._client.session.settings.disabled = value
 
     @property
     def language(self) -> str:
         """Get the current language."""
-        return self._api.params["lang"]
+        return self._client.params["lang"]
 
     @language.setter
     def language(self, value) -> None:
         """Set the language to use with the API."""
-        self._api.params["lang"] = value
+        self._client.params["lang"] = value
 
     def search(
         self,
@@ -138,7 +138,7 @@ class PxDatabase:
         page_size: int | None = None,
     ) -> dict:
         """
-        Search for tables in the database.
+        Search for tables.
 
         Parameters
         ----------
@@ -158,8 +158,8 @@ class PxDatabase:
 
         Examples
         --------
-        >>> db = PxDatabase("scb")
-        >>> search = db.search(query="arbetsmarknad", past_days=180)
+        >>> api = PxWebApi("scb")
+        >>> search = api.search(query="arbetsmarknad", past_days=180)
         >>> len(search.get("tables"))
         4
         """
@@ -172,7 +172,7 @@ class PxDatabase:
 
         # TODO Some nicer ux for multi page responses?
 
-        return self._api.call(endpoint="/tables", params=parameters)
+        return self._client.call(endpoint="/tables", params=parameters)
 
     def get_code_list(self, code_list_id: str) -> dict:
         """
@@ -190,9 +190,9 @@ class PxDatabase:
 
         Examples
         --------
-        By checking out the table variables with the `~~.PxDatabase.get_table_variables()` method we can get available code lists.
+        By checking out the table variables with the `~~.PxWebApi.get_table_variables()` method we can get available code lists.
 
-        >>> meta = db.get_table_variables("TAB638")
+        >>> meta = api.get_table_variables("TAB638")
 
         With the metadata, get the code lists available for "Region".
 
@@ -207,7 +207,7 @@ class PxDatabase:
 
         Now we can look closer at a specific code list by using the method.
 
-        >>> db.get_code_list("vs_RegionLän07")
+        >>> api.get_code_list("vs_RegionLän07")
         {
         ...     'id': 'vs_RegionLän07',
         ...     'label': 'Län',
@@ -221,7 +221,7 @@ class PxDatabase:
         ...     ]
         ... }
         """
-        return self._api.call(
+        return self._client.call(
             endpoint=f"/codelists/{code_list_id}",
         )
 
@@ -240,7 +240,7 @@ class PxDatabase:
 
         Examples
         --------
-        >>> meta = db.get_table_metadata("TAB638")
+        >>> meta = api.get_table_metadata("TAB638")
         >>> meta.keys()
         dict_keys(['version', 'class', 'href', 'label', 'source',
         ...         'updated', 'link', 'note', 'role', 'id',
@@ -248,14 +248,14 @@ class PxDatabase:
         >>> meta.get("label")
         'Folkmängden efter region, civilstånd, ålder, kön, tabellinnehåll och år'
         """
-        return self._api.call(
+        return self._client.call(
             endpoint=f"/tables/{table_id}/metadata",
         )
 
     def get_table_variables(self, table_id: str) -> dict:
         """
         Get the specific metadata for variables and value codes. Also includes information  whether a variable can be eliminated as well as the available code lists.
-        The information returned is unpacked and slightly more easily navigated than the output from the `~~.PxDatabase.get_table_metadata()` method.
+        The information returned is unpacked and slightly more easily navigated than the output from the `~~.PxWebApi.get_table_metadata()` method.
 
         Parameters
         ----------
@@ -269,7 +269,7 @@ class PxDatabase:
 
         Examples
         --------
-        >>> db.get_table_variable("TAB638")
+        >>> api.get_table_variable("TAB638")
         {
         ...     'Region': {
         ...         'label': 'region',
@@ -292,7 +292,7 @@ class PxDatabase:
         ...     ...
         }
         """
-        dimensions = self._api.call(
+        dimensions = self._client.call(
             endpoint=f"/tables/{table_id}/metadata",
         ).get("dimension")
         result = {}
@@ -332,7 +332,7 @@ class PxDatabase:
         table_id : str
             An ID of a table to get data from.
         value_codes : dict, optional
-            The value codes to use for data selection where the keys are the variable codes. You can use the `~~.PxDatabase.get_table_variables()` to explore what's available.
+            The value codes to use for data selection where the keys are the variable codes. You can use the `~~.PxWebApi.get_table_variables()` to explore what's available.
         code_list : dict, optional
             Any named code list to use with a variable for code selection.
 
@@ -344,7 +344,7 @@ class PxDatabase:
         Examples
         --------
         A simple query to get the population of 2024 for  all the Stockholm municipalities using 5-year age groups.
-        >>> dataset = db.get_table_data(
+        >>> dataset = api.get_table_data(
         ...     table_id="TAB638",
         ...     value_codes={
         ...         "ContentsCode": ["BE0101N1"],
@@ -384,7 +384,7 @@ class PxDatabase:
 
         # If no value codes are supplied, send a query to get the default selection
         if value_codes is None:
-            response = self._api.call(
+            response = self._client.call(
                 endpoint=f"/tables/{table_id}/data",
             )
             dataset = unpack_table_data(response)
@@ -440,12 +440,12 @@ class PxDatabase:
             value_codes = expand_wildcards(value_codes, table_variables)
 
         # Now count the data cells we're getting to check against the max allowed
-        if count_data_cells(value_codes) > self._api.max_data_cells:
+        if count_data_cells(value_codes) > self._client.max_data_cells:
             # Split the query into several subqueries for API calls
             subqueries = [
                 build_query(sub_query, code_list)
                 for sub_query in split_value_codes(
-                    value_codes, self._api.max_data_cells
+                    value_codes, self._client.max_data_cells
                 )
             ]
 
@@ -456,7 +456,7 @@ class PxDatabase:
                 # Map() so that we yield results in order
                 for result in executor.map(
                     lambda subquery: unpack_table_data(
-                        self._api.call(
+                        self._client.call(
                             endpoint=f"/tables/{table_id}/data", query=subquery
                         )
                     ),
@@ -467,7 +467,7 @@ class PxDatabase:
         else:
             # No batching needed so we just go ahead with the query as is
             query = build_query(value_codes, code_list)
-            response = self._api.call(
+            response = self._client.call(
                 endpoint=f"/tables/{table_id}/data",
                 query=query,
             )
@@ -477,14 +477,14 @@ class PxDatabase:
 
     def all_tables(self) -> list[dict[str, str]]:
         """
-        Get a list of all tables available with some basic metadata. Use `~~.PxDatabase.get_table_metadata()` for extensive metadata about a specific table.
+        Get a list of all tables available with some basic metadata. Use `~~.PxWebApi.get_table_metadata()` for extensive metadata about a specific table.
 
         Returns
         -------
         list[dict]
             All tables.
         """
-        return self._api.call(
+        return self._client.call(
             endpoint="/tables", params={"pageSize": self.number_of_tables}
         ).get("tables")
 
@@ -498,7 +498,7 @@ class PxDatabase:
 
         Examples
         --------
-        >>> db.tables_on_path("AM0101C")
+        >>> api.tables_on_path("AM0101C")
         [
         ... {'id': 'TAB2566',
         ...  'label': 'Genomsnittlig månadslön för tjänstemän, privat sektor (KLP) efter näringsgren SNI2002 ...'},
@@ -539,11 +539,11 @@ class PxDatabase:
 
     def get_paths(self, path_id: str | None = None) -> list[dict[str, str]]:
         """
-        List all paths available to explore. Use the ID to list tables on a specific path with `~~.PxDatabase.tables_on_path()`.
+        List all paths available to explore. Use the ID to list tables on a specific path with `~~.PxWebApi.tables_on_path()`.
 
         Examples
         --------
-        >>> db.get_paths()
+        >>> api.get_paths()
         [
         ... {'id': 'AA', 'label': 'Ämnesövergripande statistik'},
         ... {'id': 'AA0003', 'label': 'Registerdata för integration'},
@@ -555,7 +555,7 @@ class PxDatabase:
 
         You can also inspect a subpath by supplying a `path_id`.
 
-        >>> db.get_paths("AM0101")
+        >>> api.get_paths("AM0101")
         [
         ... {'id': 'AM', 'label': 'Arbetsmarknad'},
         ... {'id': 'AM0101',

@@ -46,12 +46,12 @@ quartodoc:
     dynamic: false
   render_interlinks: true
   sections:
-    - title: Database interaction
+    - title: API interaction
       desc: |
         Tools to explore tables and get data from the PxWeb API.
       contents:
-        - name: PxDatabase
-        - get_known_databases
+        - name: PxWebApi
+        - get_known_apis
 
 filters:
   - interlinks
