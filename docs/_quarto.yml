@@ -50,7 +50,7 @@ quartodoc:
       desc: |
         Tools to explore tables and get data from the PxWeb API.
       contents:
-        - name: PxWebApi
+        - name: PxApi
         - get_known_apis
 
 filters:

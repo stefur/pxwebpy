@@ -5,7 +5,7 @@ execute:
     eval: false
 ---
 
-`pxwebpy` provides bindings to interact with the PxWeb API. The goal is to make it easier to get data from the API and into a dataframe. It is *BYODF*\* so that you can use what DataFrame library you prefer, be it `polars`, `pandas` or a `pyarrow` table.
+`pxwebpy` is a Python client for the PxWeb API. The goal is to make it easier to get data from the API and into a dataframe. It is *BYODF*\* so that you can use what DataFrame library you prefer, be it `polars`, `pandas` or a `pyarrow` table.
 
 <small>\* = *Bring your own dataframe*</small>
 
@@ -25,10 +25,10 @@ uv add pxwebpy
 ## Usage
 ```{python}
 # | eval: true
-from pxweb import PxWebApi
+from pxweb import PxApi
 import polars as pl
 
-api = PxWebApi("scb")
+api = PxApi("scb")
 
 # Swedish population per year
 data = api.get_table_data(

@@ -1,7 +1,7 @@
 [project]
 name = "pxwebpy"
 dynamic = ["version"]
-description = "Python bindings for the PxWeb API to easily get data into a dataframe."
+description = "Client library for the PxWeb API to easily load data into a DataFrame."
 license = "MIT"
 repository = "https://github.com/stefur/pxwebpy/"
 keywords = ["pxweb", "statistics", "dataframes", "pandas", "polars"]

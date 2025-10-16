@@ -16,7 +16,7 @@ KnownApi: TypeAlias = Literal["scb", "ssb"]
 
 API_URLS: dict[KnownApi, str] = {
     "scb": "https://api.scb.se/ov0104/v2beta/api/v2",
-    "ssb": "https://data.ssb.no/api/pxwebapi/v2",
+    "ssb": "https://data.ssb.no/api/PxApi/v2",
 }
 
 
@@ -32,7 +32,7 @@ def get_known_apis() -> dict[str, str]:
     return API_URLS
 
 
-class PxWebApi:
+class PxApi:
     """
     A wrapper around the PxWeb API. Enables exploring available datasets interactively, getting table data, variables as well as other metadata.
 
@@ -41,7 +41,7 @@ class PxWebApi:
     url : str | KnownApi
         Either a shorthand name for a builtin API, e.g. "scb". To check out avaiable APIs, use `get_known_apis()`.
     language : str, optional
-        The language to be used with the API. You can check available languages using the `~~.PxWebApi.get_config()` method.
+        The language to be used with the API. You can check available languages using the `~~.PxApi.get_config()` method.
     disable_cache : bool
         Disable the in-memory cache that is used for API responses.
     timeout : int
@@ -50,9 +50,9 @@ class PxWebApi:
     Examples
     --------
     Get the SCB PxWeb API using the shorthand:
-    >>> api = PxWebApi("scb")
+    >>> api = PxApi("scb")
     >>> api
-    PxWebApi(url='https://api.scb.se/ov0104/v2beta/api/v2',
+    PxApi(url='https://api.scb.se/ov0104/v2beta/api/v2',
                language='sv',
                disable_cache=False,
                timeout=30)
@@ -78,7 +78,7 @@ class PxWebApi:
         )
 
     def __repr__(self) -> str:
-        return f"""PxWebApi(url='{self._client.url}',
+        return f"""PxApi(url='{self._client.url}',
         language={self._client.params.get("lang")},
         disable_cache={self._client.session.settings.disabled},
         timeout={self._client.timeout},
@@ -158,7 +158,7 @@ class PxWebApi:
 
         Examples
         --------
-        >>> api = PxWebApi("scb")
+        >>> api = PxApi("scb")
         >>> search = api.search(query="arbetsmarknad", past_days=180)
         >>> len(search.get("tables"))
         4
@@ -190,7 +190,7 @@ class PxWebApi:
 
         Examples
         --------
-        By checking out the table variables with the `~~.PxWebApi.get_table_variables()` method we can get available code lists.
+        By checking out the table variables with the `~~.PxApi.get_table_variables()` method we can get available code lists.
 
         >>> meta = api.get_table_variables("TAB638")
 
@@ -255,7 +255,7 @@ class PxWebApi:
     def get_table_variables(self, table_id: str) -> dict:
         """
         Get the specific metadata for variables and value codes. Also includes information  whether a variable can be eliminated as well as the available code lists.
-        The information returned is unpacked and slightly more easily navigated than the output from the `~~.PxWebApi.get_table_metadata()` method.
+        The information returned is unpacked and slightly more easily navigated than the output from the `~~.PxApi.get_table_metadata()` method.
 
         Parameters
         ----------
@@ -332,7 +332,7 @@ class PxWebApi:
         table_id : str
             An ID of a table to get data from.
         value_codes : dict, optional
-            The value codes to use for data selection where the keys are the variable codes. You can use the `~~.PxWebApi.get_table_variables()` to explore what's available.
+            The value codes to use for data selection where the keys are the variable codes. You can use the `~~.PxApi.get_table_variables()` to explore what's available.
         code_list : dict, optional
             Any named code list to use with a variable for code selection.
 
@@ -477,7 +477,7 @@ class PxWebApi:
 
     def all_tables(self) -> list[dict[str, str]]:
         """
-        Get a list of all tables available with some basic metadata. Use `~~.PxWebApi.get_table_metadata()` for extensive metadata about a specific table.
+        Get a list of all tables available with some basic metadata. Use `~~.PxApi.get_table_metadata()` for extensive metadata about a specific table.
 
         Returns
         -------
@@ -539,7 +539,7 @@ class PxWebApi:
 
     def get_paths(self, path_id: str | None = None) -> list[dict[str, str]]:
         """
-        List all paths available to explore. Use the ID to list tables on a specific path with `~~.PxWebApi.tables_on_path()`.
+        List all paths available to explore. Use the ID to list tables on a specific path with `~~.PxApi.tables_on_path()`.
 
         Examples
         --------

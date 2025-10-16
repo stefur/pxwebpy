@@ -3,12 +3,12 @@ from datetime import datetime, timedelta, timezone
 
 import pytest
 
-from pxweb import PxWebApi
+from pxweb import PxApi
 
 
 @pytest.fixture
 def api():
-    return PxWebApi("scb")
+    return PxApi("scb")
 
 
 @pytest.mark.skipif(
