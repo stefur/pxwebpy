@@ -1,0 +1,62 @@
+project:
+  type: website
+  output-dir: _site
+  pre-render: version_config.py
+
+encoding: utf-8
+
+format:
+  html:
+    toc: true
+    toc-depth: 5
+    css: style.css
+    smooth-scroll: true
+    code-copy: true
+    code-overflow: wrap
+
+brand: _brand.yml
+
+website:
+  title: "pxwebpy {{< env VERSION >}}"
+  description: "Python bindings for the PxWeb API to easily get data into a dataframe."
+  repo-url: https://github.com/stefur/pxwebpy
+  repo-actions: [issue]
+  page-navigation: true
+  navbar:
+    background: primary
+    pinned: true
+    search: true
+    left:
+      - text: "Get started"
+        file: index.qmd
+      - text: "Examples"
+        file: examples.qmd
+      - text: "Reference"
+        file: reference/index.qmd
+    right:
+      - icon: github
+        href: https://github.com/stefur/pxwebpy
+        target: _blank
+
+quartodoc:
+  title: Reference
+  package: pxweb
+  options:
+    include_attributes: false
+    dynamic: false
+  render_interlinks: true
+  sections:
+    - title: API interaction
+      desc: |
+        Tools to explore tables and get data from the PxWeb API.
+      contents:
+        - name: PxApi
+        - get_known_apis
+
+filters:
+  - interlinks
+
+interlinks:
+  aliases:
+    pxweb: null
+  autolink: true

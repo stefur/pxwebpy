@@ -1,0 +1,45 @@
+name: docs
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Python and dependencies
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: ".python-version"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.8.3"
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Build docs
+        run: |
+          uv sync --dev --frozen
+          cd docs && uv run quartodoc build
+
+      - name: Render and publish
+        uses: quarto-dev/quarto-actions/publish@v2
+        with:
+          target: gh-pages
+          path: docs
+        env:
+          QUARTO_PYTHON: ${{ github.workspace }}/.venv/bin/python
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

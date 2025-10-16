@@ -1,0 +1,42 @@
+---
+jupyter: python3
+title: Get started
+execute:
+    eval: false
+---
+
+`pxwebpy` is a Python client for the PxWeb API. The goal is to make it easier to get data from the API and into a dataframe. It is *BYODF*\* so that you can use what DataFrame library you prefer, be it `polars`, `pandas` or a `pyarrow` table.
+
+<small>\* = *Bring your own dataframe*</small>
+
+## Installation
+The package is on PyPI and the easiest way to install it into your environment is:
+
+```bash
+pip install pxwebpy
+```
+
+Or by using `uv`:
+
+```bash
+uv add pxwebpy
+```
+
+## Usage
+```{python}
+# | eval: true
+from pxweb import PxApi
+import polars as pl
+
+api = PxApi("scb")
+
+# Swedish population per year
+data = api.get_table_data(
+    table_id="TAB5890",
+    value_codes={"Tid": ["2022", "2023", "2024"], "ContentsCode": "0000053A"},
+)
+
+pl.DataFrame(data)
+```
+
+Have a look at the [Examples](/examples/index.html) or see the [Reference](/reference/index.html) for more details.

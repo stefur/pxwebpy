@@ -1,0 +1,19 @@
+color:
+  palette:
+    black: "#1A1A1A"
+    white: "#FCFCFC"
+    green: "#2c5545"
+  foreground: black
+  background: white
+  primary: green
+
+typography:
+  fonts:
+    - family: Fira Code
+      source: google
+
+  base: Arial
+  headings:
+    family: Arial
+    weight: 400
+  monospace: Fira Code

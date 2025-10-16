@@ -4,103 +4,58 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pxwebpy?style=flat-square)
 [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json&style=flat-square)](https://github.com/astral-sh/uv)
 [![ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json&style=flat-square)](https://github.com/astral-sh/ruff)   
-Easily get data from the PxWeb API and into either a polars or pandas dataframe.  
-  
-Pxwebpy parses the PxWeb table data as well as metadata using the json-stat2 response format. 
-  
-It has been tested with [Statistics Sweden](https://scb.se), [Statistics Finland](https://www.stat.fi), [Statistics Greenland](https://stat.gl) and [Statistics Norway](https://www.ssb.no).  
+Client library for the PxWeb API to easily load data into a DataFrame.
 
-## Example usage
+[Get started]() | [Examples]() | [Reference]()
+
+## Features
+- Automatic query batching to handle large queries to respect rate limits
+- Multithreading for faster data fetching on large queries
+- In-memory caching for quicker iterative use and exploration
+- Wildcard support in queries
+- BYODF (Bring Your Own DataFrame): native return formats for use with `pandas` or `polars`
+- Search for tables, browse and list tables, get metadata, and more
+
+It has been tested with [Statistics Sweden](https://scb.se) (currently beta) and [Statistics Norway](https://www.ssb.no).  
+
+> [!NOTE] 
+> Note that pxwebpy only supports version 2.0 of the PxWeb API.
+
+## Quick start
 ```python
->>> from pxwebpy.table import PxTable
->>> import pandas as pd
+>>> from pxweb import PxWebApi
+>>> import polars as pl
 
-# Create a table object, setting up a URL for a table
->>> tbl = PxTable(url="https://api.scb.se/OV0104/v1/doris/sv/ssd/START/HE/HE0110/HE0110A/SamForvInk1")
+# Prepare to get data from the Statistics Norway API by using the builtin URL
+>>> api = PxWebApi("ssb")
 
-# Check out the table variables that we can use
->>> tbl.get_table_variables()
-{'region': ['Riket',
-  'Stockholms län',
-  'Upplands Väsby',
-  'Vallentuna',
-...
-  'Piteå',
-  'Haparanda',
-  'Kiruna'],
- 'kön': ['män', 'kvinnor', 'totalt'],
- 'ålder': ['totalt 16+ år',
-  '16-19 år',
-  'totalt 20+ år',
-  '20-64 år',
-  '65+ år',
-  '20-24 år',
-  '25-29 år',
-...
-  '75-79 år',
-  '80-84 år',
-  '85+ år'],
- 'inkomstklass': ['totalt',
-  '0',
-  '1-19 tkr',
-  '20-39 tkr',
-...
-  '600-799 tkr',
-  '800-999 tkr',
-  '1000+ tkr'],
- 'tabellinnehåll': ['Medelinkomst, tkr',
-  'Medianinkomst, tkr',
-  'Totalsumma, mnkr',
-  'Antal personer'],
- 'år': ['1999',
-  '2000',
-...
-  '2021',
-  '2022']}
+# Set the language to english
+>>> api.language = "en"
 
-# Construct a query using a selection of variables we're interested in
->>> tbl.create_query({"tabellinnehåll": ["Medianinkomst, tkr"], "ålder": ["totalt 16+ år"]})
+# Check the population per year in Norway during the 1990's
+>>> data = api.get_table_data("06913", value_codes={"Region": "0", "ContentsCode": "Folkemengde", "Tid": "199*"})
 
-# Now we can get the data
->>> tbl.get_data()
+# Turn it into a polars dataframe
+>>> df = pl.DataFrame(data)
 
->>> tbl
-
-PxTable(url='https://api.scb.se/OV0104/v1/doris/sv/ssd/START/HE/HE0110/HE0110A/SamForvInk1',
-        query={'query': [{'code': 'ContentsCode', 'selection': {'filter': 'item', 'values': ['HE0110J8']}}, {'code': 'Alder', 'selection': {'filter': 'item', 'values': ['tot16+']}}], 'response': {'format': 'json-stat2'}},
-        metadata={'label': 'Sammanräknad förvärvsinkomst, medianinkomst för boende i Sverige hela året, tkr efter ålder, tabellinnehåll och år', 'note': None, 'source': 'SCB', 'updated': '2024-01-12T05:52:00Z'},
-        fetched=2024-06-16 10:30:34.085020,
-        dataset=[{'ålder': 'totalt 16+ år', 'tabellinnehåll': 'Medianinkomst, tkr', 'år': '1999', 'value': 159.4}, {'ålder': 'totalt 16+ år', 'tabellinnehåll': 'Medianinkomst, tkr', 'år': '2000', 'value': 165.3}, ...])
-
-# Using the dataset we can then create a Pandas dataframe
->>> df = pd.DataFrame(tbl.dataset)
+# A quick look at the result
 >>> print(df)
 
-          ålder      tabellinnehåll    år  value
-0   totalt 16+ år  Medianinkomst, tkr  1999  159.4
-1   totalt 16+ år  Medianinkomst, tkr  2000  165.3
-2   totalt 16+ år  Medianinkomst, tkr  2001  172.4
-3   totalt 16+ år  Medianinkomst, tkr  2002  179.4
-4   totalt 16+ år  Medianinkomst, tkr  2003  185.1
-5   totalt 16+ år  Medianinkomst, tkr  2004  189.4
-6   totalt 16+ år  Medianinkomst, tkr  2005  192.9
-7   totalt 16+ år  Medianinkomst, tkr  2006  198.8
-8   totalt 16+ år  Medianinkomst, tkr  2007  206.2
-9   totalt 16+ år  Medianinkomst, tkr  2008  215.1
-10  totalt 16+ år  Medianinkomst, tkr  2009  218.7
-11  totalt 16+ år  Medianinkomst, tkr  2010  219.7
-12  totalt 16+ år  Medianinkomst, tkr  2011  225.0
-13  totalt 16+ år  Medianinkomst, tkr  2012  233.7
-14  totalt 16+ år  Medianinkomst, tkr  2013  240.5
-15  totalt 16+ år  Medianinkomst, tkr  2014  244.8
-16  totalt 16+ år  Medianinkomst, tkr  2015  253.7
-17  totalt 16+ år  Medianinkomst, tkr  2016  263.9
-18  totalt 16+ år  Medianinkomst, tkr  2017  272.0
-19  totalt 16+ år  Medianinkomst, tkr  2018  279.8
-20  totalt 16+ år  Medianinkomst, tkr  2019  286.8
-21  totalt 16+ år  Medianinkomst, tkr  2020  291.9
-22  totalt 16+ år  Medianinkomst, tkr  2021  301.5
-23  totalt 16+ år  Medianinkomst, tkr  2022  316.6
+shape: (10, 4)
+┌─────────────────────┬──────────────────────┬──────┬─────────┐
+│ region              ┆ contents             ┆ year ┆ value   │
+│ ---                 ┆ ---                  ┆ ---  ┆ ---     │
+│ str                 ┆ str                  ┆ str  ┆ i64     │
+╞═════════════════════╪══════════════════════╪══════╪═════════╡
+│ 0 The whole country ┆ Population 1 January ┆ 1990 ┆ 4233116 │
+│ 0 The whole country ┆ Population 1 January ┆ 1991 ┆ 4249830 │
+│ 0 The whole country ┆ Population 1 January ┆ 1992 ┆ 4273634 │
+│ 0 The whole country ┆ Population 1 January ┆ 1993 ┆ 4299167 │
+│ 0 The whole country ┆ Population 1 January ┆ 1994 ┆ 4324815 │
+│ 0 The whole country ┆ Population 1 January ┆ 1995 ┆ 4348410 │
+│ 0 The whole country ┆ Population 1 January ┆ 1996 ┆ 4369957 │
+│ 0 The whole country ┆ Population 1 January ┆ 1997 ┆ 4392714 │
+│ 0 The whole country ┆ Population 1 January ┆ 1998 ┆ 4417599 │
+│ 0 The whole country ┆ Population 1 January ┆ 1999 ┆ 4445329 │
+└─────────────────────┴──────────────────────┴──────┴─────────┘
 ```
-
-See [examples](examples/example.py) for more details on how to use pxwebpy.
