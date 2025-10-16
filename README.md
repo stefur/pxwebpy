@@ -6,7 +6,7 @@
 [![ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json&style=flat-square)](https://github.com/astral-sh/ruff)   
 Client library for the PxWeb API to easily load data into a DataFrame.
 
-[Get started]() | [Examples]() | [Reference]()
+[Get started](https://stefur.github.io/pxwebpy) | [Examples](https://stefur.github.io/pxwebpy/examples) | [Reference](https://stefur.github.io/pxwebpy/reference)
 
 ## Features
 - Automatic query batching to handle large queries to respect rate limits
@@ -23,11 +23,11 @@ It has been tested with [Statistics Sweden](https://scb.se) (currently beta) and
 
 ## Quick start
 ```python
->>> from pxweb import PxWebApi
+>>> from pxweb import PxApi
 >>> import polars as pl
 
 # Prepare to get data from the Statistics Norway API by using the builtin URL
->>> api = PxWebApi("ssb")
+>>> api = PxApi("ssb")
 
 # Set the language to english
 >>> api.language = "en"
