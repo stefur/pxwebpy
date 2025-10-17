@@ -16,7 +16,7 @@ Client library for the PxWeb API to easily load data into a DataFrame.
 - BYODF (Bring Your Own DataFrame): native return formats for use with `pandas` or `polars`
 - Search for tables, browse and list tables, get metadata, and more
 
-It has been tested with [Statistics Sweden](https://scb.se) (currently beta) and [Statistics Norway](https://www.ssb.no).  
+It has been tested with [Statistics Sweden](https://scb.se) and [Statistics Norway](https://www.ssb.no).  
 
 > [!NOTE] 
 > Note that pxwebpy only supports version 2.0 of the PxWeb API.

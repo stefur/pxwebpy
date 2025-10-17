@@ -15,7 +15,7 @@ KnownApi: TypeAlias = Literal["scb", "ssb"]
 """Selectable APIs with a preconfigured URL"""
 
 API_URLS: dict[KnownApi, str] = {
-    "scb": "https://api.scb.se/ov0104/v2beta/api/v2",
+    "scb": "https://statistikdatabasen.scb.se/api/v2",
     "ssb": "https://data.ssb.no/api/PxApi/v2",
 }
 
