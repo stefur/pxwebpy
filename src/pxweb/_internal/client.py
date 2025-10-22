@@ -34,16 +34,18 @@ class Client:
         # Run the init without rate limiting since it's not set up yet
         configuration = self.call(endpoint="/config", enforce_rate_limit=False)
 
+        api_version = configuration.get("apiVersion")
+
         try:
-            version_mismatch = parse(
-                api_version := configuration.get("apiVersion")
-            ) < parse(expected_version := "2.0.0")
+            version_mismatch = parse(configuration.get("apiVersion")) < parse(
+                "2.0.0"
+            )
         except (TypeError, InvalidVersion):
             version_mismatch = True
 
         if version_mismatch:
             raise ApiVersionError(
-                f"The version of the API is {api_version}. pxwebpy requires {expected_version}."
+                f"The version of the API is {api_version}. pxwebpy requires 2.0.0 or greater."
             )
 
         self.max_data_cells: int = configuration.get("maxDataCells")

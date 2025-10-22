@@ -9,7 +9,7 @@ import time as real_time
 def make_response(status_code=200, json_data=None, headers=None):
     mock = MagicMock(spec=Response)
     mock.status_code = status_code
-    mock.ok = (status_code == 200)
+    mock.ok = status_code == 200
     mock.json.return_value = json_data or {}
     mock.headers = headers or {}
     mock.reason = "OK" if status_code == 200 else "Error"
@@ -22,7 +22,8 @@ def config_response():
         "maxDataCells": 99999,
         "maxCallsPerTimeWindow": 3,
         "timeWindow": 1,
-        "defaultLanguage": "en"
+        "defaultLanguage": "en",
+        "apiVersion": "2.0.0",
     }
 
 
@@ -30,7 +31,9 @@ def config_response():
 def client(config_response):
     with patch("requests_cache.CachedSession.send") as mock_send:
         mock_send.return_value = make_response(json_data=config_response)
-        return Client(url="https://some.pxweb.api", timeout=10, disable_cache=True)
+        return Client(
+            url="https://some.pxweb.api", timeout=10, disable_cache=True
+        )
 
 
 def test_init_sets_defaults(client):
@@ -48,6 +51,7 @@ def test_call_get_request(client):
         result = client.call("/test-get")
         assert result["data"] == "value"
 
+
 def test_call_post_request(client):
     # Simulate POST response
     mock_response = make_response(json_data={"result": "posted"})
@@ -63,7 +67,9 @@ def test_call_respects_retry(client):
     first = make_response(429, headers={"Retry-After": "1"})
     second = make_response(200, json_data={"done": True})
 
-    with patch.object(client.session, "send", side_effect=[first, second]) as mock_send:
+    with patch.object(
+        client.session, "send", side_effect=[first, second]
+    ) as mock_send:
         with patch("time.sleep", return_value=None) as mock_sleep:
             result = client.call("/rate-limited")
             assert result["done"] is True
@@ -77,7 +83,7 @@ def test_call_raises_http_error(client):
         "title": "Bad Request",
         "status": 400,
         "detail": "Invalid input",
-        "instance": "/bad"
+        "instance": "/bad",
     }
 
     bad_response = make_response(400, json_data=error_json)
