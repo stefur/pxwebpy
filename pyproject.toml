@@ -25,6 +25,7 @@ requires-python = ">= 3.10"
 
 [project.urls]
 Repository = "https://github.com/stefur/pxwebpy"
+Documentation = "https://stefur.github.io/pxwebpy"
 
 [build-system]
 requires = ["hatchling", "versioningit"]
