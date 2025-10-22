@@ -124,10 +124,9 @@ def unpack_table_data(json_data: dict) -> list[dict]:
 
     dimensions = json_data["dimension"]
     dimension_labels = {}
-    
+
     # Go over each dimension by id, according to the spec it is an ordered list of the dimensions
     for dim_id in json_data["id"]:
-            
         dimension = dimensions[dim_id]
         label = dimension["label"]
         category_labels = dimension["category"]["label"]
@@ -155,6 +154,8 @@ def unpack_table_data(json_data: dict) -> list[dict]:
 
     # The result is a list of dicts with the dimension as key and product of the category labels for values, with the value as "value" for each row
     return [
-    {**dict(zip(dimension_labels.keys(), combo)), "value": val}
-    for combo, val in zip(itertools.product(*dimension_labels.values()), json_data["value"])
-]
+        {**dict(zip(dimension_labels.keys(), combo)), "value": val}
+        for combo, val in zip(
+            itertools.product(*dimension_labels.values()), json_data["value"]
+        )
+    ]

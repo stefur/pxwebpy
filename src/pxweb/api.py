@@ -1,7 +1,6 @@
 from concurrent.futures import ThreadPoolExecutor
 from typing import Literal, TypeAlias
 
-
 from ._internal.client import Client
 from ._internal.functions import (
     build_query,
@@ -74,7 +73,9 @@ class PxApi:
 
         # Pull in the total number of elements (tables) available
         self.number_of_tables: int | None = (
-            self._client.call(endpoint="/tables").get("page").get("totalElements")
+            self._client.call(endpoint="/tables")
+            .get("page")
+            .get("totalElements")
         )
 
     def __repr__(self) -> str:
@@ -398,7 +399,9 @@ class PxApi:
             value_code = value_codes[variable]
 
             if isinstance(value_code, str):
-                value_codes[variable] = [value_code]  # Coerce single strings to list
+                value_codes[variable] = [
+                    value_code
+                ]  # Coerce single strings to list
             elif isinstance(value_code, list):
                 if not all(isinstance(v, str) for v in value_code):
                     raise ValueError(
@@ -413,7 +416,9 @@ class PxApi:
         wildcard_in_codelist_variables = [
             variable
             for variable, codes in value_codes.items()
-            if code_list and variable in code_list and any(s for s in codes if "*" in s)
+            if code_list
+            and variable in code_list
+            and any(s for s in codes if "*" in s)
         ]
 
         # And the same for value codes if the variable is not already included above
@@ -511,8 +516,8 @@ class PxApi:
         ... {'id': 'TAB2551',
         ...  'label': 'Genomsnittlig timlön för arbetare, privat sektor (KLP) efter näringsgren SNI92 ...'},
         ... ...
-        ]     
-        
+        ]
+
         Returns
         -------
         list[dict]
@@ -565,7 +570,7 @@ class PxApi:
         ... {'id': 'AM0101C', 'label': 'Äldre tabeller som inte uppdateras'},
         ... {'id': 'AM0101X', 'label': 'Nyckeltal'},
         ]
-        
+
         Returns
         -------
         list[dict]
