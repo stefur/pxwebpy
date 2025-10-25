@@ -23,3 +23,13 @@ div.cell-output {
     border-radius: 4px;
     margin-bottom: 1.3em;
 }
+
+/* Background color for parameters etc */
+.doc-section dt code {
+    background: none;
+}
+
+.doc-section dt {
+    background-color: #c1ddd2;
+    display: block;
+}

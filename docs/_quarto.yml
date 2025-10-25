@@ -3,8 +3,6 @@ project:
   output-dir: _site
   pre-render: version_config.py
 
-encoding: utf-8
-
 format:
   html:
     toc: true
@@ -13,11 +11,14 @@ format:
     smooth-scroll: true
     code-copy: true
     code-overflow: wrap
+    highlight-style: github
+    code-block-bg: true
+    code-block-border-left: secondary
 
 brand: _brand.yml
 
 website:
-  title: "pxwebpy {{< env VERSION >}}"
+  title: "pxwebpy"
   description: "Client library for the PxWeb API to easily load data into a DataFrame."
   repo-url: https://github.com/stefur/pxwebpy
   repo-actions: [issue]
@@ -39,12 +40,16 @@ website:
         target: _blank
 
 quartodoc:
-  title: Reference
+  title: "pxwebpy v{{< env VERSION >}}"
   package: pxweb
   options:
     include_attributes: false
     dynamic: false
   render_interlinks: true
+  renderer:
+    style: markdown
+    table_style: description-list
+    show_signature_annotations: true
   sections:
     - title: API interaction
       desc: |

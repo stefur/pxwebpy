@@ -1,7 +1,7 @@
 import time
 from threading import Lock
 
-from packaging.version import InvalidVersion, parse
+from packaging.version import parse
 from requests.exceptions import HTTPError, JSONDecodeError
 from requests_cache import CachedSession, CacheSettings, Request
 
@@ -34,18 +34,9 @@ class Client:
         # Run the init without rate limiting since it's not set up yet
         configuration = self.call(endpoint="/config", enforce_rate_limit=False)
 
-        api_version = configuration.get("apiVersion")
-
-        try:
-            version_mismatch = parse(configuration.get("apiVersion")) < parse(
-                "2.0.0"
-            )
-        except (TypeError, InvalidVersion):
-            version_mismatch = True
-
-        if version_mismatch:
+        if parse(configuration.get("apiVersion", "0.0.0")) < parse("2.0.0"):
             raise ApiVersionError(
-                f"The version of the API is {api_version}. pxwebpy requires 2.0.0 or greater."
+                f"""The version of the API is {configuration.get("apiVersion")}. pxwebpy requires 2.0.0 or greater."""
             )
 
         self.max_data_cells: int = configuration.get("maxDataCells")

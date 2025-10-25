@@ -11,7 +11,9 @@ from rich.pretty import pretty_repr
 
 # Define some nicer formatting for code output
 def plain_pretty_formatter(value):
-    return pretty_repr(value, max_depth=3, max_length=5, max_string=50, expand_all=True)
+    return pretty_repr(
+        value, max_depth=3, max_length=5, max_string=50, expand_all=True
+    )
 
 
 ip = get_ipython()

@@ -25,7 +25,7 @@ def get_known_apis() -> dict[str, str]:
 
     Returns
     -------
-    dict
+    :
         A dictionary with the API shorthand names as keys and the URLs as values.
     """
     return API_URLS
@@ -37,13 +37,13 @@ class PxApi:
 
     Parameters
     ----------
-    url : str | KnownApi
+    url: str | KnownApi
         Either a shorthand name for a builtin API, e.g. "scb". To check out avaiable APIs, use `get_known_apis()`.
-    language : str, optional
+    language: str, optional
         The language to be used with the API. You can check available languages using the `~~.PxApi.get_config()` method.
-    disable_cache : bool
+    disable_cache: bool
         Disable the in-memory cache that is used for API responses.
-    timeout : int
+    timeout: int
         The timeout in seconds to use when calling the API.
 
     Examples
@@ -72,11 +72,9 @@ class PxApi:
         )  # Resolve the name if known else assume it's a full URL
 
         # Pull in the total number of elements (tables) available
-        self.number_of_tables: int | None = (
-            self._client.call(endpoint="/tables")
-            .get("page")
-            .get("totalElements")
-        )
+        self.number_of_tables: int | None = self._client.call(
+            endpoint="/tables"
+        )["page"]["totalElements"]
 
     def __repr__(self) -> str:
         return f"""PxApi(url='{self._client.url}',
@@ -94,7 +92,7 @@ class PxApi:
 
         Returns
         -------
-        dict
+        :
             The API response containing the configuration.
 
         Examples
@@ -117,7 +115,7 @@ class PxApi:
         return self._client.session.settings.disabled
 
     @disable_cache.setter
-    def disable_cache(self, value) -> None:
+    def disable_cache(self, value: bool) -> None:
         """Set the cache setting."""
         self._client.session.settings.disabled = value
 
@@ -143,18 +141,18 @@ class PxApi:
 
         Parameters
         ----------
-        query : str, optional
+        query: str, optional
             A string to search for.
-        past_days : int, optional
+        past_days: int, optional
             Return results where tables have been updated within n number of days.
-        include_discontinued : bool, optional
+        include_discontinued: bool, optional
             Include any tables that are discontinued.
-        page_size : int, optional
+        page_size: int, optional
             Number of results per page in the returning dict. Results will be paginated if they exceed this value.
 
         Returns
         -------
-        dict
+        :
             The API response of the search query.
 
         Examples
@@ -181,12 +179,12 @@ class PxApi:
 
         Parameters
         ----------
-        code_list_id : str
+        code_list_id: str
             The ID of a code list.
 
         Returns
         -------
-        dict
+        :
             The API response with the code list information.
 
         Examples
@@ -231,12 +229,12 @@ class PxApi:
         Get the complete set of metadata for a table.
         Parameters
         ----------
-        table_id : str
+        table_id: str
             The ID of a table to get metadata from.
 
         Returns
         -------
-        dict
+        :
             The API response containing the metadata.
 
         Examples
@@ -260,12 +258,12 @@ class PxApi:
 
         Parameters
         ----------
-        table_id : str
+        table_id: str
             The ID of a table to get metadata from.
 
         Returns
         -------
-        dict
+        :
             The API response containing the metadata.
 
         Examples
@@ -295,7 +293,7 @@ class PxApi:
         """
         dimensions = self._client.call(
             endpoint=f"/tables/{table_id}/metadata",
-        ).get("dimension")
+        )["dimension"]
         result = {}
 
         # Trim the information
@@ -330,16 +328,16 @@ class PxApi:
 
         Parameters
         ----------
-        table_id : str
+        table_id: str
             An ID of a table to get data from.
-        value_codes : dict, optional
+        value_codes: dict, optional
             The value codes to use for data selection where the keys are the variable codes. You can use the `~~.PxApi.get_table_variables()` to explore what's available.
-        code_list : dict, optional
+        code_list: dict, optional
             Any named code list to use with a variable for code selection.
 
         Returns
         -------
-        list[dict]
+        :
             A dataset in a native format that can be loaded into a dataframe.
 
         Examples
@@ -486,12 +484,12 @@ class PxApi:
 
         Returns
         -------
-        list[dict]
-            All tables.
+        :
+            All tables with some metadata.
         """
         return self._client.call(
             endpoint="/tables", params={"pageSize": self.number_of_tables}
-        ).get("tables")
+        )["tables"]
 
     def _unpack_paths(self, table: dict) -> list[dict]:
         """Flatten the list of lists containing paths"""
@@ -500,6 +498,16 @@ class PxApi:
     def tables_on_path(self, path_id: str) -> list[dict[str, str]]:
         """
         List all the tables available on the path.
+
+        Parameters
+        ----------
+        path_id: str
+            A path.
+
+        Returns
+        -------
+        :
+            All tables on the path.
 
         Examples
         --------
@@ -517,11 +525,6 @@ class PxApi:
         ...  'label': 'Genomsnittlig timlön för arbetare, privat sektor (KLP) efter näringsgren SNI92 ...'},
         ... ...
         ]
-
-        Returns
-        -------
-        list[dict]
-            All tables on the path.
         """
 
         tables = self.all_tables()
@@ -545,6 +548,16 @@ class PxApi:
     def get_paths(self, path_id: str | None = None) -> list[dict[str, str]]:
         """
         List all paths available to explore. Use the ID to list tables on a specific path with `~~.PxApi.tables_on_path()`.
+
+        Parameters
+        ----------
+        path_id: str, optional
+            A path.
+
+        Returns
+        -------
+        :
+            Paths available.
 
         Examples
         --------
@@ -570,12 +583,6 @@ class PxApi:
         ... {'id': 'AM0101C', 'label': 'Äldre tabeller som inte uppdateras'},
         ... {'id': 'AM0101X', 'label': 'Nyckeltal'},
         ]
-
-        Returns
-        -------
-        list[dict]
-            Paths available.
-
         """
 
         tables = self.all_tables()

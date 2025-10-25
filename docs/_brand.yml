@@ -6,6 +6,7 @@ color:
   foreground: black
   background: white
   primary: green
+  secondary: green
 
 typography:
   fonts:

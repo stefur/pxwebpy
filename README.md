@@ -19,7 +19,7 @@ Client library for the PxWeb API to easily load data into a DataFrame.
 It has been tested with [Statistics Sweden](https://scb.se) and [Statistics Norway](https://www.ssb.no).  
 
 > [!NOTE] 
-> Note that pxwebpy only supports version 2.0 of the PxWeb API.
+> pxwebpy only supports version 2.0 of the PxWeb API.
 
 ## Quick start
 ```python
