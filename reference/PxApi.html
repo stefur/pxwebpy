@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>pxapi – pxwebpy {{&lt; env VERSION &gt;}}</title>
+<title>pxapi – pxwebpy</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -71,14 +71,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-6c39e09fdfc3dc53c1f951cfe104e44f.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-657fc1361c91eea4fb4e96764eaad9ee.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-6c39e09fdfc3dc53c1f951cfe104e44f.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-4a31fff509eb87fc25a6a1d317504ec4.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-d5eb9bace1225f8015ea3bfe0b9359d9.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-4a31fff509eb87fc25a6a1d317504ec4.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-133d027da54b053e576eb1b2823a1915.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-133d027da54b053e576eb1b2823a1915.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-133d027da54b053e576eb1b2823a1915.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-eb0d05accaa803a56a488ee381ab8dd8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-eb0d05accaa803a56a488ee381ab8dd8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-eb0d05accaa803a56a488ee381ab8dd8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -122,7 +122,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a href="../index.html" class="navbar-brand navbar-brand-logo">
     </a>
     <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">pxwebpy 0.5.0</span>
+    <span class="navbar-title">pxwebpy</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -189,37 +189,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#pxweb.PxApi.get_paths" id="toc-pxweb.PxApi.get_paths" class="nav-link" data-scroll-target="#pxweb.PxApi.get_paths">get_paths</a>
   <ul class="collapse">
-  <li><a href="#examples-3" id="toc-examples-3" class="nav-link" data-scroll-target="#examples-3">Examples</a></li>
+  <li><a href="#parameters-2" id="toc-parameters-2" class="nav-link" data-scroll-target="#parameters-2">Parameters</a></li>
   <li><a href="#returns-3" id="toc-returns-3" class="nav-link" data-scroll-target="#returns-3">Returns</a></li>
+  <li><a href="#examples-3" id="toc-examples-3" class="nav-link" data-scroll-target="#examples-3">Examples</a></li>
   </ul></li>
   <li><a href="#pxweb.PxApi.get_table_data" id="toc-pxweb.PxApi.get_table_data" class="nav-link" data-scroll-target="#pxweb.PxApi.get_table_data">get_table_data</a>
   <ul class="collapse">
-  <li><a href="#parameters-2" id="toc-parameters-2" class="nav-link" data-scroll-target="#parameters-2">Parameters</a></li>
+  <li><a href="#parameters-3" id="toc-parameters-3" class="nav-link" data-scroll-target="#parameters-3">Parameters</a></li>
   <li><a href="#returns-4" id="toc-returns-4" class="nav-link" data-scroll-target="#returns-4">Returns</a></li>
   <li><a href="#examples-4" id="toc-examples-4" class="nav-link" data-scroll-target="#examples-4">Examples</a></li>
   </ul></li>
   <li><a href="#pxweb.PxApi.get_table_metadata" id="toc-pxweb.PxApi.get_table_metadata" class="nav-link" data-scroll-target="#pxweb.PxApi.get_table_metadata">get_table_metadata</a>
   <ul class="collapse">
-  <li><a href="#parameters-3" id="toc-parameters-3" class="nav-link" data-scroll-target="#parameters-3">Parameters</a></li>
+  <li><a href="#parameters-4" id="toc-parameters-4" class="nav-link" data-scroll-target="#parameters-4">Parameters</a></li>
   <li><a href="#returns-5" id="toc-returns-5" class="nav-link" data-scroll-target="#returns-5">Returns</a></li>
   <li><a href="#examples-5" id="toc-examples-5" class="nav-link" data-scroll-target="#examples-5">Examples</a></li>
   </ul></li>
   <li><a href="#pxweb.PxApi.get_table_variables" id="toc-pxweb.PxApi.get_table_variables" class="nav-link" data-scroll-target="#pxweb.PxApi.get_table_variables">get_table_variables</a>
   <ul class="collapse">
-  <li><a href="#parameters-4" id="toc-parameters-4" class="nav-link" data-scroll-target="#parameters-4">Parameters</a></li>
+  <li><a href="#parameters-5" id="toc-parameters-5" class="nav-link" data-scroll-target="#parameters-5">Parameters</a></li>
   <li><a href="#returns-6" id="toc-returns-6" class="nav-link" data-scroll-target="#returns-6">Returns</a></li>
   <li><a href="#examples-6" id="toc-examples-6" class="nav-link" data-scroll-target="#examples-6">Examples</a></li>
   </ul></li>
   <li><a href="#pxweb.PxApi.search" id="toc-pxweb.PxApi.search" class="nav-link" data-scroll-target="#pxweb.PxApi.search">search</a>
   <ul class="collapse">
-  <li><a href="#parameters-5" id="toc-parameters-5" class="nav-link" data-scroll-target="#parameters-5">Parameters</a></li>
+  <li><a href="#parameters-6" id="toc-parameters-6" class="nav-link" data-scroll-target="#parameters-6">Parameters</a></li>
   <li><a href="#returns-7" id="toc-returns-7" class="nav-link" data-scroll-target="#returns-7">Returns</a></li>
   <li><a href="#examples-7" id="toc-examples-7" class="nav-link" data-scroll-target="#examples-7">Examples</a></li>
   </ul></li>
   <li><a href="#pxweb.PxApi.tables_on_path" id="toc-pxweb.PxApi.tables_on_path" class="nav-link" data-scroll-target="#pxweb.PxApi.tables_on_path">tables_on_path</a>
   <ul class="collapse">
-  <li><a href="#examples-8" id="toc-examples-8" class="nav-link" data-scroll-target="#examples-8">Examples</a></li>
+  <li><a href="#parameters-7" id="toc-parameters-7" class="nav-link" data-scroll-target="#parameters-7">Parameters</a></li>
   <li><a href="#returns-8" id="toc-returns-8" class="nav-link" data-scroll-target="#returns-8">Returns</a></li>
+  <li><a href="#examples-8" id="toc-examples-8" class="nav-link" data-scroll-target="#examples-8">Examples</a></li>
   </ul></li>
   </ul></li>
   </ul></li>
@@ -234,46 +236,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="pxweb.PxApi" class="level1">
 <h1>PxApi</h1>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>PxApi(url, language<span class="op">=</span><span class="va">None</span>, disable_cache<span class="op">=</span><span class="va">False</span>, timeout<span class="op">=</span><span class="dv">30</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>PxApi(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    url: <span class="bu">str</span> <span class="op">|</span> KnownApi,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    language: <span class="bu">str</span> <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    disable_cache: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    timeout: <span class="bu">int</span> <span class="op">=</span> <span class="dv">30</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>A wrapper around the PxWeb API. Enables exploring available datasets interactively, getting table data, variables as well as other metadata.</p>
 <section id="parameters" class="level2 doc-section doc-section-parameters">
 <h2 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters">Parameters</h2>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-<th>Default</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>url</td>
-<td><code>str</code> | <code>KnownApi</code></td>
-<td>Either a shorthand name for a builtin API, e.g.&nbsp;“scb”. To check out avaiable APIs, use <a href="../reference/get_known_apis.html#pxweb.get_known_apis" title="0"><code>get_known_apis()</code></a>.</td>
-<td><em>required</em></td>
-</tr>
-<tr class="even">
-<td>language</td>
-<td><code>str</code></td>
-<td>The language to be used with the API. You can check available languages using the <a href="../reference/PxApi.html#pxweb.PxApi.get_config" title="0"><code>.get_config()</code></a> method.</td>
-<td><code>None</code></td>
-</tr>
-<tr class="odd">
-<td>disable_cache</td>
-<td><code>bool</code></td>
-<td>Disable the in-memory cache that is used for API responses.</td>
-<td><code>False</code></td>
-</tr>
-<tr class="even">
-<td>timeout</td>
-<td><code>int</code></td>
-<td>The timeout in seconds to use when calling the API.</td>
-<td><code>30</code></td>
-</tr>
-</tbody>
-</table>
+<dl>
+<dt><code><span class="parameter-name"><strong>url</strong></span> <span class="parameter-annotation-sep">:</span> <span class="parameter-annotation"><code>str</code> | <code>KnownApi</code></span></code></dt>
+<dd>
+<p>Either a shorthand name for a builtin API, e.g.&nbsp;“scb”. To check out avaiable APIs, use <a href="../reference/get_known_apis.html#pxweb.get_known_apis" title="0"><code>get_known_apis()</code></a>.</p>
+</dd>
+<dt><code><span class="parameter-name"><strong>language</strong></span> <span class="parameter-annotation-sep">:</span> <span class="parameter-annotation"><code>str</code> | None</span> <span class="parameter-default-sep">=</span> <span class="parameter-default">None</span></code></dt>
+<dd>
+<p>The language to be used with the API. You can check available languages using the <a href="../reference/PxApi.html#pxweb.PxApi.get_config" title="0"><code>.get_config()</code></a> method.</p>
+</dd>
+<dt><code><span class="parameter-name"><strong>disable_cache</strong></span> <span class="parameter-annotation-sep">:</span> <span class="parameter-annotation"><code>bool</code></span> <span class="parameter-default-sep">=</span> <span class="parameter-default">False</span></code></dt>
+<dd>
+<p>Disable the in-memory cache that is used for API responses.</p>
+</dd>
+<dt><code><span class="parameter-name"><strong>timeout</strong></span> <span class="parameter-annotation-sep">:</span> <span class="parameter-annotation"><code>int</code></span> <span class="parameter-default-sep">=</span> <span class="parameter-default">30</span></code></dt>
+<dd>
+<p>The timeout in seconds to use when calling the API.</p>
+</dd>
+</dl>
 </section>
 <section id="examples" class="level2 doc-section doc-section-examples">
 <h2 class="doc-section doc-section-examples anchored" data-anchor-id="examples">Examples</h2>
@@ -339,72 +328,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Get a list of all tables available with some basic metadata. Use <a href="../reference/PxApi.html#pxweb.PxApi.get_table_metadata" title="0"><code>.get_table_metadata()</code></a> for extensive metadata about a specific table.</p>
 <section id="returns" class="level4 doc-section doc-section-returns">
 <h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns">Returns</h4>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td></td>
-<td><code>list</code>[<code>dict</code>]</td>
-<td>All tables.</td>
-</tr>
-</tbody>
-</table>
+<dl>
+<dt><code><span class="parameter-name"></span> <span class="parameter-annotation-sep">:</span> <span class="parameter-annotation"><code>list</code>[<code>dict</code>[<code>str</code>, <code>str</code>]]</span></code></dt>
+<dd>
+<p>All tables with some metadata.</p>
+</dd>
+</dl>
 </section>
 </section>
 <section id="pxweb.PxApi.get_code_list" class="level3">
 <h3 class="anchored" data-anchor-id="pxweb.PxApi.get_code_list">get_code_list</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>PxApi.get_code_list(code_list_id)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>PxApi.get_code_list(code_list_id: <span class="bu">str</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Get information about a code list.</p>
 <section id="parameters-1" class="level4 doc-section doc-section-parameters">
 <h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-1">Parameters</h4>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-<th>Default</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>code_list_id</td>
-<td><code>str</code></td>
-<td>The ID of a code list.</td>
-<td><em>required</em></td>
-</tr>
-</tbody>
-</table>
+<dl>
+<dt><code><span class="parameter-name"><strong>code_list_id</strong></span> <span class="parameter-annotation-sep">:</span> <span class="parameter-annotation"><code>str</code></span></code></dt>
+<dd>
+<p>The ID of a code list.</p>
+</dd>
+</dl>
 </section>
 <section id="returns-1" class="level4 doc-section doc-section-returns">
 <h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-1">Returns</h4>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 10%">
-<col style="width: 21%">
-<col style="width: 67%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td></td>
-<td><code>dict</code></td>
-<td>The API response with the code list information.</td>
-</tr>
-</tbody>
-</table>
+<dl>
+<dt><code><span class="parameter-name"></span> <span class="parameter-annotation-sep">:</span> <span class="parameter-annotation"><code>dict</code></span></code></dt>
+<dd>
+<p>The API response with the code list information.</p>
+</dd>
+</dl>
 </section>
 <section id="examples-1" class="level4 doc-section doc-section-examples">
 <h4 class="doc-section doc-section-examples anchored" data-anchor-id="examples-1">Examples</h4>
@@ -441,27 +393,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Retrieve the configuration for the API.</p>
 <section id="returns-2" class="level4 doc-section doc-section-returns">
 <h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-2">Returns</h4>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 11%">
-<col style="width: 22%">
-<col style="width: 66%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td></td>
-<td><code>dict</code></td>
-<td>The API response containing the configuration.</td>
-</tr>
-</tbody>
-</table>
+<dl>
+<dt><code><span class="parameter-name"></span> <span class="parameter-annotation-sep">:</span> <span class="parameter-annotation"><code>dict</code></span></code></dt>
+<dd>
+<p>The API response containing the configuration.</p>
+</dd>
+</dl>
 </section>
 <section id="examples-2" class="level4 doc-section doc-section-examples">
 <h4 class="doc-section doc-section-examples anchored" data-anchor-id="examples-2">Examples</h4>
@@ -474,8 +411,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="pxweb.PxApi.get_paths" class="level3">
 <h3 class="anchored" data-anchor-id="pxweb.PxApi.get_paths">get_paths</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>PxApi.get_paths(path_id<span class="op">=</span><span class="va">None</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>PxApi.get_paths(path_id: <span class="bu">str</span> <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>List all paths available to explore. Use the ID to list tables on a specific path with <a href="../reference/PxApi.html#pxweb.PxApi.tables_on_path" title="0"><code>.tables_on_path()</code></a>.</p>
+<section id="parameters-2" class="level4 doc-section doc-section-parameters">
+<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-2">Parameters</h4>
+<dl>
+<dt><code><span class="parameter-name"><strong>path_id</strong></span> <span class="parameter-annotation-sep">:</span> <span class="parameter-annotation"><code>str</code> | None</span> <span class="parameter-default-sep">=</span> <span class="parameter-default">None</span></code></dt>
+<dd>
+<p>A path.</p>
+</dd>
+</dl>
+</section>
+<section id="returns-3" class="level4 doc-section doc-section-returns">
+<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-3">Returns</h4>
+<dl>
+<dt><code><span class="parameter-name"></span> <span class="parameter-annotation-sep">:</span> <span class="parameter-annotation"><code>list</code>[<code>dict</code>[<code>str</code>, <code>str</code>]]</span></code></dt>
+<dd>
+<p>Paths available.</p>
+</dd>
+</dl>
+</section>
 <section id="examples-3" class="level4 doc-section doc-section-examples">
 <h4 class="doc-section doc-section-examples anchored" data-anchor-id="examples-3">Examples</h4>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> api.get_paths()</span>
@@ -499,86 +454,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>... {<span class="st">'id'</span>: <span class="st">'AM0101X'</span>, <span class="st">'label'</span>: <span class="st">'Nyckeltal'</span>},</span>
 <span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="returns-3" class="level4 doc-section doc-section-returns">
-<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-3">Returns</h4>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td></td>
-<td><code>list</code>[<code>dict</code>]</td>
-<td>Paths available.</td>
-</tr>
-</tbody>
-</table>
-</section>
 </section>
 <section id="pxweb.PxApi.get_table_data" class="level3">
 <h3 class="anchored" data-anchor-id="pxweb.PxApi.get_table_data">get_table_data</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>PxApi.get_table_data(table_id, value_codes<span class="op">=</span><span class="va">None</span>, code_list<span class="op">=</span><span class="va">None</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>PxApi.get_table_data(</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    table_id: <span class="bu">str</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    value_codes: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">list</span>[<span class="bu">str</span>]] <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    code_list: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">str</span>] <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Get table data that can be used with dataframes like <code>polars</code> or <code>pandas</code>. The query is constructed with the method parameters. An empty value code selection returns a default selection for the table.</p>
-<section id="parameters-2" class="level4 doc-section doc-section-parameters">
-<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-2">Parameters</h4>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-<th>Default</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>table_id</td>
-<td><code>str</code></td>
-<td>An ID of a table to get data from.</td>
-<td><em>required</em></td>
-</tr>
-<tr class="even">
-<td>value_codes</td>
-<td><code>dict</code></td>
-<td>The value codes to use for data selection where the keys are the variable codes. You can use the <a href="../reference/PxApi.html#pxweb.PxApi.get_table_variables" title="0"><code>.get_table_variables()</code></a> to explore what’s available.</td>
-<td><code>None</code></td>
-</tr>
-<tr class="odd">
-<td>code_list</td>
-<td><code>dict</code></td>
-<td>Any named code list to use with a variable for code selection.</td>
-<td><code>None</code></td>
-</tr>
-</tbody>
-</table>
+<section id="parameters-3" class="level4 doc-section doc-section-parameters">
+<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-3">Parameters</h4>
+<dl>
+<dt><code><span class="parameter-name"><strong>table_id</strong></span> <span class="parameter-annotation-sep">:</span> <span class="parameter-annotation"><code>str</code></span></code></dt>
+<dd>
+<p>An ID of a table to get data from.</p>
+</dd>
+<dt><code><span class="parameter-name"><strong>value_codes</strong></span> <span class="parameter-annotation-sep">:</span> <span class="parameter-annotation"><code>dict</code>[<code>str</code>, <code>list</code>[<code>str</code>]] | None</span> <span class="parameter-default-sep">=</span> <span class="parameter-default">None</span></code></dt>
+<dd>
+<p>The value codes to use for data selection where the keys are the variable codes. You can use the <a href="../reference/PxApi.html#pxweb.PxApi.get_table_variables" title="0"><code>.get_table_variables()</code></a> to explore what’s available.</p>
+</dd>
+<dt><code><span class="parameter-name"><strong>code_list</strong></span> <span class="parameter-annotation-sep">:</span> <span class="parameter-annotation"><code>dict</code>[<code>str</code>, <code>str</code>] | None</span> <span class="parameter-default-sep">=</span> <span class="parameter-default">None</span></code></dt>
+<dd>
+<p>Any named code list to use with a variable for code selection.</p>
+</dd>
+</dl>
 </section>
 <section id="returns-4" class="level4 doc-section doc-section-returns">
 <h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-4">Returns</h4>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 7%">
-<col style="width: 31%">
-<col style="width: 61%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td></td>
-<td><code>list</code>[<code>dict</code>]</td>
-<td>A dataset in a native format that can be loaded into a dataframe.</td>
-</tr>
-</tbody>
-</table>
+<dl>
+<dt><code><span class="parameter-name"></span> <span class="parameter-annotation-sep">:</span> <span class="parameter-annotation"><code>list</code>[<code>dict</code>]</span></code></dt>
+<dd>
+<p>A dataset in a native format that can be loaded into a dataframe.</p>
+</dd>
+</dl>
 </section>
 <section id="examples-4" class="level4 doc-section doc-section-examples">
 <h4 class="doc-section doc-section-examples anchored" data-anchor-id="examples-4">Examples</h4>
@@ -620,53 +529,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="pxweb.PxApi.get_table_metadata" class="level3">
 <h3 class="anchored" data-anchor-id="pxweb.PxApi.get_table_metadata">get_table_metadata</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>PxApi.get_table_metadata(table_id)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>PxApi.get_table_metadata(table_id: <span class="bu">str</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Get the complete set of metadata for a table.</p>
-<section id="parameters-3" class="level4 doc-section doc-section-parameters">
-<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-3">Parameters</h4>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 12%">
-<col style="width: 18%">
-<col style="width: 53%">
-<col style="width: 15%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-<th>Default</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>table_id</td>
-<td><code>str</code></td>
-<td>The ID of a table to get metadata from.</td>
-<td><em>required</em></td>
-</tr>
-</tbody>
-</table>
+<section id="parameters-4" class="level4 doc-section doc-section-parameters">
+<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-4">Parameters</h4>
+<dl>
+<dt><code><span class="parameter-name"><strong>table_id</strong></span> <span class="parameter-annotation-sep">:</span> <span class="parameter-annotation"><code>str</code></span></code></dt>
+<dd>
+<p>The ID of a table to get metadata from.</p>
+</dd>
+</dl>
 </section>
 <section id="returns-5" class="level4 doc-section doc-section-returns">
 <h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-5">Returns</h4>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td></td>
-<td><code>dict</code></td>
-<td>The API response containing the metadata.</td>
-</tr>
-</tbody>
-</table>
+<dl>
+<dt><code><span class="parameter-name"></span> <span class="parameter-annotation-sep">:</span> <span class="parameter-annotation"><code>dict</code></span></code></dt>
+<dd>
+<p>The API response containing the metadata.</p>
+</dd>
+</dl>
 </section>
 <section id="examples-5" class="level4 doc-section doc-section-examples">
 <h4 class="doc-section doc-section-examples anchored" data-anchor-id="examples-5">Examples</h4>
@@ -681,53 +562,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="pxweb.PxApi.get_table_variables" class="level3">
 <h3 class="anchored" data-anchor-id="pxweb.PxApi.get_table_variables">get_table_variables</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>PxApi.get_table_variables(table_id)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>PxApi.get_table_variables(table_id: <span class="bu">str</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Get the specific metadata for variables and value codes. Also includes information whether a variable can be eliminated as well as the available code lists. The information returned is unpacked and slightly more easily navigated than the output from the <a href="../reference/PxApi.html#pxweb.PxApi.get_table_metadata" title="0"><code>.get_table_metadata()</code></a> method.</p>
-<section id="parameters-4" class="level4 doc-section doc-section-parameters">
-<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-4">Parameters</h4>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 12%">
-<col style="width: 18%">
-<col style="width: 53%">
-<col style="width: 15%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-<th>Default</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>table_id</td>
-<td><code>str</code></td>
-<td>The ID of a table to get metadata from.</td>
-<td><em>required</em></td>
-</tr>
-</tbody>
-</table>
+<section id="parameters-5" class="level4 doc-section doc-section-parameters">
+<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-5">Parameters</h4>
+<dl>
+<dt><code><span class="parameter-name"><strong>table_id</strong></span> <span class="parameter-annotation-sep">:</span> <span class="parameter-annotation"><code>str</code></span></code></dt>
+<dd>
+<p>The ID of a table to get metadata from.</p>
+</dd>
+</dl>
 </section>
 <section id="returns-6" class="level4 doc-section doc-section-returns">
 <h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-6">Returns</h4>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td></td>
-<td><code>dict</code></td>
-<td>The API response containing the metadata.</td>
-</tr>
-</tbody>
-</table>
+<dl>
+<dt><code><span class="parameter-name"></span> <span class="parameter-annotation-sep">:</span> <span class="parameter-annotation"><code>dict</code></span></code></dt>
+<dd>
+<p>The API response containing the metadata.</p>
+</dd>
+</dl>
 </section>
 <section id="examples-6" class="level4 doc-section doc-section-examples">
 <h4 class="doc-section doc-section-examples anchored" data-anchor-id="examples-6">Examples</h4>
@@ -758,75 +611,41 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="pxweb.PxApi.search" class="level3">
 <h3 class="anchored" data-anchor-id="pxweb.PxApi.search">search</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>PxApi.search(</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    query<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    past_days<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    include_discontinued<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    page_size<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    query: <span class="bu">str</span> <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    past_days: <span class="bu">int</span> <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    include_discontinued: <span class="bu">bool</span> <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    page_size: <span class="bu">int</span> <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span>,</span>
 <span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Search for tables.</p>
-<section id="parameters-5" class="level4 doc-section doc-section-parameters">
-<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-5">Parameters</h4>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 14%">
-<col style="width: 10%">
-<col style="width: 67%">
-<col style="width: 7%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-<th>Default</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>query</td>
-<td><code>str</code></td>
-<td>A string to search for.</td>
-<td><code>None</code></td>
-</tr>
-<tr class="even">
-<td>past_days</td>
-<td><code>int</code></td>
-<td>Return results where tables have been updated within n number of days.</td>
-<td><code>None</code></td>
-</tr>
-<tr class="odd">
-<td>include_discontinued</td>
-<td><code>bool</code></td>
-<td>Include any tables that are discontinued.</td>
-<td><code>None</code></td>
-</tr>
-<tr class="even">
-<td>page_size</td>
-<td><code>int</code></td>
-<td>Number of results per page in the returning dict. Results will be paginated if they exceed this value.</td>
-<td><code>None</code></td>
-</tr>
-</tbody>
-</table>
+<section id="parameters-6" class="level4 doc-section doc-section-parameters">
+<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-6">Parameters</h4>
+<dl>
+<dt><code><span class="parameter-name"><strong>query</strong></span> <span class="parameter-annotation-sep">:</span> <span class="parameter-annotation"><code>str</code> | None</span> <span class="parameter-default-sep">=</span> <span class="parameter-default">None</span></code></dt>
+<dd>
+<p>A string to search for.</p>
+</dd>
+<dt><code><span class="parameter-name"><strong>past_days</strong></span> <span class="parameter-annotation-sep">:</span> <span class="parameter-annotation"><code>int</code> | None</span> <span class="parameter-default-sep">=</span> <span class="parameter-default">None</span></code></dt>
+<dd>
+<p>Return results where tables have been updated within n number of days.</p>
+</dd>
+<dt><code><span class="parameter-name"><strong>include_discontinued</strong></span> <span class="parameter-annotation-sep">:</span> <span class="parameter-annotation"><code>bool</code> | None</span> <span class="parameter-default-sep">=</span> <span class="parameter-default">None</span></code></dt>
+<dd>
+<p>Include any tables that are discontinued.</p>
+</dd>
+<dt><code><span class="parameter-name"><strong>page_size</strong></span> <span class="parameter-annotation-sep">:</span> <span class="parameter-annotation"><code>int</code> | None</span> <span class="parameter-default-sep">=</span> <span class="parameter-default">None</span></code></dt>
+<dd>
+<p>Number of results per page in the returning dict. Results will be paginated if they exceed this value.</p>
+</dd>
+</dl>
 </section>
 <section id="returns-7" class="level4 doc-section doc-section-returns">
 <h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-7">Returns</h4>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td></td>
-<td><code>dict</code></td>
-<td>The API response of the search query.</td>
-</tr>
-</tbody>
-</table>
+<dl>
+<dt><code><span class="parameter-name"></span> <span class="parameter-annotation-sep">:</span> <span class="parameter-annotation"><code>dict</code></span></code></dt>
+<dd>
+<p>The API response of the search query.</p>
+</dd>
+</dl>
 </section>
 <section id="examples-7" class="level4 doc-section doc-section-examples">
 <h4 class="doc-section doc-section-examples anchored" data-anchor-id="examples-7">Examples</h4>
@@ -838,8 +657,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="pxweb.PxApi.tables_on_path" class="level3">
 <h3 class="anchored" data-anchor-id="pxweb.PxApi.tables_on_path">tables_on_path</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>PxApi.tables_on_path(path_id)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>PxApi.tables_on_path(path_id: <span class="bu">str</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>List all the tables available on the path.</p>
+<section id="parameters-7" class="level4 doc-section doc-section-parameters">
+<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-7">Parameters</h4>
+<dl>
+<dt><code><span class="parameter-name"><strong>path_id</strong></span> <span class="parameter-annotation-sep">:</span> <span class="parameter-annotation"><code>str</code></span></code></dt>
+<dd>
+<p>A path.</p>
+</dd>
+</dl>
+</section>
+<section id="returns-8" class="level4 doc-section doc-section-returns">
+<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-8">Returns</h4>
+<dl>
+<dt><code><span class="parameter-name"></span> <span class="parameter-annotation-sep">:</span> <span class="parameter-annotation"><code>list</code>[<code>dict</code>[<code>str</code>, <code>str</code>]]</span></code></dt>
+<dd>
+<p>All tables on the path.</p>
+</dd>
+</dl>
+</section>
 <section id="examples-8" class="level4 doc-section doc-section-examples">
 <h4 class="doc-section doc-section-examples anchored" data-anchor-id="examples-8">Examples</h4>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> api.tables_on_path(<span class="st">"AM0101C"</span>)</span>
@@ -855,26 +692,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>... {<span class="st">'id'</span>: <span class="st">'TAB2551'</span>,</span>
 <span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>...  <span class="st">'label'</span>: <span class="st">'Genomsnittlig timlön för arbetare, privat sektor (KLP) efter näringsgren SNI92 ...'</span>},</span>
 <span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>... ...</span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>]     </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="returns-8" class="level4 doc-section doc-section-returns">
-<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-8">Returns</h4>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td></td>
-<td><code>list</code>[<code>dict</code>]</td>
-<td>All tables on the path.</td>
-</tr>
-</tbody>
-</table>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 
 </section>
