@@ -1,5 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor
-from typing import Literal, TypeAlias
+from typing import Literal, TypeAlias, Union
 
 from ._internal.client import Client
 from ._internal.functions import (
@@ -13,7 +13,7 @@ from ._internal.functions import (
 KnownApi: TypeAlias = Literal["scb", "ssb"]
 """Selectable APIs with a preconfigured URL"""
 
-API_URLS: dict[KnownApi, str] = {
+API_URLS: dict[Union[KnownApi, str], str] = {
     "scb": "https://statistikdatabasen.scb.se/api/v2",
     "ssb": "https://data.ssb.no/api/pxwebapi/v2",
 }
@@ -110,7 +110,7 @@ class PxApi:
         )
 
     @property
-    def disable_cache(self) -> None:
+    def disable_cache(self) -> bool:
         """Get the cache setting."""
         return self._client.session.settings.disabled
 
