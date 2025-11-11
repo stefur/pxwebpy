@@ -29,7 +29,7 @@ class Client:
         self.lock = Lock()
 
         # Setting up params used for every query
-        self.params: dict = {"lang": language, "outputFormat": "json-stat2"}
+        self.params: dict = {"lang": language}
 
         # Run the init without rate limiting since it's not set up yet
         configuration = self.call(endpoint="/config", enforce_rate_limit=False)
@@ -59,11 +59,16 @@ class Client:
     ) -> dict:
         """Call the endpoint with optional query"""
 
+        # If we're asking for table data, set parameters to get json-stat2
+        if endpoint.endswith("/data"):
+            params = params or {}
+            params["outputFormat"] = "json-stat2"
+
         # Set up the request and prepare it for being sent
         request = Request(
             method="POST" if query else "GET",
             url=self.url + endpoint,
-            json=query or None,
+            json=query,
             params=self.params | params if params else self.params,
         ).prepare()
 
