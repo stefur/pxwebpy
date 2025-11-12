@@ -2,22 +2,26 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://stefur.github.io/pxwebpy/examples.html</loc>
-    <lastmod>2025-11-09T20:52:15.067Z</lastmod>
-  </url>
-  <url>
-    <loc>https://stefur.github.io/pxwebpy/reference/get_known_apis.html</loc>
-    <lastmod>2025-11-09T20:52:29.541Z</lastmod>
-  </url>
-  <url>
-    <loc>https://stefur.github.io/pxwebpy/index.html</loc>
-    <lastmod>2025-11-09T20:52:15.067Z</lastmod>
-  </url>
-  <url>
-    <loc>https://stefur.github.io/pxwebpy/reference/index.html</loc>
-    <lastmod>2025-11-09T20:52:29.479Z</lastmod>
+    <lastmod>2025-11-12T20:42:32.717Z</lastmod>
   </url>
   <url>
     <loc>https://stefur.github.io/pxwebpy/reference/PxApi.html</loc>
-    <lastmod>2025-11-09T20:52:29.539Z</lastmod>
+    <lastmod>2025-11-12T20:42:48.553Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefur.github.io/pxwebpy/reference/index.html</loc>
+    <lastmod>2025-11-12T20:42:48.483Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefur.github.io/pxwebpy/index.html</loc>
+    <lastmod>2025-11-12T20:42:32.717Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefur.github.io/pxwebpy/reference/get_known_apis.html</loc>
+    <lastmod>2025-11-12T20:42:48.555Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefur.github.io/pxwebpy/development.html</loc>
+    <lastmod>2025-11-12T20:42:32.717Z</lastmod>
   </url>
 </urlset>

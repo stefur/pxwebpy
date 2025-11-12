@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Get started – pxwebpy</title>
+<title>Development – pxwebpy</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -58,7 +58,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
 <script src="site_libs/quarto-search/fuse.min.js"></script>
@@ -107,9 +107,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
-<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
-
-<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 <link rel="stylesheet" href="style.css">
@@ -133,7 +130,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="./index.html"> 
 <span class="menu-text">Get started</span></a>
   </li>  
   <li class="nav-item">
@@ -141,7 +138,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">Examples</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./development.html"> 
+    <a class="nav-link active" href="./development.html" aria-current="page"> 
 <span class="menu-text">Development</span></a>
   </li>  
   <li class="nav-item">
@@ -171,8 +168,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#installation" id="toc-installation" class="nav-link active" data-scroll-target="#installation">Installation</a></li>
-  <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
+  <li><a href="#setting-up-uv-and-the-virtual-environment" id="toc-setting-up-uv-and-the-virtual-environment" class="nav-link active" data-scroll-target="#setting-up-uv-and-the-virtual-environment">Setting up <code>uv</code> and the virtual environment</a></li>
+  <li><a href="#formatting" id="toc-formatting" class="nav-link" data-scroll-target="#formatting">Formatting</a>
+  <ul>
+  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code">Code</a></li>
+  <li><a href="#docstrings" id="toc-docstrings" class="nav-link" data-scroll-target="#docstrings">Docstrings</a></li>
+  </ul></li>
+  <li><a href="#running-tests" id="toc-running-tests" class="nav-link" data-scroll-target="#running-tests">Running tests</a></li>
+  <li><a href="#building-the-documentation" id="toc-building-the-documentation" class="nav-link" data-scroll-target="#building-the-documentation">Building the documentation</a></li>
+  <li><a href="#submitting-changes" id="toc-submitting-changes" class="nav-link" data-scroll-target="#submitting-changes">Submitting changes</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/stefur/pxwebpy/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -181,7 +185,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Get started</h1>
+<h1 class="title">Development</h1>
 </div>
 
 
@@ -198,74 +202,67 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p><code>pxwebpy</code> is a Python client for the PxWeb API. The goal is to make it easier to get data from the API and into a dataframe. It is <em>BYODF</em>* so that you can use what DataFrame library you prefer, be it <code>polars</code>, <code>pandas</code> or a <code>pyarrow</code> table.</p>
-<p><small>* = <em>Bring your own dataframe</em></small></p>
-<section id="installation" class="level2">
-<h2 class="anchored" data-anchor-id="installation">Installation</h2>
-<p>The package is on PyPI and the easiest way to install it into your environment is:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install pxwebpy</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Or by using <code>uv</code>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> add pxwebpy</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Thank you for your interest in the development of <code>pxwebpy</code>!<br>
+This page explains how you can contribute. All improvements to code, documentation, and tests are welcome.</p>
+<section id="setting-up-uv-and-the-virtual-environment" class="level2">
+<h2 class="anchored" data-anchor-id="setting-up-uv-and-the-virtual-environment">Setting up <code>uv</code> and the virtual environment</h2>
+<p>This project is set up to use <a href="https://docs.astral.sh/uv/"><code>uv</code></a> to manage Python and dependencies. First, be sure you <a href="https://docs.astral.sh/uv/getting-started/installation/">have <code>uv</code> installed</a>.</p>
+<p>To install dependencies and set up the virtual environment:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Clone the repository</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/stefur/pxwebpy.git</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> pxwebpy</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Sync dependencies and create the virtual environment</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> sync</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>For more details on how to use <code>uv</code>, head over to the <a href="https://docs.astral.sh/uv/"><code>uv</code> docs</a>.</p>
 </section>
-<section id="usage" class="level2">
-<h2 class="anchored" data-anchor-id="usage">Usage</h2>
-<div id="9f42e42b" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pxweb <span class="im">import</span> PxApi</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>api <span class="op">=</span> PxApi(<span class="st">"scb"</span>)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Swedish population per year</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> api.get_table_data(</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    table_id<span class="op">=</span><span class="st">"TAB5890"</span>,</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    value_codes<span class="op">=</span>{<span class="st">"Tid"</span>: [<span class="st">"2022"</span>, <span class="st">"2023"</span>, <span class="st">"2024"</span>], <span class="st">"ContentsCode"</span>: <span class="st">"0000053A"</span>},</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>pl.DataFrame(data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="1">
-<div><style>
-.dataframe > thead > tr,
-.dataframe > tbody > tr {
-  text-align: right;
-  white-space: pre-wrap;
-}
-</style>
-<small>shape: (3, 3)</small>
-<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th">tabellinnehåll</th>
-<th data-quarto-table-cell-role="th">år</th>
-<th data-quarto-table-cell-role="th">value</th>
-</tr>
-<tr class="even">
-<td>str</td>
-<td>str</td>
-<td>i64</td>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>"Antal"</td>
-<td>"2022"</td>
-<td>10521556</td>
-</tr>
-<tr class="even">
-<td>"Antal"</td>
-<td>"2023"</td>
-<td>10551707</td>
-</tr>
-<tr class="odd">
-<td>"Antal"</td>
-<td>"2024"</td>
-<td>10587710</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<p>Have a look at the <a href="./examples/index.html">Examples</a> or see the <a href="./reference/index.html">Reference</a> for more details.</p>
+<section id="formatting" class="level2">
+<h2 class="anchored" data-anchor-id="formatting">Formatting</h2>
+<section id="code" class="level3">
+<h3 class="anchored" data-anchor-id="code">Code</h3>
+<p><code>ruff</code> is used for linting and formatting. Currently, no pre-commit hooks are configured. Instead <code>ruff</code> is included in the project as a development dependency.</p>
+<p>The <code>ruff</code> command can be used in an activated virtual environment or using <code>uv run</code> to perform <code>ruff check</code> and <code>ruff format</code>. See the <a href="https://docs.astral.sh/ruff/installation/">documentation</a> on how to otherwise install <code>ruff</code>.</p>
+</section>
+<section id="docstrings" class="level3">
+<h3 class="anchored" data-anchor-id="docstrings">Docstrings</h3>
+<p>Follow the <a href="https://numpydoc.readthedocs.io/en/latest/format.html#overview"><code>NumPy</code></a> style guide when writing docstrings. This is important for being able to <a href="#building-the-documentation">build the documentation</a>.</p>
+</section>
+</section>
+<section id="running-tests" class="level2">
+<h2 class="anchored" data-anchor-id="running-tests">Running tests</h2>
+<p>Tests are run using <code>pytest</code>, typically via <code>uv run</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run pytest   <span class="co"># all tests</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run pytest <span class="at">-s</span> tests/test_client.py  <span class="co"># one test file</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run pytest <span class="at">-s</span> tests/test_client.py::test_call_raises_http_error <span class="co"># one specific test</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>To check test coverage:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run pytest <span class="at">--cov</span><span class="op">=</span>src <span class="at">--cov-report</span><span class="op">=</span>term</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Some tests utilize <a href="https://github.com/syrupy-project/syrupy"><code>syrupy</code></a> for snapshot testing to ensure consistency. If snapshots for some reason need to be updated run <code>uv run pytest --snapshot-update</code>.</p>
+</section>
+<section id="building-the-documentation" class="level2">
+<h2 class="anchored" data-anchor-id="building-the-documentation">Building the documentation</h2>
+<p>Documentation is built using <a href="https://github.com/machow/quartodoc"><code>quartodoc</code></a>, thus you also need <a href="https://quarto.org/docs/get-started/"><code>quarto</code></a> installed on your machine if you wish to build the documentation locally. This is usually a good idea to check that the output looks as expected. The documentation is automatically built and published upon each release.</p>
+<p>With <code>quarto</code> installed, building the documentation is done in two steps:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run quartodoc build</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run quarto render</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The rendered output is found in the folder called <code>_site</code>.</p>
+</section>
+<section id="submitting-changes" class="level2">
+<h2 class="anchored" data-anchor-id="submitting-changes">Submitting changes</h2>
+<p>When you’re ready to contribute:</p>
+<ol type="1">
+<li>Clone the repository and create a new branch for your changes.<br>
+</li>
+<li>Ensure that:
+<ul>
+<li>All tests pass locally (<code>uv run pytest</code>)<br>
+</li>
+<li>Code is linted and formatted (<code>uv run ruff check &amp;&amp; uv run ruff format</code>)<br>
+</li>
+<li>Documentation (if relevant) builds successfully<br>
+</li>
+</ul></li>
+<li>Open a pull request to the <code>main</code> branch.</li>
+</ol>
 
 
 </section>
