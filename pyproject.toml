@@ -43,6 +43,13 @@ packages = ["src/pxweb"]
 [tool.versioningit.write]
 file = "src/pxweb/_version.py"
 
+[tool.ruff]
+line-length = 80
+fix = true
+
+[tool.ruff.format]
+docstring-code-format = true
+
 [dependency-groups]
 dev = [
     "ipykernel>=6.29.5",

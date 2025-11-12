@@ -321,7 +321,7 @@ class PxApi:
         table_id: str,
         value_codes: dict[str, list[str]] | None = None,
         code_list: dict[str, str] | None = None,
-        show: str | None = None,
+        show: Literal["code", "value", "code_value"] | None = None,
     ) -> list[dict]:
         """
         Get table data that can be used with dataframes like `polars` or `pandas`. The query is constructed with the method parameters.
@@ -335,7 +335,7 @@ class PxApi:
             The value codes to use for data selection where the keys are the variable codes. You can use the `~~.PxApi.get_table_variables()` to explore what's available.
         code_list: dict, optional
             Any named code list to use with a variable for code selection.
-        show: str | None, optional
+        show: str, optional
             Set to "code_value", "code" or "value", to specify what to show in the categorical columns.
 
         Returns
@@ -352,12 +352,12 @@ class PxApi:
         ...         "ContentsCode": ["BE0101N1"],
         ...         "Region": ["01*"],
         ...         "Alder": ["*"],
-        ...         "Tid": ["2024"]
+        ...         "Tid": ["2024"],
         ...     },
         ...     code_list={
         ...         "Alder": "agg_Ålder5år",
-        ...         "Region": "vs_RegionKommun07"
-        ...     }
+        ...         "Region": "vs_RegionKommun07",
+        ...     },
         ... )
 
         This dataset can then easily be turned into a dataframe, for example with `polars`.
@@ -482,11 +482,10 @@ class PxApi:
 
         return dataset
 
-    
     def get_table_data_all(
         self,
         table_id: str,
-        ) -> list[dict]:
+    ) -> list[dict]:
         """
         Get table data that can be used with dataframes like `polars` or `pandas`. The query is constructed from the metadata.
         This method tries to fetch all the data in the target table by sending in wildcards to all the value_codes.
@@ -501,12 +500,13 @@ class PxApi:
         :
             A dataset in a native format that can be loaded into a dataframe.
         """
-        selection_all = {k: ["*"] for k in self.get_table_variables(table_id).keys()}
+        selection_all = {
+            k: ["*"] for k in self.get_table_variables(table_id).keys()
+        }
         return self.get_table_data(
             table_id,
             value_codes=selection_all,
         )
-    
 
     def all_tables(self) -> list[dict[str, str]]:
         """

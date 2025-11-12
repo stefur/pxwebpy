@@ -20,12 +20,15 @@ def test_search(api):
     search_result = api.search(query="befolkning", past_days=30)
 
     timestamps = [
-        datetime.fromisoformat(table["updated"]) for table in search_result["tables"]
+        datetime.fromisoformat(table["updated"])
+        for table in search_result["tables"]
     ]
 
     now = datetime.now(tz=timezone.utc)
 
-    assert all((now - timestamp) <= timedelta(days=30) for timestamp in timestamps)
+    assert all(
+        (now - timestamp) <= timedelta(days=30) for timestamp in timestamps
+    )
 
 
 def test_get_table_data(api):
@@ -42,7 +45,9 @@ def test_get_table_data_only_list_or_strings(api):
 
 def test_get_table_data_only_strings_in_list(api):
     with pytest.raises(ValueError):
-        api.get_table_data(table_id="TAB6471", value_codes={"some_var": ["1", "2", 42]})
+        api.get_table_data(
+            table_id="TAB6471", value_codes={"some_var": ["1", "2", 42]}
+        )
 
 
 def test_get_table_data_coerce_to_list(api):
@@ -63,10 +68,12 @@ def test_get_table_variables(api):
     assert isinstance(variables, dict)
     assert len(variables) > 0
 
+
 def test_get_paths(api):
     subpaths = api.get_paths("AM0101")
     assert isinstance(subpaths, list)
     assert len(subpaths) > 0
+
 
 def test_tables_on_path(api):
     tables = api.tables_on_path("AM0101C")

@@ -1,4 +1,5 @@
 import itertools
+from typing import Literal
 
 
 def count_data_cells(value_codes: dict) -> int:
@@ -116,7 +117,9 @@ def expand_wildcards(value_codes: dict, source: dict) -> dict:
     return result
 
 
-def unpack_table_data(json_data: dict, show: str | None = None) -> list[dict]:
+def unpack_table_data(
+    json_data: dict, show: Literal["code", "value", "code_value"] | None = None
+) -> list[dict]:
     """
     Takes json-stat2 and flattens it into a list of dicts that can
     be used to convert into a dataframe, using either pandas or polars.
