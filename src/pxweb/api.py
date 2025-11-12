@@ -335,7 +335,7 @@ class PxApi:
             The value codes to use for data selection where the keys are the variable codes. You can use the `~~.PxApi.get_table_variables()` to explore what's available.
         code_list: dict, optional
             Any named code list to use with a variable for code selection.
-        show: str, optional
+        show: str | None, optional
             Set to "code_value", "code" or "value", to specify what to show in the categorical columns.
 
         Returns
