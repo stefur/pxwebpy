@@ -93,24 +93,24 @@ def expand_wildcards(value_codes: dict, source: dict) -> dict:
         expanded = []
         # Now start expanding the wildcards
         for value in codes:
-            # TODO Probably use match case when 3.9 is dropped
-            if value == "*":
-                expanded.extend(items)
-            elif value.endswith("*") and not value.startswith("*"):
-                expanded.extend(
-                    [code for code in items if code.startswith(value[:-1])]
-                )  # Drop the asterisk
-            elif value.startswith("*") and not value.endswith("*"):
-                expanded.extend(
-                    [code for code in items if code.endswith(value[1:])]
-                )  # Same here
-            elif value.startswith("*") and value.endswith("*"):
-                expanded.extend(
-                    [code for code in items if value[1:-1] in code]
-                )  # And here!
-            else:
-                # Just default if no wildcard
-                expanded.append(value)
+            match value:
+                case "*":
+                    expanded.extend(items)
+                case _ if value.endswith("*") and not value.startswith("*"):
+                    expanded.extend(
+                        [code for code in items if code.startswith(value[:-1])]
+                    )  # Drop the asterisk
+                case _ if value.startswith("*") and not value.endswith("*"):
+                    expanded.extend(
+                        [code for code in items if code.endswith(value[1:])]
+                    )  # Same here
+                case _ if value.startswith("*") and value.endswith("*"):
+                    expanded.extend(
+                        [code for code in items if value[1:-1] in code]
+                    )  # And here!
+                case _:
+                    # Just default if no wildcard
+                    expanded.append(value)
 
         result[variable] = expanded
 
