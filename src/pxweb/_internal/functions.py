@@ -116,7 +116,7 @@ def expand_wildcards(value_codes: dict, source: dict) -> dict:
     return result
 
 
-def unpack_table_data(json_data: dict) -> list[dict]:
+def unpack_table_data(json_data: dict, show: str = "") -> list[dict]:
     """
     Takes json-stat2 and flattens it into a list of dicts that can
     be used to convert into a dataframe, using either pandas or polars.
@@ -131,12 +131,15 @@ def unpack_table_data(json_data: dict) -> list[dict]:
         label = dimension["label"]
         category_labels = dimension["category"]["label"]
 
-        show = dimension.get("extension", {}).get("show")
+        if not show:
+            show_local = dimension.get("extension", {}).get("show")
+        else:
+            show_local = show
         # If the dimension has extension data along with a key for show, use
         # that to determine the values shown in the output
-        match show:
+        match show_local:
             case "code_value":
-                values = [f"{k} {v}" for k, v in category_labels.items()]
+                values = [f"{k}: {v}" for k, v in category_labels.items()]
             case "code":
                 values = list(category_labels.keys())
             case "value":
