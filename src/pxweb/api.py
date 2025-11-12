@@ -478,6 +478,32 @@ class PxApi:
 
         return dataset
 
+    
+    def get_table_data_all(
+        self,
+        table_id: str,
+        ) -> list[dict]:
+        """
+        Get table data that can be used with dataframes like `polars` or `pandas`. The query is constructed from the metadata.
+        This method tries to fetch all the data in the target table by sending in wildcards to all the value_codes.
+
+        Parameters
+        ----------
+        table_id: str
+            An ID of a table to get data from.
+
+        Returns
+        -------
+        :
+            A dataset in a native format that can be loaded into a dataframe.
+        """
+        selection_all = {k: ["*"] for k in self.get_table_variables(table_id).keys()}
+        return self.get_table_data(
+            table_id,
+            value_codes=selection_all,
+        )
+    
+
     def all_tables(self) -> list[dict[str, str]]:
         """
         Get a list of all tables available with some basic metadata. Use `~~.PxApi.get_table_metadata()` for extensive metadata about a specific table.
