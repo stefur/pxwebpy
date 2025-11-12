@@ -321,6 +321,7 @@ class PxApi:
         table_id: str,
         value_codes: dict[str, list[str]] | None = None,
         code_list: dict[str, str] | None = None,
+        show: str | None = None,
     ) -> list[dict]:
         """
         Get table data that can be used with dataframes like `polars` or `pandas`. The query is constructed with the method parameters.
@@ -334,6 +335,8 @@ class PxApi:
             The value codes to use for data selection where the keys are the variable codes. You can use the `~~.PxApi.get_table_variables()` to explore what's available.
         code_list: dict, optional
             Any named code list to use with a variable for code selection.
+        show: str | None, optional
+            Set to "code_value", "code" or "value", to specify what to show in the categorical columns.
 
         Returns
         -------
@@ -386,7 +389,7 @@ class PxApi:
             response = self._client.call(
                 endpoint=f"/tables/{table_id}/data",
             )
-            dataset = unpack_table_data(response)
+            dataset = unpack_table_data(response, show=show)
             return dataset
 
         # Make sure all selections provided are in a list, even if single values
@@ -461,7 +464,8 @@ class PxApi:
                     lambda subquery: unpack_table_data(
                         self._client.call(
                             endpoint=f"/tables/{table_id}/data", query=subquery
-                        )
+                        ),
+                        show=show,
                     ),
                     subqueries,
                 ):
@@ -474,7 +478,7 @@ class PxApi:
                 endpoint=f"/tables/{table_id}/data",
                 query=query,
             )
-            dataset = unpack_table_data(response)
+            dataset = unpack_table_data(response, show=show)
 
         return dataset
 
