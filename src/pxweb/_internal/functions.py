@@ -116,7 +116,7 @@ def expand_wildcards(value_codes: dict, source: dict) -> dict:
     return result
 
 
-def unpack_table_data(json_data: dict, show: str = "") -> list[dict]:
+def unpack_table_data(json_data: dict, show: str | None = None) -> list[dict]:
     """
     Takes json-stat2 and flattens it into a list of dicts that can
     be used to convert into a dataframe, using either pandas or polars.

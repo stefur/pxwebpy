@@ -321,7 +321,7 @@ class PxApi:
         table_id: str,
         value_codes: dict[str, list[str]] | None = None,
         code_list: dict[str, str] | None = None,
-        show: str = "",
+        show: str | None = None,
     ) -> list[dict]:
         """
         Get table data that can be used with dataframes like `polars` or `pandas`. The query is constructed with the method parameters.
