@@ -81,8 +81,8 @@ class Client:
             if cache_key in self.session.cache.responses:
                 return self.session.send(request).json()
 
-        # Otherwise rate limit first
-        if enforce_rate_limit:
+        # Otherwise rate limit first, if there's a limit set by the API
+        if enforce_rate_limit and self.max_calls > 0:
             # Wait if needed
             self.rate_limit()
 
