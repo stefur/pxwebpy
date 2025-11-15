@@ -1,9 +1,11 @@
+import time as real_time
+from unittest.mock import MagicMock, patch
+
 import pytest
-from unittest.mock import patch, MagicMock
 from requests import Response
 from requests.exceptions import HTTPError
+
 from pxweb._internal.client import Client
-import time as real_time
 
 
 def make_response(status_code=200, json_data=None, headers=None):

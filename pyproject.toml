@@ -50,6 +50,9 @@ fix = true
 [tool.ruff.format]
 docstring-code-format = true
 
+[tool.ruff.lint]
+extend-select = ["I"]
+
 [dependency-groups]
 dev = [
     "ipykernel>=6.29.5",
@@ -58,12 +61,12 @@ dev = [
     "pandas>=2.2.3",
     "pandas-stubs>=2.2.2.240807",
     "polars>=1.19.0",
+    "pre-commit>=4.4.0",
     "pyarrow>=21.0.0",
     "pytest>=8.3.4",
     "pytest-cov>=6.2.1",
     "quartodoc>=0.11.1",
     "rich>=14.1.0",
-    "ruff>=0.14.4",
     "syrupy>=4.8.0",
     "types-requests>=2.32.0.20241016",
 ]

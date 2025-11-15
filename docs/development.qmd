@@ -12,14 +12,13 @@ This project is set up to use [`uv`](https://docs.astral.sh/uv/) to manage Pytho
 dependencies. First, be sure you
 [have `uv` installed](https://docs.astral.sh/uv/getting-started/installation/).
 
-To install dependencies and set up the virtual environment:
 ```bash
-# Clone the repository
-git clone https://github.com/stefur/pxwebpy.git
-cd pxwebpy
-
-# Sync dependencies and create the virtual environment
+# Install dependencies and set up the virtual environment
 uv sync
+
+# Install the pre-commit hooks
+uv run pre-commit install
+
 ```
 
 For more details on how to use `uv`, head over to the [`uv` docs](https://docs.astral.sh/uv/).
@@ -27,9 +26,9 @@ For more details on how to use `uv`, head over to the [`uv` docs](https://docs.a
 ## Formatting
 
 ### Code
-`ruff` is used for linting and formatting. Currently, no pre-commit hooks are configured. Instead `ruff` is included in the project as a development dependency.  
+`ruff` is used for linting and formatting, automatically executed in a `pre-commit` hook.  
   
-The `ruff` command can be used in an activated virtual environment or using `uv run` to perform `ruff check` and `ruff format`. See the [documentation](https://docs.astral.sh/ruff/installation/) on how to otherwise install `ruff`.
+To run `ruff` manually from the command line or editor, see the [documentation](https://docs.astral.sh/ruff/) on how to install and use`ruff`.
 
 ### Docstrings
 Follow the [`NumPy`](https://numpydoc.readthedocs.io/en/latest/format.html#overview) style guide when writing docstrings. This is important for being able to [build the documentation](#building-the-documentation).
@@ -57,6 +56,7 @@ Documentation is built using [`quartodoc`](https://github.com/machow/quartodoc),
 With `quarto` installed, building the documentation is done in two steps:
 
 ```bash
+cd docs
 uv run quartodoc build
 uv run quarto render
 ```

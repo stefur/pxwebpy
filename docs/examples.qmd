@@ -75,8 +75,8 @@ api.tables_on_path(path_id="BE0101A")
 It's also possible to search for tables using the `~~.PxApi.search()` method.
 
 ```{python}
-# Keeping it simple and just look for tables updated in the past 30 days matching the query string
-results = api.search(query="energi", past_days=30)
+# Keeping it simple and just look for tables updated in the past 180 days matching the query string
+results = api.search(query="energi", past_days=180)
 
 # Checking how many tables there are in the results
 len(results.get("tables"))
