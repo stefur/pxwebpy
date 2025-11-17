@@ -116,6 +116,10 @@ class Client:
 
     def rate_limit(self) -> None:
         """Ensure we respect the rate limit of the API"""
+        # Guard against APIs that don't have rate limiting
+        if not self.max_calls or not self.time_window:
+            return
+
         with self.lock:
             now = time.monotonic()
             # Drop old timstamps no longer in the window
