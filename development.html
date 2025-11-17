@@ -207,21 +207,19 @@ This page explains how you can contribute. All improvements to code, documentati
 <section id="setting-up-uv-and-the-virtual-environment" class="level2">
 <h2 class="anchored" data-anchor-id="setting-up-uv-and-the-virtual-environment">Setting up <code>uv</code> and the virtual environment</h2>
 <p>This project is set up to use <a href="https://docs.astral.sh/uv/"><code>uv</code></a> to manage Python and dependencies. First, be sure you <a href="https://docs.astral.sh/uv/getting-started/installation/">have <code>uv</code> installed</a>.</p>
-<p>To install dependencies and set up the virtual environment:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Clone the repository</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/stefur/pxwebpy.git</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> pxwebpy</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Sync dependencies and create the virtual environment</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> sync</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install dependencies and set up the virtual environment</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> sync</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Install the pre-commit hooks</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run pre-commit install</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>For more details on how to use <code>uv</code>, head over to the <a href="https://docs.astral.sh/uv/"><code>uv</code> docs</a>.</p>
 </section>
 <section id="formatting" class="level2">
 <h2 class="anchored" data-anchor-id="formatting">Formatting</h2>
 <section id="code" class="level3">
 <h3 class="anchored" data-anchor-id="code">Code</h3>
-<p><code>ruff</code> is used for linting and formatting. Currently, no pre-commit hooks are configured. Instead <code>ruff</code> is included in the project as a development dependency.</p>
-<p>The <code>ruff</code> command can be used in an activated virtual environment or using <code>uv run</code> to perform <code>ruff check</code> and <code>ruff format</code>. See the <a href="https://docs.astral.sh/ruff/installation/">documentation</a> on how to otherwise install <code>ruff</code>.</p>
+<p><code>ruff</code> is used for linting and formatting, automatically executed in a <code>pre-commit</code> hook.</p>
+<p>To run <code>ruff</code> manually from the command line or editor, see the <a href="https://docs.astral.sh/ruff/">documentation</a> on how to install and use<code>ruff</code>.</p>
 </section>
 <section id="docstrings" class="level3">
 <h3 class="anchored" data-anchor-id="docstrings">Docstrings</h3>
@@ -242,8 +240,9 @@ This page explains how you can contribute. All improvements to code, documentati
 <h2 class="anchored" data-anchor-id="building-the-documentation">Building the documentation</h2>
 <p>Documentation is built using <a href="https://github.com/machow/quartodoc"><code>quartodoc</code></a>, thus you also need <a href="https://quarto.org/docs/get-started/"><code>quarto</code></a> installed on your machine if you wish to build the documentation locally. This is usually a good idea to check that the output looks as expected. The documentation is automatically built and published upon each release.</p>
 <p>With <code>quarto</code> installed, building the documentation is done in two steps:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run quartodoc build</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run quarto render</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> docs</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run quartodoc build</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run quarto render</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The rendered output is found in the folder called <code>_site</code>.</p>
 </section>
 <section id="submitting-changes" class="level2">

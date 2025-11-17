@@ -33,3 +33,8 @@ div.cell-output {
     background-color: #c1ddd2;
     display: block;
 }
+
+/* No bold in bash commands */
+.ex {
+    font-weight: normal !important;
+}

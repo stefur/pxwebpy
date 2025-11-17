@@ -18,7 +18,7 @@
     "href": "examples.html#searching-for-tables",
     "title": "Examples",
     "section": "Searching for tables",
-    "text": "Searching for tables\nIt’s also possible to search for tables using the .search() method.\n\n# Keeping it simple and just look for tables updated in the past 30 days matching the query string\nresults = api.search(query=\"energi\", past_days=30)\n\n# Checking how many tables there are in the results\nlen(results.get(\"tables\"))\n\n0\n\n\nWe can also get the labels and ID’s, or any other metadata, to find out more.\n\n[\n    {k: v for k, v in table.items() if k in (\"id\", \"label\")}\n    for table in results.get(\"tables\")\n]\n\n[]"
+    "text": "Searching for tables\nIt’s also possible to search for tables using the .search() method.\n\n# Keeping it simple and just look for tables updated in the past 180 days matching the query string\nresults = api.search(query=\"energi\", past_days=180)\n\n# Checking how many tables there are in the results\nlen(results.get(\"tables\"))\n\n20\n\n\nWe can also get the labels and ID’s, or any other metadata, to find out more.\n\n[\n    {k: v for k, v in table.items() if k in (\"id\", \"label\")}\n    for table in results.get(\"tables\")\n]\n\n[\n    {\n        'id': 'TAB3859',\n        'label': 'Utvinning av energi- och odlingstorv i 1000-tal ku'+22\n    },\n    {\n        'id': 'TAB5179',\n        'label': 'Investeringsutgifter för kommuner efter region och'+33\n    },\n    {\n        'id': 'TAB5918',\n        'label': 'Konsumentprisindex med fast ränta exklusive energi'+44\n    },\n    {\n        'id': 'TAB6636',\n        'label': 'Detaljerad tabell: KPIF analysgrupper, 2020=100. Å'+11\n    },\n    {\n        'id': 'TAB6628',\n        'label': 'Detaljerad tabell: KPIF analysgrupper, 2020=100. M'+20\n    },\n    ... +15\n]"
   },
   {
     "objectID": "examples.html#getting-table-metadata",
@@ -65,14 +65,14 @@
   {
     "objectID": "reference/index.html",
     "href": "reference/index.html",
-    "title": "pxwebpy v0.5.2",
+    "title": "pxwebpy v0.5.3",
     "section": "",
     "text": "Tools to explore tables and get data from the PxWeb API.\n\n\n\nPxApi\nA wrapper around the PxWeb API. Enables exploring available datasets interactively, getting table data, variables as well as other metadata.\n\n\nget_known_apis\nGet all the known builtin APIs, shorthand names as keys and corresponding URL as value."
   },
   {
     "objectID": "reference/index.html#api-interaction",
     "href": "reference/index.html#api-interaction",
-    "title": "pxwebpy v0.5.2",
+    "title": "pxwebpy v0.5.3",
     "section": "",
     "text": "Tools to explore tables and get data from the PxWeb API.\n\n\n\nPxApi\nA wrapper around the PxWeb API. Enables exploring available datasets interactively, getting table data, variables as well as other metadata.\n\n\nget_known_apis\nGet all the known builtin APIs, shorthand names as keys and corresponding URL as value."
   },
@@ -123,14 +123,14 @@
     "href": "development.html#setting-up-uv-and-the-virtual-environment",
     "title": "Development",
     "section": "Setting up uv and the virtual environment",
-    "text": "Setting up uv and the virtual environment\nThis project is set up to use uv to manage Python and dependencies. First, be sure you have uv installed.\nTo install dependencies and set up the virtual environment:\n# Clone the repository\ngit clone https://github.com/stefur/pxwebpy.git\ncd pxwebpy\n\n# Sync dependencies and create the virtual environment\nuv sync\nFor more details on how to use uv, head over to the uv docs."
+    "text": "Setting up uv and the virtual environment\nThis project is set up to use uv to manage Python and dependencies. First, be sure you have uv installed.\n# Install dependencies and set up the virtual environment\nuv sync\n\n# Install the pre-commit hooks\nuv run pre-commit install\nFor more details on how to use uv, head over to the uv docs."
   },
   {
     "objectID": "development.html#formatting",
     "href": "development.html#formatting",
     "title": "Development",
     "section": "Formatting",
-    "text": "Formatting\n\nCode\nruff is used for linting and formatting. Currently, no pre-commit hooks are configured. Instead ruff is included in the project as a development dependency.\nThe ruff command can be used in an activated virtual environment or using uv run to perform ruff check and ruff format. See the documentation on how to otherwise install ruff.\n\n\nDocstrings\nFollow the NumPy style guide when writing docstrings. This is important for being able to build the documentation."
+    "text": "Formatting\n\nCode\nruff is used for linting and formatting, automatically executed in a pre-commit hook.\nTo run ruff manually from the command line or editor, see the documentation on how to install and useruff.\n\n\nDocstrings\nFollow the NumPy style guide when writing docstrings. This is important for being able to build the documentation."
   },
   {
     "objectID": "development.html#running-tests",
@@ -144,7 +144,7 @@
     "href": "development.html#building-the-documentation",
     "title": "Development",
     "section": "Building the documentation",
-    "text": "Building the documentation\nDocumentation is built using quartodoc, thus you also need quarto installed on your machine if you wish to build the documentation locally. This is usually a good idea to check that the output looks as expected. The documentation is automatically built and published upon each release.\nWith quarto installed, building the documentation is done in two steps:\nuv run quartodoc build\nuv run quarto render\nThe rendered output is found in the folder called _site."
+    "text": "Building the documentation\nDocumentation is built using quartodoc, thus you also need quarto installed on your machine if you wish to build the documentation locally. This is usually a good idea to check that the output looks as expected. The documentation is automatically built and published upon each release.\nWith quarto installed, building the documentation is done in two steps:\ncd docs\nuv run quartodoc build\nuv run quarto render\nThe rendered output is found in the folder called _site."
   },
   {
     "objectID": "development.html#submitting-changes",
