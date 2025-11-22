@@ -41,7 +41,7 @@ jobs:
         run: uv sync --dev --locked
       
       - name: Lint
-        run: ruff check --output-format=github .
+        uses: astral-sh/ruff-action@v3
 
       - name: Run tests
         run: |
