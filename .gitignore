@@ -5,6 +5,7 @@ dist/
 .pytest_cache
 .ruff_cache
 .coverage
+.nox
 htmlcov
 
 # Generated version files
