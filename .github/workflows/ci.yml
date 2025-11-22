@@ -25,7 +25,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: "Set up Python"
+      - name: Install Python
         uses: actions/setup-python@v6
         with:
           python-version-file: ".python-version"
@@ -38,7 +38,7 @@ jobs:
           cache-dependency-glob: "uv.lock"
 
       - name: Install the project
-        run: uv sync --dev --locked
+        run: uv sync --locked
       
       - name: Lint
         uses: astral-sh/ruff-action@v3
