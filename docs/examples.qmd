@@ -219,3 +219,33 @@ pl.DataFrame(data)
 
 ### In-memory caching
 By default `pxwebpy` uses in-memory caching for API responses, which can be useful for exploration and iterative use. Caching both reduces the load on the API and speeds up execution. However it can be turned off if needed simply by setting the attribute `disable_cache` to `True`.
+
+## Debugging
+Sometimes things don't work as expected. To troubleshoot you can set the log level to `DEBUG` to get verbose output of the queries sent to the API.
+
+```{python}
+# | eval: false
+import logging
+
+# Set the log level to debug for the root logger which will affect all loaded modules, which can be quite noisy
+logging.basicConfig(level=logging.DEBUG)
+
+```
+
+```{python}
+# | echo: false
+import logging
+```
+
+```{python}
+# Or set up a handler just for pxwebpy
+handler = logging.StreamHandler()
+handler.setFormatter(
+    logging.Formatter("%(levelname)s:%(thread)s:%(name)s:%(message)s")
+)
+logging.getLogger("pxweb").addHandler(handler)
+logging.getLogger("pxweb").setLevel(logging.DEBUG)
+
+# Set up an API object with the logging enabled
+ssb = PxApi("ssb")
+```

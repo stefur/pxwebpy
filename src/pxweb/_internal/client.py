@@ -1,9 +1,12 @@
 import time
+from logging import getLogger
 from threading import Lock
 
 from packaging.version import parse
 from requests.exceptions import HTTPError, JSONDecodeError
 from requests_cache import CachedSession, CacheSettings, Request
+
+logger = getLogger(__name__)
 
 
 class ApiVersionError(Exception):
@@ -31,6 +34,7 @@ class Client:
         # Setting up params used for every query
         self.params: dict = {"lang": language}
 
+        logger.debug("Getting the API configuration")
         # Run the init without rate limiting since it's not set up yet
         configuration = self.call(endpoint="/config", enforce_rate_limit=False)
 
@@ -43,6 +47,17 @@ class Client:
         self.max_calls: int = configuration.get("maxCallsPerTimeWindow")
         self.time_window: int = configuration.get("timeWindow")
         self.call_timestamps: list[float] = []
+
+        logger.debug(
+            f"Query size is limited to {self.max_data_cells} number of data cells"
+        )
+
+        if self.max_calls > 0:
+            logger.debug(
+                f"Rate limiting set to a maximum of {self.max_calls} calls per time window of {self.time_window} seconds"
+            )
+        else:
+            logger.debug("No rate limit is configured")
 
         # Now that we have the configuration set up, get the language if needed
         self.params["lang"] = language or configuration.get(
@@ -69,8 +84,15 @@ class Client:
             method="POST" if query else "GET",
             url=self.url + endpoint,
             json=query,
-            params=self.params | params if params else self.params,
+            params=(
+                set_params := self.params | params if params else self.params
+            ),
         ).prepare()
+
+        logger.debug(f"{request.method} request prepared for {request.url}")
+        logger.debug(f"Request with parameters: {set_params}")
+        if query:
+            logger.debug(f"Request with query: {query}")
 
         # Handle cache settings
         if not self.session.settings.disabled:
@@ -79,6 +101,7 @@ class Client:
 
             # If there's a cache, go ahead without rate limiting
             if cache_key in self.session.cache.responses:
+                logger.debug("Request found in cache")
                 return self.session.send(request).json()
 
         # Otherwise rate limit first, if there's a limit set by the API
@@ -91,6 +114,7 @@ class Client:
         # a heavy number of subqueries. The response contains a retry-after in the headers
         # so we basically back off and then go again
         for attempt in range(max_retries + 1):
+            logger.debug(f"Sending request, attempt {attempt + 1}")
             response = self.session.send(request)
             if response.ok:
                 return response.json()
@@ -99,6 +123,10 @@ class Client:
             # need to "back off" and then retry
             elif response.status_code == 429 and attempt < max_retries:
                 retry_after = response.headers.get("Retry-After", "1")
+                logger.debug(
+                    f"Response 429, backing off for {retry_after} second(s)"
+                )
+
                 time.sleep(int(retry_after))
                 # Then continue to do another attempt
                 continue
@@ -130,5 +158,8 @@ class Client:
                 return None
             # Otherise there have been to many calls, so we need to sleep
             sleep_time = self.time_window - (now - self.call_timestamps[0])
+            logger.debug(
+                f"Hit the rate limit, sleeping for {sleep_time} second(s)"
+            )
             # This way we hold the lock so other threads queue up
             time.sleep(sleep_time)

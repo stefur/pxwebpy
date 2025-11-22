@@ -1,4 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor
+from logging import getLogger
 from typing import Literal, TypeAlias, Union
 
 from ._internal.client import Client
@@ -9,6 +10,8 @@ from ._internal.functions import (
     split_value_codes,
     unpack_table_data,
 )
+
+logger = getLogger(__name__)
 
 KnownApi: TypeAlias = Literal["scb", "ssb"]
 """Selectable APIs with a preconfigured URL"""
@@ -64,6 +67,7 @@ class PxApi:
         disable_cache: bool = False,
         timeout: int = 30,
     ):
+        logger.debug("Setting up the client")
         self._client = Client(
             url=API_URLS.get(url, url),
             language=language,
@@ -71,6 +75,7 @@ class PxApi:
             disable_cache=disable_cache,
         )  # Resolve the name if known else assume it's a full URL
 
+        logger.debug("Getting the number of tables available")
         # Pull in the total number of elements (tables) available
         self.number_of_tables: int | None = self._client.call(
             endpoint="/tables"
