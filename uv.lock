@@ -1206,6 +1206,7 @@ wheels = [
 name = "pxwebpy"
 source = { editable = "." }
 dependencies = [
+    { name = "packaging" },
     { name = "requests" },
     { name = "requests-cache" },
 ]
@@ -1230,6 +1231,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "packaging", specifier = ">=25.0" },
     { name = "requests", specifier = ">=2.32.3" },
     { name = "requests-cache", specifier = ">=1.2.1" },
 ]
