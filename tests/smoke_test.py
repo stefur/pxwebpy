@@ -1,5 +1,5 @@
 """
-Check that basic features work on release.
+Check some basics to ensure functionality.
 """
 
 from pxweb import get_known_apis
