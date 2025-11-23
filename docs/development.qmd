@@ -15,10 +15,6 @@ dependencies. First, be sure you
 ```bash
 # Install dependencies and set up the virtual environment
 uv sync
-
-# Install the pre-commit hooks
-uv run pre-commit install
-
 ```
 
 For more details on how to use `uv`, head over to the [`uv` docs](https://docs.astral.sh/uv/).
@@ -27,33 +23,46 @@ For more details on how to use `uv`, head over to the [`uv` docs](https://docs.a
 
 ### Code
 `ruff` is used for linting and formatting, automatically executed in a `pre-commit` hook.  
+
+```bash
+# Install the pre-commit hooks
+uv run pre-commit install
+```
   
-To run `ruff` manually from the command line or editor, see the [documentation](https://docs.astral.sh/ruff/) on how to install and use`ruff`.
+To run `ruff` manually from the command line or editor, see the [`ruff` documentation](https://docs.astral.sh/ruff/).
 
 ### Docstrings
 Follow the [`NumPy`](https://numpydoc.readthedocs.io/en/latest/format.html#overview) style guide when writing docstrings. This is important for being able to [build the documentation](#building-the-documentation).
 
 ## Running tests
-Tests are run using `pytest`, typically via `uv run`:
+For fast iteration on specific tests, use `uv run pytest`:
 
 ```bash
-uv run pytest   # all tests
-uv run pytest -s tests/test_client.py  # one test file
+uv run pytest -s tests/test_client.py # one test file
 uv run pytest -s tests/test_client.py::test_call_raises_http_error # one specific test
 ```
 
-To check test coverage:
-
+To run the complete test suite across all supported Python versions, use `nox`:
 ```bash
-uv run pytest --cov=src --cov-report=term
+uv run nox # for the entire suite
+uv run nox -s tests # same thing, just being explicit about the session
 ```
 
-Some tests utilize [`syrupy`](https://github.com/syrupy-project/syrupy) for snapshot testing to ensure consistency. If snapshots for some reason need to be updated run `uv run pytest --snapshot-update`.
+To check test coverage:
+```bash
+uv run pytest --cov=pxweb # for terminal output
+uv run pytest --cov=pxweb --cov-report=html # to get a report 
+```
+
+Some tests utilize [`syrupy`](https://github.com/syrupy-project/syrupy) for snapshot testing to ensure consistency. If snapshots need to be updated:
+```bash
+uv run pytest --snapshot-update
+```
 
 ## Building the documentation
 Documentation is built using [`quartodoc`](https://github.com/machow/quartodoc), thus you also need [`quarto`](https://quarto.org/docs/get-started/) installed on your machine if you wish to build the documentation locally. This is usually a good idea to check that the output looks as expected. The documentation is automatically built and published upon each release.
 
-With `quarto` installed, building the documentation is done in two steps:
+With `quarto` installed the documentation can be rendered:
 
 ```bash
 cd docs
@@ -67,8 +76,5 @@ The rendered output is found in the folder called `_site`.
 When you’re ready to contribute:  
 
 1. Clone the repository and create a new branch for your changes.  
-2. Ensure that:  
-    * All tests pass locally (`uv run pytest`)  
-    * Code is linted and formatted (`uv run ruff check && uv run ruff format`)  
-    * Documentation (if relevant) builds successfully  
+2. Ensure tests pass and code is properly formatted.
 3. Open a pull request to the `main` branch.  
