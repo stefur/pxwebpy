@@ -208,10 +208,7 @@ This page explains how you can contribute. All improvements to code, documentati
 <h2 class="anchored" data-anchor-id="setting-up-uv-and-the-virtual-environment">Setting up <code>uv</code> and the virtual environment</h2>
 <p>This project is set up to use <a href="https://docs.astral.sh/uv/"><code>uv</code></a> to manage Python and dependencies. First, be sure you <a href="https://docs.astral.sh/uv/getting-started/installation/">have <code>uv</code> installed</a>.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install dependencies and set up the virtual environment</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> sync</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Install the pre-commit hooks</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run pre-commit install</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> sync</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>For more details on how to use <code>uv</code>, head over to the <a href="https://docs.astral.sh/uv/"><code>uv</code> docs</a>.</p>
 </section>
 <section id="formatting" class="level2">
@@ -219,7 +216,9 @@ This page explains how you can contribute. All improvements to code, documentati
 <section id="code" class="level3">
 <h3 class="anchored" data-anchor-id="code">Code</h3>
 <p><code>ruff</code> is used for linting and formatting, automatically executed in a <code>pre-commit</code> hook.</p>
-<p>To run <code>ruff</code> manually from the command line or editor, see the <a href="https://docs.astral.sh/ruff/">documentation</a> on how to install and use<code>ruff</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install the pre-commit hooks</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run pre-commit install</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>To run <code>ruff</code> manually from the command line or editor, see the <a href="https://docs.astral.sh/ruff/"><code>ruff</code> documentation</a>.</p>
 </section>
 <section id="docstrings" class="level3">
 <h3 class="anchored" data-anchor-id="docstrings">Docstrings</h3>
@@ -228,21 +227,25 @@ This page explains how you can contribute. All improvements to code, documentati
 </section>
 <section id="running-tests" class="level2">
 <h2 class="anchored" data-anchor-id="running-tests">Running tests</h2>
-<p>Tests are run using <code>pytest</code>, typically via <code>uv run</code>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run pytest   <span class="co"># all tests</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run pytest <span class="at">-s</span> tests/test_client.py  <span class="co"># one test file</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run pytest <span class="at">-s</span> tests/test_client.py::test_call_raises_http_error <span class="co"># one specific test</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>For fast iteration on specific tests, use <code>uv run pytest</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run pytest <span class="at">-s</span> tests/test_client.py <span class="co"># one test file</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run pytest <span class="at">-s</span> tests/test_client.py::test_call_raises_http_error <span class="co"># one specific test</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>To run the complete test suite across all supported Python versions, use <code>nox</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run nox <span class="co"># for the entire suite</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run nox <span class="at">-s</span> tests <span class="co"># same thing, just being explicit about the session</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>To check test coverage:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run pytest <span class="at">--cov</span><span class="op">=</span>src <span class="at">--cov-report</span><span class="op">=</span>term</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Some tests utilize <a href="https://github.com/syrupy-project/syrupy"><code>syrupy</code></a> for snapshot testing to ensure consistency. If snapshots for some reason need to be updated run <code>uv run pytest --snapshot-update</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run pytest <span class="at">--cov</span><span class="op">=</span>pxweb <span class="co"># for terminal output</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run pytest <span class="at">--cov</span><span class="op">=</span>pxweb <span class="at">--cov-report</span><span class="op">=</span>html <span class="co"># to get a report </span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Some tests utilize <a href="https://github.com/syrupy-project/syrupy"><code>syrupy</code></a> for snapshot testing to ensure consistency. If snapshots need to be updated:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run pytest <span class="at">--snapshot-update</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="building-the-documentation" class="level2">
 <h2 class="anchored" data-anchor-id="building-the-documentation">Building the documentation</h2>
 <p>Documentation is built using <a href="https://github.com/machow/quartodoc"><code>quartodoc</code></a>, thus you also need <a href="https://quarto.org/docs/get-started/"><code>quarto</code></a> installed on your machine if you wish to build the documentation locally. This is usually a good idea to check that the output looks as expected. The documentation is automatically built and published upon each release.</p>
-<p>With <code>quarto</code> installed, building the documentation is done in two steps:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> docs</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run quartodoc build</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run quarto render</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>With <code>quarto</code> installed the documentation can be rendered:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> docs</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run quartodoc build</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run quarto render</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The rendered output is found in the folder called <code>_site</code>.</p>
 </section>
 <section id="submitting-changes" class="level2">
@@ -251,15 +254,7 @@ This page explains how you can contribute. All improvements to code, documentati
 <ol type="1">
 <li>Clone the repository and create a new branch for your changes.<br>
 </li>
-<li>Ensure that:
-<ul>
-<li>All tests pass locally (<code>uv run pytest</code>)<br>
-</li>
-<li>Code is linted and formatted (<code>uv run ruff check &amp;&amp; uv run ruff format</code>)<br>
-</li>
-<li>Documentation (if relevant) builds successfully<br>
-</li>
-</ul></li>
+<li>Ensure tests pass and code is properly formatted.</li>
 <li>Open a pull request to the <code>main</code> branch.</li>
 </ol>
 
