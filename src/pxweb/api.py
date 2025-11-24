@@ -490,6 +490,7 @@ class PxApi:
     def get_table_data_all(
         self,
         table_id: str,
+        show: Literal["code", "value", "code_value"] | None = None,
     ) -> list[dict]:
         """
         Get table data that can be used with dataframes like `polars` or `pandas`. The query is constructed from the metadata.
@@ -499,6 +500,8 @@ class PxApi:
         ----------
         table_id: str
             An ID of a table to get data from.
+        show: str, optional
+            Set to "code_value", "code" or "value", to specify what to show in the categorical columns.
 
         Returns
         -------
@@ -509,8 +512,7 @@ class PxApi:
             k: ["*"] for k in self.get_table_variables(table_id).keys()
         }
         return self.get_table_data(
-            table_id,
-            value_codes=selection_all,
+            table_id, value_codes=selection_all, show=show
         )
 
     def all_tables(self) -> list[dict[str, str]]:
