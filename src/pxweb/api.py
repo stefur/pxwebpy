@@ -1,5 +1,4 @@
 from concurrent.futures import ThreadPoolExecutor
-from functools import partial
 from logging import getLogger
 from typing import Literal, TypeAlias, Union
 
@@ -466,6 +465,14 @@ class PxApi:
             # Perform wildcard expansion
             value_codes = expand_wildcards(value_codes, table_variables)
 
+        def fetch(query):
+            return unpack_table_data(
+                self._client.call(
+                    endpoint=f"/tables/{table_id}/data", query=query
+                ),
+                show=show,
+            )
+
         # Now count the data cells we're getting to check against the max allowed
         if count_data_cells(value_codes) > self._client.max_data_cells:
             # Split the query into several subqueries for API calls
@@ -475,40 +482,23 @@ class PxApi:
                     value_codes, self._client.max_data_cells
                 )
             ]
-
             dataset = []
-
-            fetch_subquery = partial(
-                lambda table_id, subquery, show: unpack_table_data(
-                    self._client.call(
-                        endpoint=f"/tables/{table_id}/data", query=subquery
-                    ),
-                    show=show,
-                ),
-                table_id,
-                show=show,
-            )
-
             if self.max_workers == 1:
                 # 1 worker = sequential on main thread
                 for subquery in subqueries:
-                    dataset.extend(fetch_subquery(subquery))
+                    dataset.extend(fetch(subquery))
             else:
                 # Use threading for the subqueries
                 with ThreadPoolExecutor(
                     max_workers=self.max_workers
                 ) as executor:
                     # Map() so that we yield results in order
-                    for result in executor.map(fetch_subquery, subqueries):
+                    for result in executor.map(fetch, subqueries):
                         dataset.extend(result)
         else:
             # No batching needed so we just go ahead with the query as is
             query = build_query(value_codes, code_list)
-            response = self._client.call(
-                endpoint=f"/tables/{table_id}/data",
-                query=query,
-            )
-            dataset = unpack_table_data(response, show=show)
+            dataset = fetch(query)
 
         return dataset
 
