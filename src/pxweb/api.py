@@ -1,4 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor
+from functools import partial
 from logging import getLogger
 from typing import Literal, TypeAlias, Union
 
@@ -48,6 +49,8 @@ class PxApi:
         Disable the in-memory cache that is used for API responses.
     timeout: int
         The timeout in seconds to use when calling the API.
+    max_workers: int, optional
+        Maximum number of workers to use for parallel execution when fetching data. Set to 1 for sequential execution or set a fixed number to limit the amount of concurrent requests being sent. None uses automatic sizing.
 
     Examples
     --------
@@ -66,6 +69,7 @@ class PxApi:
         language: str | None = None,
         disable_cache: bool = False,
         timeout: int = 30,
+        max_workers: int | None = None,
     ):
         logger.debug("Setting up the client")
         self._client = Client(
@@ -80,6 +84,8 @@ class PxApi:
         self.number_of_tables: int | None = self._client.call(
             endpoint="/tables"
         )["page"]["totalElements"]
+
+        self._max_workers = max_workers
 
     def __repr__(self) -> str:
         return f"""PxApi(url='{self._client.url}',
@@ -125,12 +131,22 @@ class PxApi:
         self._client.session.settings.disabled = value
 
     @property
+    def max_workers(self) -> int | None:
+        """Get the maximum number of workers used for parallel execution when getting data."""
+        return self._max_workers
+
+    @max_workers.setter
+    def max_workers(self, value: int) -> None:
+        """Set the maximum number of workers to use for parallel execution when getting data."""
+        self._max_workers = value
+
+    @property
     def language(self) -> str:
         """Get the current language."""
         return self._client.params["lang"]
 
     @language.setter
-    def language(self, value) -> None:
+    def language(self, value: str) -> None:
         """Set the language to use with the API."""
         self._client.params["lang"] = value
 
@@ -462,20 +478,29 @@ class PxApi:
 
             dataset = []
 
-            # Use threading for the subqueries
-            with ThreadPoolExecutor() as executor:
-                # Map() so that we yield results in order
-                for result in executor.map(
-                    lambda subquery: unpack_table_data(
-                        self._client.call(
-                            endpoint=f"/tables/{table_id}/data", query=subquery
-                        ),
-                        show=show,
+            fetch_subquery = partial(
+                lambda table_id, subquery, show: unpack_table_data(
+                    self._client.call(
+                        endpoint=f"/tables/{table_id}/data", query=subquery
                     ),
-                    subqueries,
-                ):
-                    dataset.extend(result)
+                    show=show,
+                ),
+                table_id,
+                show=show,
+            )
 
+            if self.max_workers == 1:
+                # 1 worker = sequential on main thread
+                for subquery in subqueries:
+                    dataset.extend(fetch_subquery(subquery))
+            else:
+                # Use threading for the subqueries
+                with ThreadPoolExecutor(
+                    max_workers=self.max_workers
+                ) as executor:
+                    # Map() so that we yield results in order
+                    for result in executor.map(fetch_subquery, subqueries):
+                        dataset.extend(result)
         else:
             # No batching needed so we just go ahead with the query as is
             query = build_query(value_codes, code_list)
