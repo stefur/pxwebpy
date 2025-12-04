@@ -1,8 +1,8 @@
 color:
   palette:
-    black: "#1A1A1A"
-    white: "#FCFCFC"
-    green: "#2c5545"
+    black: "#1a1a1a"
+    white: "#fafafa"
+    green: "#4f666a"
   foreground: black
   background: white
   primary: green
@@ -12,9 +12,16 @@ typography:
   fonts:
     - family: Fira Code
       source: google
+    - family: Inter
+      source: google
+      weight: [300, 400, 500, 600]
+      style: [normal, italic]
 
-  base: Arial
+  base: 
+    family: Inter
+    line-height: 1.55
+    size: 1.1rem
   headings:
-    family: Arial
-    weight: 400
+    family: Inter
+    weight: 300
   monospace: Fira Code

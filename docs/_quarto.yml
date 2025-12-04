@@ -17,16 +17,21 @@ format:
 
 brand: _brand.yml
 
+language: 
+  search-text-placeholder: Search
+
 website:
   title: "pxwebpy"
   description: "Client library for the PxWeb API to easily load data into a DataFrame."
   repo-url: https://github.com/stefur/pxwebpy
   repo-actions: [issue]
   page-navigation: true
+  search: 
+    location: navbar
+    type: textbox
   navbar:
     background: primary
     pinned: true
-    search: true
     left:
       - text: "Get started"
         file: index.qmd
