@@ -56,7 +56,7 @@ def split_value_codes(value_codes: dict, max_cells: int) -> list[dict]:
         return [value_codes]
 
     # We go by largest-dimension-first, so choose variable with largest number of values (biggest "contributor" to the query being too large)
-    largest_variable = max(split_variables, key=sizes.get)
+    largest_variable = max(split_variables, key=lambda x: sizes.get(x, 0))
 
     # Figure out max chunk size for this variable
     other_cell_count = total_cells // sizes[largest_variable]
