@@ -30,11 +30,16 @@ div.cell-output {
 }
 
 .doc-section dt {
-    background-color: #c1ddd2;
+    background-color: #c0ced0;
     display: block;
 }
 
 /* No bold in bash commands */
 .ex {
     font-weight: normal !important;
+}
+
+/* Increase title font size a bit */
+.navbar-title {
+    font-weight: 700 !important;
 }
