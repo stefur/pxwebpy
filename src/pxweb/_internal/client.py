@@ -127,7 +127,7 @@ class Client:
                     f"Response 429, backing off for {retry_after} second(s)"
                 )
 
-                time.sleep(int(retry_after))
+                time.sleep(float(retry_after))
                 # Then continue to do another attempt
                 continue
             else:
