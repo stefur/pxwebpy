@@ -13,6 +13,10 @@ class ApiVersionError(Exception):
     """Raised if the API version is not >2.0.0"""
 
 
+class ApiConfigurationError(Exception):
+    """Required configuration is missing"""
+
+
 class Client:
     def __init__(
         self,
@@ -43,9 +47,16 @@ class Client:
                 f"""The version of the API is {configuration.get("apiVersion")}. pxwebpy requires 2.0.0 or greater."""
             )
 
-        self.max_data_cells: int = configuration.get("maxDataCells")
-        self.max_calls: int = configuration.get("maxCallsPerTimeWindow")
-        self.time_window: int = configuration.get("timeWindow")
+        try:
+            # Pick up necessary rate limit configuration from the API
+            self.max_data_cells: int = configuration["maxDataCells"]
+            self.max_calls: int = configuration["maxCallsPerTimeWindow"]
+            self.time_window: int = configuration["timeWindow"]
+        except KeyError as error:
+            raise ApiConfigurationError(
+                f"The required key {error} is missing in the API configuration."
+            ) from error
+
         self.call_timestamps: list[float] = []
 
         logger.debug(
