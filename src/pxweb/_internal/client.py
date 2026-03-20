@@ -40,40 +40,42 @@ class Client:
 
         logger.debug("Getting the API configuration")
         # Run the init without rate limiting since it's not set up yet
-        configuration = self.call(endpoint="/config", enforce_rate_limit=False)
-
-        if parse(configuration.get("apiVersion", "0.0.0")) < parse("2.0.0"):
-            raise ApiVersionError(
-                f"""The version of the API is {configuration.get("apiVersion")}. pxwebpy requires 2.0.0 or greater."""
-            )
-
-        try:
-            # Pick up necessary rate limit configuration from the API
-            self.max_data_cells: int = configuration["maxDataCells"]
-            self.max_calls: int = configuration["maxCallsPerTimeWindow"]
-            self.time_window: int = configuration["timeWindow"]
-        except KeyError as error:
-            raise ApiConfigurationError(
-                f"The required key {error} is missing in the API configuration."
-            ) from error
-
-        self.call_timestamps: list[float] = []
-
-        logger.debug(
-            f"Query size is limited to {self.max_data_cells} number of data cells"
+        self.configuration = self.call(
+            endpoint="/config", enforce_rate_limit=False
         )
 
-        if self.max_calls > 0:
+        if parse(self.configuration.get("apiVersion", "0.0.0")) < parse(
+            "2.0.0"
+        ):
+            raise ApiVersionError(
+                f"""The version of the API is {self.configuration.get("apiVersion")}. pxwebpy requires 2.0.0 or greater."""
+            )
+
+        for key in ("maxDataCells", "maxCallsPerTimeWindow", "timeWindow"):
+            if self.configuration.get(key) is None:
+                raise ApiConfigurationError(
+                    f"The required key {key} is missing in the API configuration."
+                )
+
+        logger.debug(
+            f"""Query size is limited to {self.configuration["maxDataCells"]} number of data cells"""
+        )
+
+        if self.configuration["maxCallsPerTimeWindow"] > 0:
             logger.debug(
-                f"Rate limiting set to a maximum of {self.max_calls} calls per time window of {self.time_window} seconds"
+                "Rate limiting set to a maximum of %s calls per time window of %s seconds",
+                self.configuration["maxCallsPerTimeWindow"],
+                self.configuration["timeWindow"],
             )
         else:
             logger.debug("No rate limit is configured")
 
         # Now that we have the configuration set up, get the language if needed
-        self.params["lang"] = language or configuration.get(
+        self.params["lang"] = language or self.configuration.get(
             "defaultLanguage", None
         )
+
+        self.call_timestamps: list[float] = []
 
     def call(
         self,
@@ -116,7 +118,10 @@ class Client:
                 return self.session.send(request).json()
 
         # Otherwise rate limit first, if there's a limit set by the API
-        if enforce_rate_limit and self.max_calls > 0:
+        if (
+            enforce_rate_limit
+            and self.configuration["maxCallsPerTimeWindow"] > 0
+        ):
             # Wait if needed
             self.rate_limit()
 
@@ -161,14 +166,19 @@ class Client:
             self.call_timestamps = [
                 timestamp
                 for timestamp in self.call_timestamps
-                if now - timestamp < self.time_window
+                if now - timestamp < self.configuration["timeWindow"]
             ]
             # If we still have slots in the window, stop blocking and proceed
-            if len(self.call_timestamps) < self.max_calls:
+            if (
+                len(self.call_timestamps)
+                < self.configuration["maxCallsPerTimeWindow"]
+            ):
                 self.call_timestamps.append(now)
                 return None
             # Otherise there have been to many calls, so we need to sleep
-            sleep_time = self.time_window - (now - self.call_timestamps[0])
+            sleep_time = self.configuration["timeWindow"] - (
+                now - self.call_timestamps[0]
+            )
             logger.debug(
                 f"Hit the rate limit, sleeping for {sleep_time} second(s)"
             )

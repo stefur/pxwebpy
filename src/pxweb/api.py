@@ -103,7 +103,7 @@ class PxApi:
         Returns
         -------
         :
-            The API response containing the configuration.
+            The API configuration.
 
         Examples
         --------
@@ -115,9 +115,7 @@ class PxApi:
         [{'id': 'sv', 'label': 'Svenska'},
          {'id': 'en', 'label': 'English'}]
         """
-        return self._client.call(
-            endpoint="/config",
-        )
+        return self._client.configuration
 
     @property
     def disable_cache(self) -> bool:
@@ -474,12 +472,15 @@ class PxApi:
             )
 
         # Now count the data cells we're getting to check against the max allowed
-        if count_data_cells(value_codes) > self._client.max_data_cells:
+        if (
+            count_data_cells(value_codes)
+            > self._client.configuration["maxDataCells"]
+        ):
             # Split the query into several subqueries for API calls
             subqueries = [
                 build_query(sub_query, code_list)
                 for sub_query in split_value_codes(
-                    value_codes, self._client.max_data_cells
+                    value_codes, self._client.configuration["maxDataCells"]
                 )
             ]
             dataset = []

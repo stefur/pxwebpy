@@ -40,8 +40,8 @@ def client(config_response):
 
 def test_init_sets_defaults(client):
     # Ensure it's all set up as expected
-    assert client.max_calls == 3
-    assert client.time_window == 1
+    assert client.configuration["maxCallsPerTimeWindow"] == 3
+    assert client.configuration["timeWindow"] == 1
     assert client.params["lang"] == "en"
 
 
