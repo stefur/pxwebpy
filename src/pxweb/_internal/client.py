@@ -18,6 +18,8 @@ class ApiConfigurationError(Exception):
 
 
 class Client:
+    """Used to communicate with the API"""
+
     def __init__(
         self,
         url: str,
@@ -102,10 +104,10 @@ class Client:
             ),
         ).prepare()
 
-        logger.debug(f"{request.method} request prepared for {request.url}")
-        logger.debug(f"Request with parameters: {set_params}")
+        logger.debug("%s request prepared for %s", request.method, request.url)
+        logger.debug("Request with parameters: %s", set_params)
         if query:
-            logger.debug(f"Request with query: {query}")
+            logger.debug("Request with query: %s", query)
 
         # Handle cache settings
         if not self.session.settings.disabled:
@@ -130,9 +132,10 @@ class Client:
         # a heavy number of subqueries. The response contains a retry-after in the headers
         # so we basically back off and then go again
         for attempt in range(max_retries + 1):
-            logger.debug(f"Sending request, attempt {attempt + 1}")
+            logger.debug("Sending request, attempt %s", attempt + 1)
             response = self.session.send(request)
             if response.ok:
+                logger.debug("OK response")
                 return response.json()
 
             # If we get this response, despite rate limiting, we basically
@@ -140,7 +143,7 @@ class Client:
             elif response.status_code == 429 and attempt < max_retries:
                 retry_after = response.headers.get("Retry-After", "1")
                 logger.debug(
-                    f"Response 429, backing off for {retry_after} second(s)"
+                    "Response 429, backing off for %s second(s)", retry_after
                 )
 
                 time.sleep(float(retry_after))
@@ -180,7 +183,8 @@ class Client:
                 now - self.call_timestamps[0]
             )
             logger.debug(
-                f"Hit the rate limit, sleeping for {sleep_time} second(s)"
+                "Hit the rate limit, sleeping for %s second(s)",
+                sleep_time,
             )
             # This way we hold the lock so other threads queue up
             time.sleep(sleep_time)
