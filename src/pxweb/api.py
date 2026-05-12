@@ -524,8 +524,8 @@ class PxApi:
         :
             A dataset in a native format that can be loaded into a dataframe.
         """
-        selection_all = {
-            k: ["*"] for k in self.get_table_variables(table_id).keys()
+        selection_all: dict[str, list[str] | str] = {
+            k: ["*"] for k in self.get_table_variables(table_id)
         }
         return self.get_table_data(
             table_id, value_codes=selection_all, show=show
