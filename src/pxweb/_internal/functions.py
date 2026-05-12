@@ -158,10 +158,18 @@ def unpack_table_data(
 
         dimension_labels[label] = values
 
+    combos = list(itertools.product(*dimension_labels.values()))
+    values = json_data["value"]
+
+    # First make sure that the lengths are equal before zipping to avoid silent truncation
+    if len(combos) != len(values):
+        raise ValueError(
+            f"Dimension product ({len(combos)}) does not match value count ({len(values)}). "
+            "The API response may be malformed."
+        )
+
     # The result is a list of dicts with the dimension as key and product of the category labels for values, with the value as "value" for each row
     return [
         {**dict(zip(dimension_labels.keys(), combo)), "value": val}
-        for combo, val in zip(
-            itertools.product(*dimension_labels.values()), json_data["value"]
-        )
+        for combo, val in zip(combos, values)
     ]
