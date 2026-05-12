@@ -410,6 +410,9 @@ class PxApi:
             dataset = unpack_table_data(response, show=show)
             return dataset
 
+        # A shallow copy to avoid unexpected mutation, e.g. turning a single item into a list
+        value_codes = dict(value_codes)
+
         # Make sure all selections provided are in a list, even if single values
         for variable in list(value_codes.keys()):
             if not isinstance(variable, str):
