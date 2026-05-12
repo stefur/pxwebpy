@@ -40,13 +40,14 @@ def test_get_table_data(api):
 
 def test_get_table_data_only_list_or_strings(api):
     with pytest.raises(ValueError):
-        api.get_table_data(table_id="TAB6471", value_codes={"some_var": 42})
+        api.get_table_data(table_id="TAB6471", value_codes={"some_var": 42})  # type: ignore
 
 
 def test_get_table_data_only_strings_in_list(api):
     with pytest.raises(ValueError):
         api.get_table_data(
-            table_id="TAB6471", value_codes={"some_var": ["1", "2", 42]}
+            table_id="TAB6471",
+            value_codes={"some_var": ["1", "2", 42]},  # type: ignore
         )
 
 

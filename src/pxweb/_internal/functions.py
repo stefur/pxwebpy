@@ -90,7 +90,7 @@ def expand_wildcards(value_codes: dict, source: dict) -> dict:
         else:
             items = codes
 
-        expanded = []
+        expanded: list[str] = []
         # Now start expanding the wildcards
         for value in codes:
             match value:

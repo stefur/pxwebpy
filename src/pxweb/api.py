@@ -1,6 +1,6 @@
 from concurrent.futures import ThreadPoolExecutor
 from logging import getLogger
-from typing import Literal, TypeAlias, Union
+from typing import Literal, TypeAlias
 
 from ._internal.client import Client
 from ._internal.functions import (
@@ -16,7 +16,7 @@ logger = getLogger(__name__)
 KnownApi: TypeAlias = Literal["scb", "ssb"]
 """Selectable APIs with a preconfigured URL"""
 
-API_URLS: dict[Union[KnownApi, str], str] = {
+API_URLS: dict[str, str] = {
     "scb": "https://statistikdatabasen.scb.se/api/v2",
     "ssb": "https://data.ssb.no/api/pxwebapi/v2",
 }
@@ -337,7 +337,7 @@ class PxApi:
     def get_table_data(
         self,
         table_id: str,
-        value_codes: dict[str, list[str]] | None = None,
+        value_codes: dict[str, list[str] | str] | None = None,
         code_list: dict[str, str] | None = None,
         show: Literal["code", "value", "code_value"] | None = None,
     ) -> list[dict]:
@@ -548,7 +548,7 @@ class PxApi:
         """Flatten the list of lists containing paths"""
         return [item for sublist in table.get("paths", []) for item in sublist]
 
-    def tables_on_path(self, path_id: str) -> list[dict[str, str]]:
+    def tables_on_path(self, path_id: str) -> list[dict[str, str | None]]:
         """
         List all the tables available on the path.
 
