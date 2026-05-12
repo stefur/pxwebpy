@@ -60,7 +60,8 @@ class Client:
                 )
 
         logger.debug(
-            f"""Query size is limited to {self.configuration["maxDataCells"]} number of data cells"""
+            "Query size is limited to %s number of data cells",
+            self.configuration["maxDataCells"],
         )
 
         if self.configuration["maxCallsPerTimeWindow"] > 0:
@@ -140,7 +141,7 @@ class Client:
 
             # If we get this response, despite rate limiting, we basically
             # need to "back off" and then retry
-            elif response.status_code == 429 and attempt < max_retries:
+            if response.status_code == 429 and attempt < max_retries:
                 retry_after = response.headers.get("Retry-After", "1")
                 logger.debug(
                     "Response 429, backing off for %s second(s)", retry_after
@@ -149,17 +150,17 @@ class Client:
                 time.sleep(float(retry_after))
                 # Then continue to do another attempt
                 continue
-            else:
-                # Try to extract any response body for more meaningful errors
-                try:
-                    response_body = response.json()
-                except JSONDecodeError:
-                    response_body = {}
-                raise HTTPError(
-                    f"""Error {response.status_code}: {response.reason}\nType: {response_body.get("type")}\nTitle: {response_body.get("title")}\nStatus: {response_body.get("status")}\nDetail: {response_body.get("detail")}\nInstance: {response_body.get("instance")}"""
-                )
-        else:
-            raise HTTPError("Reached max amount of retries.")
+
+            # Try to extract any response body for more meaningful errors
+            try:
+                response_body = response.json()
+            except JSONDecodeError:
+                response_body = {}
+            raise HTTPError(
+                f"""Error {response.status_code}: {response.reason}\nType: {response_body.get("type")}\nTitle: {response_body.get("title")}\nStatus: {response_body.get("status")}\nDetail: {response_body.get("detail")}\nInstance: {response_body.get("instance")}"""
+            )
+
+        raise HTTPError("Reached max amount of retries.")
 
     def rate_limit(self) -> None:
         """Ensure we respect the rate limit of the API"""
@@ -171,20 +172,23 @@ class Client:
                 for timestamp in self.call_timestamps
                 if now - timestamp < self.configuration["timeWindow"]
             ]
+            self.call_timestamps.append(now)
+
             # If we still have slots in the window, stop blocking and proceed
             if (
                 len(self.call_timestamps)
-                < self.configuration["maxCallsPerTimeWindow"]
+                <= self.configuration["maxCallsPerTimeWindow"]
             ):
-                self.call_timestamps.append(now)
                 return None
+
             # Otherise there have been to many calls, so we need to sleep
             sleep_time = self.configuration["timeWindow"] - (
                 now - self.call_timestamps[0]
             )
-            logger.debug(
-                "Hit the rate limit, sleeping for %s second(s)",
-                sleep_time,
-            )
-            # This way we hold the lock so other threads queue up
-            time.sleep(sleep_time)
+        logger.debug(
+            "Hit the rate limit, sleeping for %s second(s)",
+            sleep_time,
+        )
+        # Sleep before continuing
+        time.sleep(sleep_time)
+        return None
