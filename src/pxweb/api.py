@@ -406,6 +406,11 @@ class PxApi:
         """
         # TODO support output_values
 
+        if show not in (valid_show := {"code", "value", "code_value", None}):
+            raise ValueError(
+                f"Invalid value for show: {show}. Expected one of {valid_show}."
+            )
+
         # If no value codes are supplied, send a query to get the default selection
         if value_codes is None:
             response = self._client.call(
