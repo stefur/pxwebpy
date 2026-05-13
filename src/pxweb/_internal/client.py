@@ -4,7 +4,7 @@ from threading import Lock
 
 from packaging.version import parse
 from requests.exceptions import HTTPError, JSONDecodeError
-from requests_cache import CachedSession, CacheSettings, Request
+from requests_cache import CachedSession, Request
 
 logger = getLogger(__name__)
 
@@ -28,11 +28,12 @@ class Client:
         language: str | None = None,
     ):
         self.session: CachedSession = CachedSession(
-            ttl=3600,
+            expire_after=3600,
             allowable_methods=("GET", "POST"),
             backend="memory",
-            settings=CacheSettings(disabled=disable_cache),
         )
+
+        self.session.settings.disabled = disable_cache
         self.url: str = url
         self.timeout: int = timeout
         self.lock = Lock()
