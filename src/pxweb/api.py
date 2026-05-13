@@ -93,9 +93,6 @@ class PxApi:
         timeout={self._client.timeout},
         number_of_tables={self.number_of_tables})"""
 
-    def __eq__(self, other) -> bool:
-        return self._client.url == other
-
     def get_config(self) -> dict:
         """
         Retrieve the configuration for the API.
@@ -115,7 +112,7 @@ class PxApi:
         [{'id': 'sv', 'label': 'Svenska'},
          {'id': 'en', 'label': 'English'}]
         """
-        return self._client.configuration
+        return self._client.configuration.copy()
 
     @property
     def disable_cache(self) -> bool:
