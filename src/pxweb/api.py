@@ -498,9 +498,18 @@ class PxApi:
             dataset = []
             if self.max_workers == 1:
                 # 1 worker = sequential on main thread
+                logger.debug(
+                    "Fetching %s subqueries",
+                    len(subqueries),
+                )
                 for subquery in subqueries:
                     dataset.extend(fetch(subquery))
             else:
+                logger.debug(
+                    "Fetching %s subqueries with %s workers",
+                    len(subqueries),
+                    self.max_workers,
+                )
                 # Use threading for the subqueries
                 with ThreadPoolExecutor(
                     max_workers=self.max_workers
@@ -552,6 +561,11 @@ class PxApi:
         :
             All tables with some metadata.
         """
+        if self.number_of_tables is None:
+            raise RuntimeError(
+                "Cannot fetch all tables: the API did not return a total element count."
+            )
+
         return self._client.call(
             endpoint="/tables", params={"pageSize": self.number_of_tables}
         )["tables"]
