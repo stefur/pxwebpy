@@ -189,7 +189,11 @@ class PxApi:
 
         # TODO Some nicer ux for multi page responses?
 
-        return self._client.call(endpoint="/tables", params=parameters)
+        # Call with parameters, but skip any parameter set to None
+        return self._client.call(
+            endpoint="/tables",
+            params={k: v for k, v in parameters.items() if v is not None},
+        )
 
     def get_code_list(self, code_list_id: str) -> dict:
         """
