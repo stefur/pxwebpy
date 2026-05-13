@@ -150,6 +150,9 @@ def unpack_table_data(
             case None:
                 # If there's no show key at all we default to using the label values
                 values = list(category_labels.values())
+            case _:
+                # This could basically only stem from an unknown value in the API response
+                raise ValueError(f"Unexpected show value: {show_local!r}")
 
         dimension_labels[label] = values
 
