@@ -147,18 +147,28 @@ def unpack_table_data(
             show_local = dimension.get("extension", {}).get("show")
         else:
             show_local = show
+
+        # Sort by index in accordance with json-stat2 spec
+        index = dimension["category"].get("index", {})
+
+        if index:
+            ordered_keys = sorted(
+                category_labels, key=lambda k, index=index: index[k]
+            )
+        else:
+            ordered_keys = list(category_labels)
+
         # If the dimension has extension data along with a key for show, use
         # that to determine the values shown in the output
+
         match show_local:
             case "code_value":
-                values = [f"{k}: {v}" for k, v in category_labels.items()]
+                values = [f"{k}: {category_labels[k]}" for k in ordered_keys]
             case "code":
-                values = list(category_labels.keys())
-            case "value":
-                values = list(category_labels.values())
-            case None:
+                values = ordered_keys
+            case "value" | None:
                 # If there's no show key at all we default to using the label values
-                values = list(category_labels.values())
+                values = [category_labels[k] for k in ordered_keys]
             case _:
                 # This could basically only stem from an unknown value in the API response
                 raise ValueError(f"Unexpected show value: {show_local!r}")
