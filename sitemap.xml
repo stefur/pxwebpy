@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://stefur.github.io/pxwebpy/examples.html</loc>
-    <lastmod>2026-01-13T18:41:54.867Z</lastmod>
-  </url>
-  <url>
-    <loc>https://stefur.github.io/pxwebpy/reference/PxApi.html</loc>
-    <lastmod>2026-01-13T18:42:08.970Z</lastmod>
-  </url>
-  <url>
-    <loc>https://stefur.github.io/pxwebpy/reference/index.html</loc>
-    <lastmod>2026-01-13T18:42:08.901Z</lastmod>
-  </url>
-  <url>
     <loc>https://stefur.github.io/pxwebpy/index.html</loc>
-    <lastmod>2026-01-13T18:41:54.867Z</lastmod>
-  </url>
-  <url>
-    <loc>https://stefur.github.io/pxwebpy/reference/get_known_apis.html</loc>
-    <lastmod>2026-01-13T18:42:08.972Z</lastmod>
+    <lastmod>2026-06-09T19:12:40.775Z</lastmod>
   </url>
   <url>
     <loc>https://stefur.github.io/pxwebpy/development.html</loc>
-    <lastmod>2026-01-13T18:41:54.867Z</lastmod>
+    <lastmod>2026-06-09T19:12:40.775Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefur.github.io/pxwebpy/reference/index.html</loc>
+    <lastmod>2026-06-09T19:13:00.213Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefur.github.io/pxwebpy/reference/get_known_apis.html</loc>
+    <lastmod>2026-06-09T19:13:00.299Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefur.github.io/pxwebpy/reference/PxApi.html</loc>
+    <lastmod>2026-06-09T19:13:00.297Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefur.github.io/pxwebpy/examples.html</loc>
+    <lastmod>2026-06-09T19:12:40.775Z</lastmod>
   </url>
 </urlset>

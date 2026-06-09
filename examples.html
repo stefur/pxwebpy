@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.26">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Examples – pxwebpy</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -66,19 +69,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="./">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-43a01391b561054b9fdfcb5e50cd706b.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-058e922e97f91431af762737220bcbe9.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-43a01391b561054b9fdfcb5e50cd706b.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-1d203b1ad2122c6fe2e165fcbdb732c6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-ce24e106e7be6394c9c13f66cbadcf63.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-1d203b1ad2122c6fe2e165fcbdb732c6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-ce7b5dd705a47ec991571bbcb510061b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-ce7b5dd705a47ec991571bbcb510061b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-ce7b5dd705a47ec991571bbcb510061b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-6072ec04d431013e727046556fc29861.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-6072ec04d431013e727046556fc29861.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-6072ec04d431013e727046556fc29861.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -181,6 +183,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#loading-into-dataframes" id="toc-loading-into-dataframes" class="nav-link" data-scroll-target="#loading-into-dataframes">Loading into dataframes</a></li>
   <li><a href="#using-wildcards" id="toc-using-wildcards" class="nav-link" data-scroll-target="#using-wildcards">Using wildcards</a></li>
   <li><a href="#large-queries-and-batching" id="toc-large-queries-and-batching" class="nav-link" data-scroll-target="#large-queries-and-batching">Large queries and batching</a></li>
+  <li><a href="#streaming-responses" id="toc-streaming-responses" class="nav-link" data-scroll-target="#streaming-responses">Streaming responses</a></li>
   <li><a href="#in-memory-caching" id="toc-in-memory-caching" class="nav-link" data-scroll-target="#in-memory-caching">In-memory caching</a></li>
   </ul></li>
   <li><a href="#debugging" id="toc-debugging" class="nav-link" data-scroll-target="#debugging">Debugging</a></li>
@@ -225,7 +228,7 @@ Note
 <section id="basic-setup-and-exploration" class="level2">
 <h2 class="anchored" data-anchor-id="basic-setup-and-exploration">Basic setup and exploration</h2>
 <p>The first step is to set up a PxApi object to use.</p>
-<div id="064e4058" class="cell" data-execution_count="2">
+<div id="6e181b29" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pxweb <span class="im">import</span> PxApi</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Use the builtin known API instead of a URL</span></span>
@@ -237,15 +240,15 @@ Note
         language=sv,
         disable_cache=False,
         timeout=30,
-        number_of_tables=5144)</code></pre>
+        number_of_tables=4250)</code></pre>
 </div>
 </div>
 <p>We can check out information about the API, including languages supported, by using <a href="./reference/PxApi.html#pxweb.PxApi.get_config" title="0"><code>.get_config()</code></a>.</p>
-<div id="b530a0f5" class="cell" data-execution_count="3">
+<div id="abd10cd3" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>api.get_config()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
 <pre><code>{
-    'apiVersion': '2.0.0',
+    'apiVersion': '2.2.0',
     'appVersion': '1.0.0',
     'languages': [
         {
@@ -265,7 +268,7 @@ Note
 </div>
 <p>If we want to change the language, we can do so by changing an attribute of the <a href="./reference/PxApi.html#pxweb.PxApi" title="0"><code>PxApi</code></a> object like so: <code>api.language = "en"</code> This will change the response language for all subsequent queries to the API.</p>
 <p>From here we can also browse around and get data. Checking out all tables available is doable with <a href="./reference/PxApi.html#pxweb.PxApi.all_tables" title="0"><code>.all_tables()</code></a>, but probably a bit overwhelming.</p>
-<div id="abe1d9cc" class="cell" data-execution_count="4">
+<div id="d3c916dc" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>api.all_tables()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>[
@@ -273,119 +276,129 @@ Note
         'id': 'TAB4707',
         'label': 'Antal pågående anställningar efter anställningstid'+39,
         'description': '',
-        'updated': '2025-12-22T07:00:00Z',
-        'firstPeriod': '2015M04',
-        ... +8
+        'sortCode': '01',
+        'updated': '2026-05-29T06:00:00Z',
+        ... +9
     },
     {
         'id': 'TAB4714',
         'label': 'Antal pågående anställningar efter anställningstid'+58,
         'description': '',
-        'updated': '2025-12-22T07:00:00Z',
-        'firstPeriod': '2015M04',
-        ... +8
+        'sortCode': '02',
+        'updated': '2026-05-29T06:00:00Z',
+        ... +9
     },
     {
         'id': 'TAB4718',
         'label': 'Antal pågående anställningar efter kön, region och'+30,
         'description': '',
-        'updated': '2025-12-22T07:00:00Z',
-        'firstPeriod': '2020M01',
-        ... +8
+        'sortCode': '03',
+        'updated': '2026-05-29T06:00:00Z',
+        ... +9
     },
     {
         'id': 'TAB4723',
         'label': 'Antal pågående anställningar i näringslivet efter '+56,
         'description': '',
-        'updated': '2025-12-22T07:00:00Z',
-        'firstPeriod': '2020M01',
-        ... +8
+        'sortCode': '04',
+        'updated': '2026-05-29T06:00:00Z',
+        ... +9
     },
     {
         'id': 'TAB4344',
         'label': 'Antal pågående anställningar i näringslivet efter '+65,
         'description': '',
-        'updated': '2025-12-22T07:00:00Z',
-        'firstPeriod': '2015M04',
-        ... +8
+        'sortCode': '06',
+        'updated': '2026-05-29T06:00:00Z',
+        ... +9
     },
-    ... +5139
+    ... +4245
 ]</code></pre>
 </div>
 </div>
 <p>Tables are organised into subjects and are categorised into different <code>paths</code>. To see all paths available, use <a href="./reference/PxApi.html#pxweb.PxApi.get_paths" title="0"><code>.get_paths()</code></a>.</p>
-<div id="975185b1" class="cell" data-execution_count="5">
+<div id="9c075288" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>api.get_paths()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>[
     {
         'id': 'AA',
-        'label': 'Ämnesövergripande statistik'
+        'label': 'Ämnesövergripande statistik',
+        'sortCode': 'Ämnesövergripande statistik'
     },
     {
         'id': 'AA0003',
-        'label': 'Registerdata för integration'
+        'label': 'Registerdata för integration',
+        'sortCode': 'Registerdata för integration'
     },
     {
         'id': 'AA0003B',
-        'label': 'Statistik med inriktning mot arbetsmarknaden'
+        'label': 'Statistik med inriktning mot arbetsmarknaden',
+        'sortCode': '001'
     },
     {
         'id': 'AA0003C',
-        'label': 'Statistik med inriktning mot flyttmönster'
+        'label': 'Statistik med inriktning mot flyttmönster',
+        'sortCode': '006'
     },
     {
         'id': 'AA0003D',
-        'label': 'Statistik med inriktning mot boende'
+        'label': 'Statistik med inriktning mot boende',
+        'sortCode': '005'
     },
-    ... +833
+    ... +756
 ]</code></pre>
 </div>
 </div>
 <p>It’s also possible to filter the paths, for example to get all paths related to a specific subject like “Befolkning”.</p>
-<div id="6b72f620" class="cell" data-execution_count="6">
+<div id="1a18445f" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>api.get_paths(path_id<span class="op">=</span><span class="st">"BE"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
 <pre><code>[
     {
         'id': 'BE',
-        'label': 'Befolkning'
-    },
-    {
-        'id': 'BE0001',
-        'label': 'Namnstatistik'
-    },
-    {
-        'id': 'BE0001D',
-        'label': 'Nyfödda – Äldre tabeller som inte längre uppdatera'+1
-    },
-    {
-        'id': 'BE0001G',
-        'label': 'Hela befolkningen – Äldre tabeller som inte längre'+11
+        'label': 'Befolkning',
+        'sortCode': 'Befolkning'
     },
     {
         'id': 'BE0101',
-        'label': 'Befolkningsstatistik'
+        'label': 'Befolkningsstatistik',
+        'sortCode': 'Befolkningsstatistik'
     },
-    ... +29
+    {
+        'id': 'BE0101A',
+        'label': 'Folkmängd',
+        'sortCode': '001'
+    },
+    {
+        'id': 'BE0101B',
+        'label': 'Medelålder',
+        'sortCode': '011'
+    },
+    {
+        'id': 'BE0101C',
+        'label': 'Befolkningstäthet',
+        'sortCode': '016'
+    },
+    ... +25
 ]</code></pre>
 </div>
 </div>
 <p>To get all tables that are in specific path you can use <a href="./reference/PxApi.html#pxweb.PxApi.tables_on_path" title="0"><code>.tables_on_path()</code></a>. Here we take a closer look at “Folkmängd”.</p>
-<div id="6065f8f8" class="cell" data-execution_count="7">
+<div id="0329fdeb" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>api.tables_on_path(path_id<span class="op">=</span><span class="st">"BE0101A"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>[
     {
-        'id': 'TAB6471',
-        'label': 'Folkmängden per månad efter region, ålder och kön.'+20,
+        'id': 'TAB5444',
+        'label': 'Folkmängden per månad efter region, ålder och kön.'+19,
         'paths': [
             [...]
         ]
     },
     {
-        'id': 'TAB5444',
-        'label': 'Folkmängden per månad efter region, ålder och kön.'+19,
+        'id': 'TAB6667',
+        'label': 'Folkmängden efter ålder och kön.  År 2025',
         'paths': [
             [...]
         ]
@@ -398,20 +411,20 @@ Note
         ]
     },
     {
+        'id': 'TAB5557',
+        'label': 'Folkmängden efter region, civilstånd, ålder och kö'+10,
+        'paths': [
+            [...]
+        ]
+    },
+    {
         'id': 'TAB638',
         'label': 'Folkmängden efter region, civilstånd, ålder och kö'+16,
         'paths': [
             [...]
         ]
     },
-    {
-        'id': 'TAB4537',
-        'label': 'Folkmängden per distrikt, landskap, landsdel eller'+30,
-        'paths': [
-            [...]
-        ]
-    },
-    ... +3
+    ... +7
 ]</code></pre>
 </div>
 </div>
@@ -419,7 +432,7 @@ Note
 <section id="searching-for-tables" class="level2">
 <h2 class="anchored" data-anchor-id="searching-for-tables">Searching for tables</h2>
 <p>It’s also possible to search for tables using the <a href="./reference/PxApi.html#pxweb.PxApi.search" title="0"><code>.search()</code></a> method.</p>
-<div id="69c52df5" class="cell" data-execution_count="8">
+<div id="1238f2d3" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Keeping it simple and just look for tables updated in the past 180 days matching the query string</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> api.search(query<span class="op">=</span><span class="st">"energi"</span>, past_days<span class="op">=</span><span class="dv">180</span>)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -430,7 +443,7 @@ Note
 </div>
 </div>
 <p>We can also get the labels and ID’s, or any other metadata, to find out more.</p>
-<div id="5d67239e" class="cell" data-execution_count="9">
+<div id="4eea4c7a" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>[</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    {k: v <span class="cf">for</span> k, v <span class="kw">in</span> table.items() <span class="cf">if</span> k <span class="kw">in</span> (<span class="st">"id"</span>, <span class="st">"label"</span>)}</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> table <span class="kw">in</span> results.get(<span class="st">"tables"</span>)</span>
@@ -438,24 +451,24 @@ Note
 <div class="cell-output cell-output-display" data-execution_count="9">
 <pre><code>[
     {
-        'id': 'TAB3859',
-        'label': 'Utvinning av energi- och odlingstorv i 1000-tal ku'+22
-    },
-    {
         'id': 'TAB5179',
         'label': 'Investeringsutgifter för kommuner efter region och'+33
     },
     {
         'id': 'TAB5918',
-        'label': 'Konsumentprisindex med fast ränta exklusive energi'+44
+        'label': 'Konsumentprisindex med fast ränta exklusive energi'+73
     },
     {
         'id': 'TAB6593',
         'label': 'Konsumentprisindex med fast ränta exklusive energi'+43
     },
     {
-        'id': 'TAB3886',
-        'label': 'Kostnader i tkr för inköpt energi inom mineral- oc'+52
+        'id': 'TAB1030',
+        'label': 'Snabb-KPI: Preliminära förändringstal, analysgrupp'+30
+    },
+    {
+        'id': 'TAB6636',
+        'label': 'Detaljerad tabell: KPIF analysgrupper, 2020=100. Å'+11
     },
     ... +15
 ]</code></pre>
@@ -466,7 +479,7 @@ Note
 <h2 class="anchored" data-anchor-id="getting-table-metadata">Getting table metadata</h2>
 <p>There are two methods to get table metadata. You can get the full metadata information by simply calling <a href="./reference/PxApi.html#pxweb.PxApi.get_table_metadata" title="0"><code>.get_table_metadata()</code></a>.</p>
 <p>If you’re interested in the details about variables of a table you can also use <a href="./reference/PxApi.html#pxweb.PxApi.get_table_variables" title="0"><code>.get_table_variables()</code></a>. This method returns information in a more condensed way which may be easier to overview.</p>
-<div id="f608055b" class="cell" data-execution_count="10">
+<div id="15c96ead" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use the table ID</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>tab_vars <span class="op">=</span> api.get_table_variables(<span class="st">"TAB2706"</span>)</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -486,20 +499,7 @@ Note
         }
     },
     'elimination': True,
-    'codelists': [
-        {
-            'id': 'vs_RegionKommun07+BaraEjAggr',
-            'label': 'Kommuner och Bara kommun (1229) som upphörde 1976'
-        },
-        {
-            'id': 'vs_RegionValkrets99',
-            'label': 'Valkretsar'
-        },
-        {
-            'id': 'vs_RegionValkretsTot99',
-            'label': 'Totalt, alla redovisade valkretsar'
-        }
-    ]
+    'codelists': []
 }</code></pre>
 </div>
 </div>
@@ -507,7 +507,7 @@ Note
 <section id="code-lists" class="level3">
 <h3 class="anchored" data-anchor-id="code-lists">Code lists</h3>
 <p>Getting information about code lists can be done with <a href="./reference/PxApi.html#pxweb.PxApi.get_code_list" title="0"><code>.get_code_list()</code></a>.</p>
-<div id="837082ee" class="cell" data-execution_count="11">
+<div id="bd6522be" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fetching and unpacking 'values' of 'vs_RegionValkrets99'</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>api.get_code_list(<span class="st">"vs_RegionValkrets99"</span>).get(<span class="st">"values"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="11">
@@ -562,7 +562,7 @@ Note
 <li>A selection of value codes from variables</li>
 <li>A code list (optional)</li>
 </ul>
-<div id="e8ea2a2b" class="cell" data-execution_count="12">
+<div id="27be6824" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Getting some election results for specific regions, using a code list to match value codes</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> api.get_table_data(</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"TAB2706"</span>,</span>
@@ -634,7 +634,7 @@ Note
 <h3 class="anchored" data-anchor-id="loading-into-dataframes">Loading into dataframes</h3>
 <p>The native format of the returned dataset can now easily be loaded into a dataframe.</p>
 <p>For instance <code>polars</code>:</p>
-<div id="acc04c25" class="cell" data-execution_count="13">
+<div id="0efe142b" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>pl.DataFrame(dataset)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -748,7 +748,7 @@ Note
 </div>
 </div>
 <p>But also <code>pandas</code> and <code>pyarrow</code>:</p>
-<div id="12741329" class="cell" data-execution_count="14">
+<div id="3f612bfe" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(dataset)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -950,7 +950,7 @@ Note
 </div>
 </div>
 </div>
-<div id="aeb66e8b" class="cell" data-execution_count="15">
+<div id="456ff974" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyarrow <span class="im">as</span> pa</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>pa.Table.from_pylist(dataset)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -973,7 +973,7 @@ value: [[197466,60776,48949,40207,42284,...,19543,45237,4134,2410,40954]]</code>
 <section id="using-wildcards" class="level3">
 <h3 class="anchored" data-anchor-id="using-wildcards">Using wildcards</h3>
 <p>Wildcards are useful, and here is an example using wildcards for a larger query.</p>
-<div id="d7c3835e" class="cell" data-execution_count="16">
+<div id="3019857e" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Using wildcards here to get all the municipalities in Stockholm, all months of 2024, all genders and 5-year age groups.</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co"># The somewhat cryptic ContentsCode represents count</span></span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>population_data <span class="op">=</span> api.get_table_data(</span>
@@ -999,13 +999,13 @@ value: [[197466,60776,48949,40207,42284,...,19543,45237,4134,2410,40954]]</code>
 <h3 class="anchored" data-anchor-id="large-queries-and-batching">Large queries and batching</h3>
 <p>pxwebpy allows for very large queries by using automatic batching to stay within the rate limits of the API.</p>
 <p>Consider the following query for population per year (<code>"TAB1267"</code>):</p>
-<div id="28c622e0" class="cell" data-execution_count="17">
+<div id="fa882e9d" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>codes <span class="op">=</span> {<span class="st">"ContentsCode"</span>: <span class="st">"BE0101A9"</span>, <span class="st">"Region"</span>: <span class="st">"*"</span>, <span class="st">"Alder"</span>: <span class="st">"*"</span>, <span class="st">"Kon"</span>: <span class="st">"*"</span>, <span class="st">"Tid"</span>: <span class="st">"*"</span>}</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>lists <span class="op">=</span> {<span class="st">"Region"</span>: <span class="st">"vs_RegionKommun07"</span>, <span class="st">"Alder"</span>: <span class="st">"vs_Ålder1årA"</span>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This query would produce over 1 million data cells, overshooting the data cell limit of the API (150 000 in this case).</p>
 <p>To handle this pxwebpy will break up the query into several subqueries to stay within the limit of data cells while also respecting the rate limit of the number of queries allowed within a give time window. Calls are multithreaded to fetch results as fast as possible.</p>
-<div id="570b26a3" class="cell" data-execution_count="18">
+<div id="0a815a47" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Executing the large query</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> api.get_table_data(<span class="st">"TAB1267"</span>, value_codes<span class="op">=</span>codes, code_list<span class="op">=</span>lists)</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1133,6 +1133,40 @@ value: [[197466,60776,48949,40207,42284,...,19543,45237,4134,2410,40954]]</code>
 </div>
 </div>
 </div>
+<p>If you simply want all data from a given table, you can use the method <a href="./reference/PxApi.html#pxweb.PxApi.get_table_data_all" title="0"><code>.get_table_data_all()</code></a> instead.</p>
+<div id="b67a0bf4" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simply get all data from the table</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>all_data <span class="op">=</span> api.get_table_data_all(<span class="st">"TAB6683"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Be aware that this may return many millions of rows and exhaust available RAM. A way to handle such a scenario is to stream the responses from the API.</p>
+</section>
+<section id="streaming-responses" class="level3">
+<h3 class="anchored" data-anchor-id="streaming-responses">Streaming responses</h3>
+<p>There are two iterator methods that yield responses from the API: <a href="./reference/PxApi.html#pxweb.PxApi.get_table_data_iter" title="0"><code>.get_table_data_iter()</code></a> and <a href="./reference/PxApi.html#pxweb.PxApi.get_table_data_all_iter" title="0"><code>.get_table_data_all_iter()</code></a>.</p>
+<p>These can be used for example when holding all data in RAM is not feasible.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Disabling the <a href="#in-memory-caching">in-memory caching</a> is useful in these situations to keep the RAM footprint as low as possible.</p>
+</div>
+</div>
+<div id="a6d09925" class="cell" data-execution_count="20">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>api.disable_cache <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Streaming each response into a newline delimited JSON file</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"TAB6683.ndjson"</span>, <span class="st">"w"</span>) <span class="im">as</span> f:</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> record <span class="kw">in</span> api.get_table_data_all_iter(<span class="st">"TAB6683"</span>):</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>        f.write(json.dumps(record, ensure_ascii<span class="op">=</span><span class="va">False</span>) <span class="op">+</span> <span class="st">"</span><span class="ch">\\</span><span class="st">n"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 </section>
 <section id="in-memory-caching" class="level3">
 <h3 class="anchored" data-anchor-id="in-memory-caching">In-memory caching</h3>
@@ -1142,35 +1176,37 @@ value: [[197466,60776,48949,40207,42284,...,19543,45237,4134,2410,40954]]</code>
 <section id="debugging" class="level2">
 <h2 class="anchored" data-anchor-id="debugging">Debugging</h2>
 <p>Sometimes things don’t work as expected. To troubleshoot you can set the log level to <code>DEBUG</code> to get verbose output of the queries sent to the API.</p>
-<div id="ae92ce2e" class="cell" data-execution_count="19">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> logging</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the log level to debug for the root logger which will affect all loaded modules, which can be quite noisy</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>logging.basicConfig(level<span class="op">=</span>logging.DEBUG)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="f02e0dac" class="cell" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> logging</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the log level to debug for the root logger which will affect all loaded modules, which can be quite noisy</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>logging.basicConfig(level<span class="op">=</span>logging.DEBUG)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="bf37eadc" class="cell" data-execution_count="21">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Or set up a handler just for pxwebpy</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>handler <span class="op">=</span> logging.StreamHandler()</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>handler.setFormatter(</span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    logging.Formatter(<span class="st">"</span><span class="sc">%(levelname)s</span><span class="st">:</span><span class="sc">%(thread)s</span><span class="st">:</span><span class="sc">%(name)s</span><span class="st">:</span><span class="sc">%(message)s</span><span class="st">"</span>)</span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>logging.getLogger(<span class="st">"pxweb"</span>).addHandler(handler)</span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>logging.getLogger(<span class="st">"pxweb"</span>).setLevel(logging.DEBUG)</span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up an API object with the logging enabled</span></span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>ssb <span class="op">=</span> PxApi(<span class="st">"ssb"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="2cec8f7d" class="cell" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Or set up a handler just for pxwebpy</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>handler <span class="op">=</span> logging.StreamHandler()</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>handler.setFormatter(</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    logging.Formatter(<span class="st">"</span><span class="sc">%(levelname)s</span><span class="st">:</span><span class="sc">%(thread)s</span><span class="st">:</span><span class="sc">%(name)s</span><span class="st">:</span><span class="sc">%(message)s</span><span class="st">"</span>)</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>logging.getLogger(<span class="st">"pxweb"</span>).addHandler(handler)</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>logging.getLogger(<span class="st">"pxweb"</span>).setLevel(logging.DEBUG)</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up an API object with the logging enabled</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>ssb <span class="op">=</span> PxApi(<span class="st">"ssb"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>DEBUG:140523950615424:pxweb.api:Setting up the client
-DEBUG:140523950615424:pxweb._internal.client:Getting the API configuration
-DEBUG:140523950615424:pxweb._internal.client:GET request prepared for https://data.ssb.no/api/pxwebapi/v2/config
-DEBUG:140523950615424:pxweb._internal.client:Request with parameters: {'lang': None}
-DEBUG:140523950615424:pxweb._internal.client:Sending request, attempt 1
-DEBUG:140523950615424:pxweb._internal.client:Query size is limited to 800000 number of data cells
-DEBUG:140523950615424:pxweb._internal.client:No rate limit is configured
-DEBUG:140523950615424:pxweb.api:Getting the number of tables available
-DEBUG:140523950615424:pxweb._internal.client:GET request prepared for https://data.ssb.no/api/pxwebapi/v2/tables?lang=no
-DEBUG:140523950615424:pxweb._internal.client:Request with parameters: {'lang': 'no'}
-DEBUG:140523950615424:pxweb._internal.client:Sending request, attempt 1</code></pre>
+<pre><code>DEBUG:139997778885504:pxweb.api:Setting up the client
+DEBUG:139997778885504:pxweb._internal.client:Getting the API configuration
+DEBUG:139997778885504:pxweb._internal.client:GET request prepared for https://data.ssb.no/api/pxwebapi/v2/config
+DEBUG:139997778885504:pxweb._internal.client:Request with parameters: {'lang': None}
+DEBUG:139997778885504:pxweb._internal.client:Sending request, attempt 1
+DEBUG:139997778885504:pxweb._internal.client:OK response
+DEBUG:139997778885504:pxweb._internal.client:Query size is limited to 800000 number of data cells
+DEBUG:139997778885504:pxweb._internal.client:No rate limit is configured
+DEBUG:139997778885504:pxweb.api:Getting the number of tables available
+DEBUG:139997778885504:pxweb._internal.client:GET request prepared for https://data.ssb.no/api/pxwebapi/v2/tables?lang=no
+DEBUG:139997778885504:pxweb._internal.client:Request with parameters: {'lang': 'no'}
+DEBUG:139997778885504:pxweb._internal.client:Sending request, attempt 1
+DEBUG:139997778885504:pxweb._internal.client:OK response</code></pre>
 </div>
 </div>
 
