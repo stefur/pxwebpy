@@ -55,6 +55,9 @@ docstring-code-format = true
 [tool.ruff.lint]
 extend-select = ["I"]
 
+[tool.zuban]
+strict = true
+
 [dependency-groups]
 dev = [
     "nox>=2026.02.09",

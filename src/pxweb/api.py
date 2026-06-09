@@ -1,7 +1,7 @@
 from collections.abc import Iterator
 from concurrent.futures import ThreadPoolExecutor
 from logging import getLogger
-from typing import Literal, TypeAlias
+from typing import Any
 
 from ._internal.client import Client
 from ._internal.functions import (
@@ -11,11 +11,9 @@ from ._internal.functions import (
     split_value_codes,
     unpack_table_data,
 )
+from .types import KnownApi, Show
 
 logger = getLogger(__name__)
-
-KnownApi: TypeAlias = Literal["scb", "ssb"]
-"""Selectable APIs with a preconfigured URL"""
 
 API_URLS: dict[str, str] = {
     "scb": "https://statistikdatabasen.scb.se/api/v2",
@@ -94,7 +92,7 @@ class PxApi:
         timeout={self._client.timeout},
         number_of_tables={self.number_of_tables})"""
 
-    def get_config(self) -> dict:
+    def get_config(self) -> Any:
         """
         Retrieve the configuration for the API.
 
@@ -136,7 +134,7 @@ class PxApi:
         self._max_workers = value
 
     @property
-    def language(self) -> str:
+    def language(self) -> str | None:
         """Get the current language."""
         return self._client.params["lang"]
 
@@ -151,7 +149,7 @@ class PxApi:
         past_days: int | None = None,
         include_discontinued: bool | None = None,
         page_size: int | None = None,
-    ) -> dict:
+    ) -> Any:
         """
         Search for tables.
 
@@ -193,7 +191,7 @@ class PxApi:
             params={k: v for k, v in parameters.items() if v is not None},
         )
 
-    def get_code_list(self, code_list_id: str) -> dict:
+    def get_code_list(self, code_list_id: str) -> Any:
         """
         Get information about a code list.
 
@@ -244,7 +242,7 @@ class PxApi:
             endpoint=f"/codelists/{code_list_id}",
         )
 
-    def get_table_metadata(self, table_id: str) -> dict:
+    def get_table_metadata(self, table_id: str) -> Any:
         """
         Get the complete set of metadata for a table.
         Parameters
@@ -271,7 +269,7 @@ class PxApi:
             endpoint=f"/tables/{table_id}/metadata",
         )
 
-    def get_table_variables(self, table_id: str) -> dict:
+    def get_table_variables(self, table_id: str) -> Any:
         """
         Get the specific metadata for variables and value codes. Also includes information  whether a variable can be eliminated as well as the available code lists.
         The information returned is unpacked and slightly more easily navigated than the output from the `~~.PxApi.get_table_metadata()` method.
@@ -341,8 +339,8 @@ class PxApi:
         table_id: str,
         value_codes: dict[str, list[str] | str] | None = None,
         code_list: dict[str, str] | None = None,
-        show: Literal["code", "value", "code_value"] | None = None,
-    ) -> list[dict]:
+        show: Show | None = None,
+    ) -> list[dict[str, Any]]:
         """
         Get table data that can be used with dataframes like `polars` or `pandas`. The query is constructed with the method parameters.
         An empty value code selection returns a default selection for the table.
@@ -411,7 +409,7 @@ class PxApi:
         table_id: str,
         value_codes: dict[str, list[str] | str] | None = None,
         code_list: dict[str, str] | None = None,
-        show: Literal["code", "value", "code_value"] | None = None,
+        show: Show | None = None,
     ) -> Iterator[dict]:
         """
         Like `~~.PxApi.get_table_data`, but yields row dicts one at a time
@@ -508,7 +506,7 @@ class PxApi:
             # Perform wildcard expansion
             value_codes = expand_wildcards(value_codes, table_variables)
 
-        def fetch(query):
+        def fetch(query: dict[str, Any]) -> list[dict[str, Any]]:
             return unpack_table_data(
                 self._client.call(
                     endpoint=f"/tables/{table_id}/data", query=query
@@ -557,8 +555,8 @@ class PxApi:
     def get_table_data_all(
         self,
         table_id: str,
-        show: Literal["code", "value", "code_value"] | None = None,
-    ) -> list[dict]:
+        show: Show | None = None,
+    ) -> list[dict[str, Any]]:
         """
         Get table data that can be used with dataframes like `polars` or `pandas`. The query is constructed from the metadata.
         This method tries to fetch all the data in the target table by sending in wildcards to all the value_codes.
@@ -580,7 +578,7 @@ class PxApi:
     def get_table_data_all_iter(
         self,
         table_id: str,
-        show: Literal["code", "value", "code_value"] | None = None,
+        show: Show | None = None,
     ) -> Iterator[dict]:
         """
         Like `~~.PxApi.get_table_data_all`, but yields row dicts one at a time
@@ -633,11 +631,13 @@ class PxApi:
                 "Cannot fetch all tables: the API did not return a total element count."
             )
 
-        return self._client.call(
-            endpoint="/tables", params={"pageSize": self.number_of_tables}
+        result: list[dict[str, Any]] = self._client.call(
+            endpoint="/tables", params={"pageSize": str(self.number_of_tables)}
         )["tables"]
 
-    def _unpack_paths(self, table: dict) -> list[dict]:
+        return result
+
+    def _unpack_paths(self, table: dict[str, Any]) -> list[dict[str, Any]]:
         """Flatten the list of lists containing paths"""
         return [item for sublist in table.get("paths", []) for item in sublist]
 

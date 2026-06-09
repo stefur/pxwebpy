@@ -1,8 +1,10 @@
 import itertools
-from typing import Literal
+from typing import Any
+
+from ..types import Show
 
 
-def count_data_cells(value_codes: dict) -> int:
+def count_data_cells(value_codes: dict[str, Any]) -> int:
     """
     Based on the supplied value codes, calculate the number of data cells this would
     selection would produce.
@@ -17,7 +19,9 @@ def count_data_cells(value_codes: dict) -> int:
     return number_of_data_cells
 
 
-def build_query(value_codes: dict, code_list: dict | None = None) -> dict:
+def build_query(
+    value_codes: dict[str, Any], code_list: dict[str, Any] | None = None
+) -> dict[str, Any]:
     """
     Construct a query based on supplied value codes and optional code list.
     """
@@ -31,7 +35,9 @@ def build_query(value_codes: dict, code_list: dict | None = None) -> dict:
     return {"selection": selection}
 
 
-def split_value_codes(value_codes: dict, max_cells: int) -> list[dict]:
+def split_value_codes(
+    value_codes: dict[str, Any], max_cells: int
+) -> list[dict[str, Any]]:
     """
     Recursively split a query to not go over API limit of max data cells allowed.
     Will try to optimize the batch size for each split, minimizing the number of queries sent.
@@ -73,7 +79,9 @@ def split_value_codes(value_codes: dict, max_cells: int) -> list[dict]:
     return results
 
 
-def expand_wildcards(value_codes: dict, source: dict) -> dict:
+def expand_wildcards(
+    value_codes: dict[str, Any], source: dict[str, Any]
+) -> dict[str, Any]:
     """
     Expand wildcards in value_codes using the provided `source`.
     `source` is either a `dict` with either code list or table_variables.
@@ -118,8 +126,9 @@ def expand_wildcards(value_codes: dict, source: dict) -> dict:
 
 
 def unpack_table_data(
-    json_data: dict, show: Literal["code", "value", "code_value"] | None = None
-) -> list[dict]:
+    json_data: dict[str, Any],
+    show: Show | None = None,
+) -> list[dict[str, Any]]:
     """
     Takes json-stat2 and flattens it into a list of dicts that can
     be used to convert into a dataframe, using either pandas or polars.

@@ -1,10 +1,12 @@
 import time
 from logging import getLogger
 from threading import Lock
+from typing import Any
 
 from packaging.version import parse
+from requests import Request
 from requests.exceptions import HTTPError, JSONDecodeError
-from requests_cache import CachedSession, Request
+from requests_cache import CachedSession
 
 logger = getLogger(__name__)
 
@@ -39,7 +41,7 @@ class Client:
         self.lock = Lock()
 
         # Setting up params used for every query
-        self.params: dict = {"lang": language}
+        self.params: dict[str, str | None] = {"lang": language}
 
         logger.debug("Getting the API configuration")
         # Run the init without rate limiting since it's not set up yet
@@ -84,11 +86,11 @@ class Client:
     def call(
         self,
         endpoint: str,
-        query: dict | None = None,
-        params: dict | None = None,
+        query: dict[str, Any] | None = None,
+        params: dict[str, str] | None = None,
         max_retries: int = 3,
         enforce_rate_limit: bool = True,
-    ) -> dict:
+    ) -> Any:
         """Call the endpoint with optional query"""
 
         # If we're asking for table data, set parameters to get json-stat2
