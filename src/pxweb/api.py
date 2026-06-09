@@ -1,3 +1,4 @@
+from collections.abc import Iterator
 from concurrent.futures import ThreadPoolExecutor
 from logging import getLogger
 from typing import Literal, TypeAlias
@@ -401,6 +402,41 @@ class PxApi:
         │ 0192 Nynäshamn      ┆ uppgift saknas ┆ Folkmängd      ┆ 2024 ┆ 0     │
         └─────────────────────┴────────────────┴────────────────┴──────┴───────┘
         """
+        return list(
+            self.get_table_data_iter(table_id, value_codes, code_list, show)
+        )
+
+    def get_table_data_iter(
+        self,
+        table_id: str,
+        value_codes: dict[str, list[str] | str] | None = None,
+        code_list: dict[str, str] | None = None,
+        show: Literal["code", "value", "code_value"] | None = None,
+    ) -> Iterator[dict]:
+        """
+        Like `~~.PxApi.get_table_data`, but yields row dicts one at a time
+        instead of materialising the full dataset in memory before returning.
+        When a query is split into subqueries, rows are yielded as each
+        subquery completes, so processing can begin before all network calls
+        have finished. This is useful for streaming large tables to disk
+        without holding the whole result in RAM.
+
+        Parameters
+        ----------
+        table_id: str
+            An ID of a table to get data from.
+        value_codes: dict, optional
+            The value codes to use for data selection where the keys are the variable codes. You can use the `~~.PxApi.get_table_variables()` to explore what's available.
+        code_list: dict, optional
+            Any named code list to use with a variable for code selection.
+        show: str, optional
+            Set to "code_value", "code" or "value", to specify what to show in the categorical columns.
+
+        Yields
+        ------
+        :
+            One dict per data cell, in the same format as `~~.PxApi.get_table_data`.
+        """
         # TODO support output_values
 
         if show not in (valid_show := {"code", "value", "code_value", None}):
@@ -413,8 +449,8 @@ class PxApi:
             response = self._client.call(
                 endpoint=f"/tables/{table_id}/data",
             )
-            dataset = unpack_table_data(response, show=show)
-            return dataset
+            yield from unpack_table_data(response, show=show)
+            return
 
         # A shallow copy to avoid unexpected mutation, e.g. turning a single item into a list
         value_codes = dict(value_codes)
@@ -492,7 +528,6 @@ class PxApi:
                     value_codes, self._client.configuration["maxDataCells"]
                 )
             ]
-            dataset = []
             if self.max_workers == 1:
                 # 1 worker = sequential on main thread
                 logger.debug(
@@ -500,7 +535,7 @@ class PxApi:
                     len(subqueries),
                 )
                 for subquery in subqueries:
-                    dataset.extend(fetch(subquery))
+                    yield from fetch(subquery)
             else:
                 logger.debug(
                     "Fetching %s subqueries with %s workers",
@@ -513,13 +548,11 @@ class PxApi:
                 ) as executor:
                     # Map() so that we yield results in order
                     for result in executor.map(fetch, subqueries):
-                        dataset.extend(result)
+                        yield from result
         else:
             # No batching needed so we just go ahead with the query as is
             query = build_query(value_codes, code_list)
-            dataset = fetch(query)
-
-        return dataset
+            yield from fetch(query)
 
     def get_table_data_all(
         self,
@@ -542,10 +575,47 @@ class PxApi:
         :
             A dataset in a native format that can be loaded into a dataframe.
         """
+        return list(self.get_table_data_all_iter(table_id, show=show))
+
+    def get_table_data_all_iter(
+        self,
+        table_id: str,
+        show: Literal["code", "value", "code_value"] | None = None,
+    ) -> Iterator[dict]:
+        """
+        Like `~~.PxApi.get_table_data_all`, but yields row dicts one at a time
+        instead of materialising the full dataset in memory before returning.
+        Rows are yielded as each subquery completes, so processing can begin
+        before all network calls have finished. This makes it possible to
+        stream very large tables to disk without holding the whole result in
+        RAM.
+
+        Parameters
+        ----------
+        table_id: str
+            An ID of a table to get data from.
+        show: str, optional
+            Set to "code_value", "code" or "value", to specify what to show in the categorical columns.
+
+        Yields
+        ------
+        :
+            One dict per data cell, in the same format as `~~.PxApi.get_table_data_all`.
+
+        Examples
+        --------
+        Stream a large table to a newline-delimited JSON file without loading
+        the whole dataset into memory.
+
+        >>> import json
+        >>> with open("TAB6683.ndjson", "w") as f:
+        ...     for record in api.get_table_data_all_iter("TAB6683"):
+        ...         f.write(json.dumps(record, ensure_ascii=False) + "\\n")
+        """
         selection_all: dict[str, list[str] | str] = {
             k: ["*"] for k in self.get_table_variables(table_id)
         }
-        return self.get_table_data(
+        yield from self.get_table_data_iter(
             table_id, value_codes=selection_all, show=show
         )
 

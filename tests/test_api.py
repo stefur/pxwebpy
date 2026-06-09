@@ -38,6 +38,28 @@ def test_get_table_data(api):
     assert len(dataset) > 1
 
 
+def test_get_table_data_iter(api):
+    iterator = api.get_table_data_iter(table_id="TAB6471")
+
+    assert not isinstance(iterator, list)
+
+    rows = list(iterator)
+    assert all(isinstance(row, dict) for row in rows)
+    # The iterator should yield the same data as the list-returning method
+    assert rows == api.get_table_data(table_id="TAB6471")
+
+
+def test_get_table_data_all_iter(api):
+    iterator = api.get_table_data_all_iter(table_id="TAB6471")
+
+    assert not isinstance(iterator, list)
+
+    rows = list(iterator)
+    assert len(rows) > 1
+    assert all(isinstance(row, dict) and "value" in row for row in rows)
+    assert rows == api.get_table_data_all(table_id="TAB6471")
+
+
 def test_get_table_data_only_list_or_strings(api):
     with pytest.raises(ValueError):
         api.get_table_data(table_id="TAB6471", value_codes={"some_var": 42})  # type: ignore
