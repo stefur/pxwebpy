@@ -99,6 +99,6 @@ def test_get_paths(api):
 
 
 def test_tables_on_path(api):
-    tables = api.tables_on_path("AM0101C")
+    tables = api.tables_on_path("AM0101A")
     assert isinstance(tables, list)
     assert len(tables) > 0
