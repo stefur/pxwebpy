@@ -60,6 +60,10 @@ strict = true
 
 [dependency-groups]
 dev = [
+    "griffe>=1.15.0,<2.0.0",
+    "ipykernel>=7.2.0",
+    "nbclient>=0.11.0",
+    "nbformat>=5.10.4",
     "nox>=2026.02.09",
     "nox-uv>=0.6.3",
     "pandas>=2.2.3",
@@ -74,3 +78,6 @@ dev = [
     "syrupy>=4.8.0",
     "types-requests>=2.32.0.20241016",
 ]
+
+[tool.uv.sources]
+quartodoc = { git = "https://github.com/machow/quartodoc", rev = "665734cf5db6dbd2fdd8a37b0dd1701f1e3fd734" }
