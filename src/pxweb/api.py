@@ -188,7 +188,7 @@ class PxApi:
         # Call with parameters, but skip any parameter set to None
         return self._client.call(
             endpoint="/tables",
-            params={k: v for k, v in parameters.items() if v is not None},
+            params={k: str(v) for k, v in parameters.items() if v is not None},
         )
 
     def get_code_list(self, code_list_id: str) -> Any:
