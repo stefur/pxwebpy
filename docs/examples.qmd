@@ -217,6 +217,38 @@ data = api.get_table_data("TAB1267", value_codes=codes, code_list=lists)
 pl.DataFrame(data)
 ```
 
+If you simply want all data from a given table, you can use the method `~~.PxApi.get_table_data_all()` instead.
+
+```{python}
+# | eval: false
+# Simply get all data from the table
+all_data = api.get_table_data_all("TAB6683")
+```
+
+Be aware that this may return many millions of rows and exhaust available RAM.
+A way to handle such a scenario is to stream the responses from the API.
+
+### Streaming responses
+There are two iterator methods that yield responses from the API: `~~.PxApi.get_table_data_iter()` and `~~.PxApi.get_table_data_all_iter()`.
+
+These can be used for example when holding all data in RAM is not feasible.
+
+::: {.callout-note}
+Disabling the [in-memory caching](#in-memory-caching) is useful in these situations to keep the RAM footprint as low as possible.
+:::
+
+```{python}
+# | eval: false
+import json
+
+api.disable_cache = True
+
+# Streaming each response into a newline delimited JSON file
+with open("TAB6683.ndjson", "w") as f:
+    for record in api.get_table_data_all_iter("TAB6683"):
+        f.write(json.dumps(record, ensure_ascii=False) + "\\n")
+```
+
 ### In-memory caching
 By default `pxwebpy` uses in-memory caching for API responses, which can be useful for exploration and iterative use. Caching both reduces the load on the API and speeds up execution. However it can be turned off if needed simply by setting the attribute `disable_cache` to `True`.
 
