@@ -35,6 +35,12 @@ To run `ruff` manually from the command line or editor, see the [`ruff` document
 Follow the [`NumPy`](https://numpydoc.readthedocs.io/en/latest/format.html#overview) style guide when writing docstrings. This is important for being able to [build the documentation](#building-the-documentation).
 
 ## Running tests
+
+Install the dependency group needed for running tests:
+```bash
+uv sync --group=tests
+```
+
 For fast iteration on specific tests, use `uv run pytest`:
 
 ```bash
@@ -62,7 +68,12 @@ uv run pytest --snapshot-update
 ## Building the documentation
 Documentation is built using [`quartodoc`](https://github.com/machow/quartodoc), thus you also need [`quarto`](https://quarto.org/docs/get-started/) installed on your machine if you wish to build the documentation locally. This is usually a good idea to check that the output looks as expected. The documentation is automatically built and published upon each release.
 
-With `quarto` installed the documentation can be rendered:
+Install the dependency group needed to render the documentation:
+```bash
+uv sync --group=docs
+```
+
+With `quarto` and the dependencies installed the documentation can be rendered:
 
 ```bash
 cd docs

@@ -32,7 +32,7 @@ jobs:
 
       - name: Build docs
         run: |
-          uv sync --locked
+          uv sync --no-default-groups --locked --group=docs
           cd docs && uv run quartodoc build
 
       - name: Render and publish
