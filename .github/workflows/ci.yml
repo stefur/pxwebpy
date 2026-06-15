@@ -32,13 +32,12 @@ jobs:
           enable-cache: true
           cache-dependency-glob: "uv.lock"
 
-      - name: Install dependencies for tests
-        run: uv sync --no-default-groups --locked --group=tests
-      
       - name: Lint
         uses: astral-sh/ruff-action@v3
 
       - name: Run tests
+        env:
+          PYTHONUTF8: "1"
         run: |
           uv run nox -s tests
       
