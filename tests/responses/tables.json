@@ -1,0 +1,1228 @@
+{
+  "language": "sv",
+  "tables": [
+    {
+      "id": "TAB4707",
+      "label": "Antal pågående anställningar efter anställningstid, kön och sektor. Månad 2015M04-2026M03",
+      "description": "",
+      "sortCode": "01",
+      "updated": "2026-05-29T06:00:00Z",
+      "firstPeriod": "2015M04",
+      "lastPeriod": "2026M03",
+      "category": "public",
+      "variableNames": [
+        "sektor",
+        "kön",
+        "tabellinnehåll",
+        "månad"
+      ],
+      "source": "SCB",
+      "subjectCode": "AM",
+      "timeUnit": "Monthly",
+      "paths": [
+        [
+          {
+            "id": "AM",
+            "label": "Arbetsmarknad",
+            "sortCode": "Arbetsmarknad"
+          },
+          {
+            "id": "AM0211",
+            "label": "Anställningar",
+            "sortCode": "005"
+          },
+          {
+            "id": "AM0211A",
+            "label": "Anställningar",
+            "sortCode": "001"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4707?lang=sv"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "en",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4707?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4707/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4707/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    },
+    {
+      "id": "TAB4714",
+      "label": "Antal pågående anställningar efter anställningstid, sektor och näringsgren (SNI 2007). Månad 2015M04-2026M03",
+      "description": "",
+      "sortCode": "02",
+      "updated": "2026-05-29T06:00:00Z",
+      "firstPeriod": "2015M04",
+      "lastPeriod": "2026M03",
+      "category": "public",
+      "variableNames": [
+        "sektor",
+        "näringsgren (SNI 2007)",
+        "tabellinnehåll",
+        "månad"
+      ],
+      "source": "SCB",
+      "subjectCode": "AM",
+      "timeUnit": "Monthly",
+      "paths": [
+        [
+          {
+            "id": "AM",
+            "label": "Arbetsmarknad",
+            "sortCode": "Arbetsmarknad"
+          },
+          {
+            "id": "AM0211",
+            "label": "Anställningar",
+            "sortCode": "005"
+          },
+          {
+            "id": "AM0211A",
+            "label": "Anställningar",
+            "sortCode": "001"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4714?lang=sv"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "en",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4714?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4714/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4714/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    },
+    {
+      "id": "TAB4718",
+      "label": "Antal pågående anställningar efter kön, region och sektor. Månad 2020M01-2026M03",
+      "description": "",
+      "sortCode": "03",
+      "updated": "2026-05-29T06:00:00Z",
+      "firstPeriod": "2020M01",
+      "lastPeriod": "2026M03",
+      "category": "public",
+      "variableNames": [
+        "region",
+        "kön",
+        "sektor",
+        "tabellinnehåll",
+        "månad"
+      ],
+      "source": "SCB",
+      "subjectCode": "AM",
+      "timeUnit": "Monthly",
+      "paths": [
+        [
+          {
+            "id": "AM",
+            "label": "Arbetsmarknad",
+            "sortCode": "Arbetsmarknad"
+          },
+          {
+            "id": "AM0211",
+            "label": "Anställningar",
+            "sortCode": "005"
+          },
+          {
+            "id": "AM0211A",
+            "label": "Anställningar",
+            "sortCode": "001"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4718?lang=sv"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "en",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4718?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4718/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4718/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    },
+    {
+      "id": "TAB4723",
+      "label": "Antal pågående anställningar i näringslivet efter region och näringsgren (SNI 2007). Månad 2020M01-2026M03",
+      "description": "",
+      "sortCode": "04",
+      "updated": "2026-05-29T06:00:00Z",
+      "firstPeriod": "2020M01",
+      "lastPeriod": "2026M03",
+      "category": "public",
+      "variableNames": [
+        "region",
+        "bransch",
+        "tabellinnehåll",
+        "månad"
+      ],
+      "source": "SCB",
+      "subjectCode": "AM",
+      "timeUnit": "Monthly",
+      "paths": [
+        [
+          {
+            "id": "AM",
+            "label": "Arbetsmarknad",
+            "sortCode": "Arbetsmarknad"
+          },
+          {
+            "id": "AM0211",
+            "label": "Anställningar",
+            "sortCode": "005"
+          },
+          {
+            "id": "AM0211A",
+            "label": "Anställningar",
+            "sortCode": "001"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4723?lang=sv"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "en",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4723?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4723/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4723/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    },
+    {
+      "id": "TAB4344",
+      "label": "Antal pågående anställningar i näringslivet efter anställningstid och näringsgren (SNI 2007). Månad 2015M04-2026M03",
+      "description": "",
+      "sortCode": "06",
+      "updated": "2026-05-29T06:00:00Z",
+      "firstPeriod": "2015M04",
+      "lastPeriod": "2026M03",
+      "category": "public",
+      "variableNames": [
+        "näringsgren (SNI 2007)",
+        "tabellinnehåll",
+        "månad"
+      ],
+      "source": "SCB",
+      "subjectCode": "AM",
+      "timeUnit": "Monthly",
+      "paths": [
+        [
+          {
+            "id": "AM",
+            "label": "Arbetsmarknad",
+            "sortCode": "Arbetsmarknad"
+          },
+          {
+            "id": "AM0211",
+            "label": "Anställningar",
+            "sortCode": "005"
+          },
+          {
+            "id": "AM0211A",
+            "label": "Anställningar",
+            "sortCode": "001"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4344?lang=sv"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "en",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4344?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4344/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4344/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    },
+    {
+      "id": "TAB6348",
+      "label": "Antal pågående anställningar efter kön, sektor och näringsgren SNI2007. Månad 2020M01-2026M03",
+      "description": "",
+      "sortCode": "07",
+      "updated": "2026-05-29T06:00:00Z",
+      "firstPeriod": "2020M01",
+      "lastPeriod": "2026M03",
+      "category": "public",
+      "variableNames": [
+        "kön",
+        "sektor",
+        "näringsgren (SNI 2007)",
+        "tabellinnehåll",
+        "månad"
+      ],
+      "source": "SCB",
+      "subjectCode": "AM",
+      "timeUnit": "Monthly",
+      "paths": [
+        [
+          {
+            "id": "AM",
+            "label": "Arbetsmarknad",
+            "sortCode": "Arbetsmarknad"
+          },
+          {
+            "id": "AM0211",
+            "label": "Anställningar",
+            "sortCode": "005"
+          },
+          {
+            "id": "AM0211A",
+            "label": "Anställningar",
+            "sortCode": "001"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6348?lang=sv"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "en",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6348?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6348/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6348/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    },
+    {
+      "id": "TAB6349",
+      "label": "Antal pågående anställningar i näringslivet efter kön och näringsgren (SNI 2007). Månad 2020M01-2026M03",
+      "description": "",
+      "sortCode": "08",
+      "updated": "2026-05-29T06:00:00Z",
+      "firstPeriod": "2020M01",
+      "lastPeriod": "2026M03",
+      "category": "public",
+      "variableNames": [
+        "kön",
+        "näringsgren (SNI 2007)",
+        "tabellinnehåll",
+        "månad"
+      ],
+      "source": "SCB",
+      "subjectCode": "AM",
+      "timeUnit": "Monthly",
+      "paths": [
+        [
+          {
+            "id": "AM",
+            "label": "Arbetsmarknad",
+            "sortCode": "Arbetsmarknad"
+          },
+          {
+            "id": "AM0211",
+            "label": "Anställningar",
+            "sortCode": "005"
+          },
+          {
+            "id": "AM0211A",
+            "label": "Anställningar",
+            "sortCode": "001"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6349?lang=sv"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "en",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6349?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6349/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6349/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    },
+    {
+      "id": "TAB6458",
+      "label": "Sjukfrånvaro under sjuklöneperioden efter sektor och kön.  Månad 2024M01-2026M03",
+      "description": "",
+      "sortCode": "15",
+      "updated": "2026-05-29T06:00:00Z",
+      "firstPeriod": "2024M01",
+      "lastPeriod": "2026M03",
+      "category": "public",
+      "variableNames": [
+        "sektor",
+        "kön",
+        "tabellinnehåll",
+        "månad"
+      ],
+      "source": "SCB",
+      "subjectCode": "AM",
+      "timeUnit": "Monthly",
+      "paths": [
+        [
+          {
+            "id": "AM",
+            "label": "Arbetsmarknad",
+            "sortCode": "Arbetsmarknad"
+          },
+          {
+            "id": "AM0211",
+            "label": "Anställningar",
+            "sortCode": "005"
+          },
+          {
+            "id": "AM0211B",
+            "label": "Sjukfrånvaro under sjuklöneperioden                   ",
+            "sortCode": "002"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6458?lang=sv"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "en",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6458?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6458/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6458/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    },
+    {
+      "id": "TAB6467",
+      "label": "Sjukfrånvaro under sjuklöneperioden i näringslivet efter näringsgren (SNI 2007) och kön. Månad 2024M01-2026M03",
+      "description": "",
+      "sortCode": "16",
+      "updated": "2026-05-29T06:00:00Z",
+      "firstPeriod": "2024M01",
+      "lastPeriod": "2026M03",
+      "category": "public",
+      "variableNames": [
+        "näringsgren (SNI 2007)",
+        "kön",
+        "tabellinnehåll",
+        "månad"
+      ],
+      "source": "SCB",
+      "subjectCode": "AM",
+      "timeUnit": "Monthly",
+      "paths": [
+        [
+          {
+            "id": "AM",
+            "label": "Arbetsmarknad",
+            "sortCode": "Arbetsmarknad"
+          },
+          {
+            "id": "AM0211",
+            "label": "Anställningar",
+            "sortCode": "005"
+          },
+          {
+            "id": "AM0211B",
+            "label": "Sjukfrånvaro under sjuklöneperioden                   ",
+            "sortCode": "002"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6467?lang=sv"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "en",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6467?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6467/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6467/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    },
+    {
+      "id": "TAB6468",
+      "label": "Sjukfrånvaro under sjuklöneperioden i offentlig förvaltning efter näringsgren (SNI 2007) och kön.  Månad 2024M01-2026M03",
+      "description": "",
+      "sortCode": "17",
+      "updated": "2026-05-29T06:00:00Z",
+      "firstPeriod": "2024M01",
+      "lastPeriod": "2026M03",
+      "category": "public",
+      "variableNames": [
+        "näringsgren (SNI 2007)",
+        "kön",
+        "tabellinnehåll",
+        "månad"
+      ],
+      "source": "SCB",
+      "subjectCode": "AM",
+      "timeUnit": "Monthly",
+      "paths": [
+        [
+          {
+            "id": "AM",
+            "label": "Arbetsmarknad",
+            "sortCode": "Arbetsmarknad"
+          },
+          {
+            "id": "AM0211",
+            "label": "Anställningar",
+            "sortCode": "005"
+          },
+          {
+            "id": "AM0211B",
+            "label": "Sjukfrånvaro under sjuklöneperioden                   ",
+            "sortCode": "002"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6468?lang=sv"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "en",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6468?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6468/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6468/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    },
+    {
+      "id": "TAB6650",
+      "label": "Arbetad tid för pågående anställningar efter sektor och näringsgren (SNI 2007).  Månad 2020M01-2026M03",
+      "description": "",
+      "sortCode": "08",
+      "updated": "2026-05-29T06:00:00Z",
+      "firstPeriod": "2020M01",
+      "lastPeriod": "2026M03",
+      "category": "public",
+      "variableNames": [
+        "sektor",
+        "näringsgren (SNI 2007)",
+        "tabellinnehåll",
+        "månad"
+      ],
+      "source": "SCB",
+      "subjectCode": "AM",
+      "timeUnit": "Monthly",
+      "paths": [
+        [
+          {
+            "id": "AM",
+            "label": "Arbetsmarknad",
+            "sortCode": "Arbetsmarknad"
+          },
+          {
+            "id": "AM0211",
+            "label": "Anställningar",
+            "sortCode": "005"
+          },
+          {
+            "id": "AM0211C",
+            "label": "Arbetad tid",
+            "sortCode": "003"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6650?lang=sv"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "en",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6650?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6650/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6650/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    },
+    {
+      "id": "TAB6012",
+      "label": "Flöde i anställningar i näringslivet efter kön och näringsgren (SNI 2007). Månad 2020M01-2026M03",
+      "description": "",
+      "sortCode": "08",
+      "updated": "2026-05-29T06:00:00Z",
+      "firstPeriod": "2020M01",
+      "lastPeriod": "2026M03",
+      "category": "public",
+      "variableNames": [
+        "kön",
+        "näringsgren (SNI 2007)",
+        "tabellinnehåll",
+        "månad"
+      ],
+      "source": "SCB",
+      "subjectCode": "AM",
+      "timeUnit": "Monthly",
+      "paths": [
+        [
+          {
+            "id": "AM",
+            "label": "Arbetsmarknad",
+            "sortCode": "Arbetsmarknad"
+          },
+          {
+            "id": "AM0211",
+            "label": "Anställningar",
+            "sortCode": "005"
+          },
+          {
+            "id": "AM0211D",
+            "label": "Flöde i anställningar",
+            "sortCode": "004"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6012?lang=sv"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "en",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6012?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6012/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6012/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    },
+    {
+      "id": "TAB6016",
+      "label": "Flöde i anställningar i näringslivet efter storleksklass och näringsgren (SNI 2007). Månad 2020M01-2026M03",
+      "description": "",
+      "sortCode": "09",
+      "updated": "2026-05-29T06:00:00Z",
+      "firstPeriod": "2020M01",
+      "lastPeriod": "2026M03",
+      "category": "public",
+      "variableNames": [
+        "storleksklass",
+        "bransch",
+        "tabellinnehåll",
+        "månad"
+      ],
+      "source": "SCB",
+      "subjectCode": "AM",
+      "timeUnit": "Monthly",
+      "paths": [
+        [
+          {
+            "id": "AM",
+            "label": "Arbetsmarknad",
+            "sortCode": "Arbetsmarknad"
+          },
+          {
+            "id": "AM0211",
+            "label": "Anställningar",
+            "sortCode": "005"
+          },
+          {
+            "id": "AM0211D",
+            "label": "Flöde i anställningar",
+            "sortCode": "004"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6016?lang=sv"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "en",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6016?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6016/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6016/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    },
+    {
+      "id": "TAB6395",
+      "label": "Flöde i anställningar efter kön, sektor och näringsgren (SNI 2007). Månad 2020M01-2026M03",
+      "description": "",
+      "sortCode": "11",
+      "updated": "2026-05-29T06:00:00Z",
+      "firstPeriod": "2020M01",
+      "lastPeriod": "2026M03",
+      "category": "public",
+      "variableNames": [
+        "kön",
+        "sektor",
+        "näringsgren (SNI 2007)",
+        "tabellinnehåll",
+        "månad"
+      ],
+      "source": "SCB",
+      "subjectCode": "AM",
+      "timeUnit": "Monthly",
+      "paths": [
+        [
+          {
+            "id": "AM",
+            "label": "Arbetsmarknad",
+            "sortCode": "Arbetsmarknad"
+          },
+          {
+            "id": "AM0211",
+            "label": "Anställningar",
+            "sortCode": "005"
+          },
+          {
+            "id": "AM0211D",
+            "label": "Flöde i anställningar",
+            "sortCode": "004"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6395?lang=sv"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "en",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6395?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6395/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6395/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    },
+    {
+      "id": "TAB6047",
+      "label": "Lönesummor, förmåner, arbetsgivaravgifter och preliminär A-skatt efter region och sektor.  Månad 2020M01-2026M03",
+      "description": "",
+      "sortCode": "11",
+      "updated": "2026-05-29T06:00:00Z",
+      "firstPeriod": "2020M01",
+      "lastPeriod": "2026M03",
+      "category": "public",
+      "variableNames": [
+        "region",
+        "sektor",
+        "tabellinnehåll",
+        "månad"
+      ],
+      "source": "SCB",
+      "subjectCode": "AM",
+      "timeUnit": "Monthly",
+      "paths": [
+        [
+          {
+            "id": "AM",
+            "label": "Arbetsmarknad",
+            "sortCode": "Arbetsmarknad"
+          },
+          {
+            "id": "AM0211",
+            "label": "Anställningar",
+            "sortCode": "005"
+          },
+          {
+            "id": "AM0211E",
+            "label": "Lönesummor, förmåner, arbetsgivaravgifter och preliminär A-skatt",
+            "sortCode": "005"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6047?lang=sv"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "en",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6047?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6047/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6047/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    },
+    {
+      "id": "TAB6048",
+      "label": "Lönesummor, förmåner, arbetsgivaravgifter och preliminär A-skatt i näringslivet efter region och näringsgren (SNI 2007).  Månad 2020M01-2026M03",
+      "description": "",
+      "sortCode": "12",
+      "updated": "2026-05-29T06:00:00Z",
+      "firstPeriod": "2020M01",
+      "lastPeriod": "2026M03",
+      "category": "public",
+      "variableNames": [
+        "region",
+        "näringsgren (SNI 2007)",
+        "tabellinnehåll",
+        "månad"
+      ],
+      "source": "SCB",
+      "subjectCode": "AM",
+      "timeUnit": "Monthly",
+      "paths": [
+        [
+          {
+            "id": "AM",
+            "label": "Arbetsmarknad",
+            "sortCode": "Arbetsmarknad"
+          },
+          {
+            "id": "AM0211",
+            "label": "Anställningar",
+            "sortCode": "005"
+          },
+          {
+            "id": "AM0211E",
+            "label": "Lönesummor, förmåner, arbetsgivaravgifter och preliminär A-skatt",
+            "sortCode": "005"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6048?lang=sv"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "en",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6048?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6048/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6048/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    },
+    {
+      "id": "TAB6651",
+      "label": "Nyckeltal från Anställningar. Antal pågående anställningar och arbetad tid. Månad 2015M04-2026M03",
+      "description": "",
+      "sortCode": "10",
+      "updated": "2026-05-29T06:00:00Z",
+      "firstPeriod": "2015M04",
+      "lastPeriod": "2026M03",
+      "category": "public",
+      "variableNames": [
+        "typ av nyckeltal",
+        "tabellinnehåll",
+        "månad"
+      ],
+      "source": "SCB",
+      "subjectCode": "AM",
+      "timeUnit": "Monthly",
+      "paths": [
+        [
+          {
+            "id": "AM",
+            "label": "Arbetsmarknad",
+            "sortCode": "Arbetsmarknad"
+          },
+          {
+            "id": "AM0211",
+            "label": "Anställningar",
+            "sortCode": "005"
+          },
+          {
+            "id": "AM0211N",
+            "label": "Nyckeltal",
+            "sortCode": "006"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6651?lang=sv"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "en",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6651?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6651/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6651/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    },
+    {
+      "id": "TAB6652",
+      "label": "Nyckeltal från Anställningar. Andel sjukfrånvaro. Månad 2024M01-2026M03",
+      "description": "",
+      "sortCode": "11",
+      "updated": "2026-05-29T06:00:00Z",
+      "firstPeriod": "2024M01",
+      "lastPeriod": "2026M03",
+      "category": "public",
+      "variableNames": [
+        "typ av nyckeltal",
+        "tabellinnehåll",
+        "månad"
+      ],
+      "source": "SCB",
+      "subjectCode": "AM",
+      "timeUnit": "Monthly",
+      "paths": [
+        [
+          {
+            "id": "AM",
+            "label": "Arbetsmarknad",
+            "sortCode": "Arbetsmarknad"
+          },
+          {
+            "id": "AM0211",
+            "label": "Anställningar",
+            "sortCode": "005"
+          },
+          {
+            "id": "AM0211N",
+            "label": "Nyckeltal",
+            "sortCode": "006"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6652?lang=sv"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "en",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6652?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6652/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6652/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    },
+    {
+      "id": "TAB68",
+      "label": "Arbetskostnadsindex för arbetare, privat sektor (AKI) efter näringsgren enligt SNI 2007. Månad 2008M01-2026M03",
+      "description": "",
+      "sortCode": "Arbetskostnadsindex för arbetare, privat sektor (AKI) efter näringsgren enligt SNI 2007. Månad 2008M01-2026M03",
+      "updated": "2026-05-29T06:00:00Z",
+      "firstPeriod": "2008M01",
+      "lastPeriod": "2026M03",
+      "category": "public",
+      "variableNames": [
+        "näringsgren SNI 2007",
+        "tabellinnehåll",
+        "månad"
+      ],
+      "source": "SCB",
+      "subjectCode": "AM",
+      "timeUnit": "Monthly",
+      "paths": [
+        [
+          {
+            "id": "AM",
+            "label": "Arbetsmarknad",
+            "sortCode": "Arbetsmarknad"
+          },
+          {
+            "id": "AM0301",
+            "label": "Arbetskostnadsindex för arbetare och tjänstemän inom privat sektor (AKI)",
+            "sortCode": "010"
+          },
+          {
+            "id": "AM0301A",
+            "label": "Arbetskostnadsindex",
+            "sortCode": "10"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB68?lang=sv"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "en",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB68?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB68/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB68/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    },
+    {
+      "id": "TAB72",
+      "label": "Arbetskostnadsindex för tjänstemän, privat sektor (AKI) efter näringsgren SNI 2007. Månad 2008M01-2026M03",
+      "description": "",
+      "sortCode": "Arbetskostnadsindex för tjänstemän, privat sektor (AKI) efter näringsgren SNI 2007. Månad 2008M01-2026M03",
+      "updated": "2026-05-29T06:00:00Z",
+      "firstPeriod": "2008M01",
+      "lastPeriod": "2026M03",
+      "category": "public",
+      "variableNames": [
+        "näringsgren SNI 2007",
+        "tabellinnehåll",
+        "månad"
+      ],
+      "source": "SCB",
+      "subjectCode": "AM",
+      "timeUnit": "Monthly",
+      "paths": [
+        [
+          {
+            "id": "AM",
+            "label": "Arbetsmarknad",
+            "sortCode": "Arbetsmarknad"
+          },
+          {
+            "id": "AM0301",
+            "label": "Arbetskostnadsindex för arbetare och tjänstemän inom privat sektor (AKI)",
+            "sortCode": "010"
+          },
+          {
+            "id": "AM0301A",
+            "label": "Arbetskostnadsindex",
+            "sortCode": "10"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB72?lang=sv"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "en",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB72?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB72/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB72/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    }
+  ],
+  "page": {
+    "pageNumber": 1,
+    "pageSize": 20,
+    "totalElements": 4246,
+    "totalPages": 213,
+    "links": [
+      {
+        "rel": "next",
+        "hreflang": "sv",
+        "href": "https://statistikdatabasen.scb.se/api/v2/tables/?lang=sv&pagesize=20&pageNumber=2"
+      },
+      {
+        "rel": "last",
+        "hreflang": "sv",
+        "href": "https://statistikdatabasen.scb.se/api/v2/tables/?lang=sv&pagesize=20&pageNumber=213"
+      }
+    ]
+  },
+  "links": [
+    {
+      "rel": "self",
+      "hreflang": "sv",
+      "href": "https://statistikdatabasen.scb.se/api/v2/tables/?lang=sv&pagesize=20&pageNumber=1"
+    }
+  ]
+}

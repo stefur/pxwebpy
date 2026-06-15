@@ -1,0 +1,623 @@
+{
+  "language": "sv",
+  "tables": [
+    {
+      "id": "TAB4552",
+      "label": "Befolkningens anslutning till kommunalt vatten och avlopp. År 1960-2024",
+      "description": "",
+      "sortCode": "Befolkningens anslutning till kommunalt vatten och avlopp. År 1960-2024",
+      "updated": "2026-06-02T06:00:00Z",
+      "firstPeriod": "1960",
+      "lastPeriod": "2024",
+      "category": "public",
+      "variableNames": [
+        "typ av anslutning",
+        "tabellinnehåll",
+        "år"
+      ],
+      "source": "SCB",
+      "subjectCode": "MI",
+      "timeUnit": "Annual",
+      "paths": [
+        [
+          {
+            "id": "MI",
+            "label": "Miljö",
+            "sortCode": "Miljö"
+          },
+          {
+            "id": "MI0902",
+            "label": "Vattenuttag och vattenanvändning i Sverige",
+            "sortCode": "Vattenuttag och vattenanvändning i Sverige"
+          },
+          {
+            "id": "MI0902C",
+            "label": "Vatten- och avloppsförhållanden",
+            "sortCode": "04"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4552?lang=sv"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "en",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4552?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4552/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4552/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    },
+    {
+      "id": "TAB4560",
+      "label": "Befolkningen efter region och typ av avloppsanslutning. År 2000-2024",
+      "description": "",
+      "sortCode": "Befolkningen efter region och typ av avloppsanslutning. År 2000-2024",
+      "updated": "2026-06-02T06:00:00Z",
+      "firstPeriod": "2000",
+      "lastPeriod": "2024",
+      "category": "public",
+      "variableNames": [
+        "region",
+        "avloppsanslutning",
+        "tabellinnehåll",
+        "år"
+      ],
+      "source": "SCB",
+      "subjectCode": "MI",
+      "timeUnit": "Annual",
+      "paths": [
+        [
+          {
+            "id": "MI",
+            "label": "Miljö",
+            "sortCode": "Miljö"
+          },
+          {
+            "id": "MI0902",
+            "label": "Vattenuttag och vattenanvändning i Sverige",
+            "sortCode": "Vattenuttag och vattenanvändning i Sverige"
+          },
+          {
+            "id": "MI0902C",
+            "label": "Vatten- och avloppsförhållanden",
+            "sortCode": "04"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4560?lang=sv"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "en",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4560?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4560/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4560/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    },
+    {
+      "id": "TAB4562",
+      "label": "Befolkningen efter region och typ av vattenanslutning. År 2000-2024",
+      "description": "",
+      "sortCode": "Befolkningen efter region och typ av vattenanslutning. År 2000-2024",
+      "updated": "2026-06-02T06:00:00Z",
+      "firstPeriod": "2000",
+      "lastPeriod": "2024",
+      "category": "public",
+      "variableNames": [
+        "region",
+        "vattenanslutning",
+        "tabellinnehåll",
+        "år"
+      ],
+      "source": "SCB",
+      "subjectCode": "MI",
+      "timeUnit": "Annual",
+      "paths": [
+        [
+          {
+            "id": "MI",
+            "label": "Miljö",
+            "sortCode": "Miljö"
+          },
+          {
+            "id": "MI0902",
+            "label": "Vattenuttag och vattenanvändning i Sverige",
+            "sortCode": "Vattenuttag och vattenanvändning i Sverige"
+          },
+          {
+            "id": "MI0902C",
+            "label": "Vatten- och avloppsförhållanden",
+            "sortCode": "04"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4562?lang=sv"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "en",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4562?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4562/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4562/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    },
+    {
+      "id": "TAB6387",
+      "label": "Befolkningen 15-74 år (AKU) efter arbetskraftstillhörighet, typ av data, kön och ålder. Månad 2001M01-2026M04",
+      "description": "",
+      "sortCode": "001",
+      "updated": "2026-05-21T06:00:00Z",
+      "firstPeriod": "2001M01",
+      "lastPeriod": "2026M04",
+      "category": "public",
+      "variableNames": [
+        "arbetskraftstillhörighet",
+        "typ av data",
+        "kön",
+        "ålder",
+        "tabellinnehåll",
+        "månad"
+      ],
+      "source": "SCB",
+      "subjectCode": "AM",
+      "timeUnit": "Monthly",
+      "paths": [
+        [
+          {
+            "id": "AM",
+            "label": "Arbetsmarknad",
+            "sortCode": "Arbetsmarknad"
+          },
+          {
+            "id": "AM0401",
+            "label": "Arbetskraftsundersökningarna (AKU)",
+            "sortCode": "020"
+          },
+          {
+            "id": "AM0401A",
+            "label": "Befolkningen efter arbetskraftstillhörighet från och med 2001",
+            "sortCode": "001"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6387?lang=sv"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "en",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6387?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6387/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6387/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    },
+    {
+      "id": "TAB6512",
+      "label": "Befolkningen 15-74 år (AKU) efter arbetskraftstillhörighet, inrikes/utrikes född, typ av data, kön och ålder. Månad 2005M01-2026M04",
+      "description": "",
+      "sortCode": "004",
+      "updated": "2026-05-21T06:00:00Z",
+      "firstPeriod": "2005M01",
+      "lastPeriod": "2026M04",
+      "category": "public",
+      "variableNames": [
+        "arbetskraftstillhörighet",
+        "inrikes/utrikes född",
+        "typ av data",
+        "kön",
+        "ålder",
+        "tabellinnehåll",
+        "månad"
+      ],
+      "source": "SCB",
+      "subjectCode": "AM",
+      "timeUnit": "Monthly",
+      "paths": [
+        [
+          {
+            "id": "AM",
+            "label": "Arbetsmarknad",
+            "sortCode": "Arbetsmarknad"
+          },
+          {
+            "id": "AM0401",
+            "label": "Arbetskraftsundersökningarna (AKU)",
+            "sortCode": "020"
+          },
+          {
+            "id": "AM0401R",
+            "label": "Inrikes och utrikes födda från och med 2005",
+            "sortCode": "014"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6512?lang=sv"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "en",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6512?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6512/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6512/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    },
+    {
+      "id": "TAB4948",
+      "label": "Befolkning i kollektivtrafiknära läge.  År 2014-2024",
+      "description": "",
+      "sortCode": "081",
+      "updated": "2026-06-02T06:00:00Z",
+      "firstPeriod": "2014",
+      "lastPeriod": "2024",
+      "category": "public",
+      "variableNames": [
+        "region",
+        "avstånd från hållplats",
+        "inom/utanför tätort",
+        "kön",
+        "tabellinnehåll",
+        "år"
+      ],
+      "source": "SCB",
+      "subjectCode": "MI",
+      "timeUnit": "Annual",
+      "paths": [
+        [
+          {
+            "id": "MI",
+            "label": "Miljö",
+            "sortCode": "Miljö"
+          },
+          {
+            "id": "MI1303",
+            "label": "Indikatorer för hållbar utveckling",
+            "sortCode": "Indikatorer för hållbar utveckling"
+          },
+          {
+            "id": "MI1303A",
+            "label": "God bebyggd miljö",
+            "sortCode": "07"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4948?lang=sv"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4948/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB4948/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    },
+    {
+      "id": "TAB2920",
+      "label": "Befolkningen 15-74 år (AKU) efter arbetskraftstillhörighet, kön, civilstånd och om det finns hemmaboende barn eller ej.  Månad 2005M01-2026M04",
+      "description": "",
+      "sortCode": "01",
+      "updated": "2026-05-21T06:00:00Z",
+      "firstPeriod": "2005M01",
+      "lastPeriod": "2026M04",
+      "category": "public",
+      "variableNames": [
+        "arbetskraftstillhörighet",
+        "kön",
+        "civilstånd",
+        "med/utan barn",
+        "tabellinnehåll",
+        "månad"
+      ],
+      "source": "SCB",
+      "subjectCode": "AM",
+      "timeUnit": "Monthly",
+      "paths": [
+        [
+          {
+            "id": "AM",
+            "label": "Arbetsmarknad",
+            "sortCode": "Arbetsmarknad"
+          },
+          {
+            "id": "AM0401",
+            "label": "Arbetskraftsundersökningarna (AKU)",
+            "sortCode": "020"
+          },
+          {
+            "id": "AM0401Q",
+            "label": "Civilstånd och barn från och med 2005",
+            "sortCode": "013"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB2920?lang=sv"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "en",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB2920?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB2920/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB2920/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    },
+    {
+      "id": "TAB5643",
+      "label": "Nyckeltal från Befolkningens arbetsmarknadsstatus (BAS). Antal sysselsatta efter region. Preliminär statistik.  Månad 2021M01-2026M03",
+      "description": "",
+      "sortCode": "08",
+      "updated": "2026-06-12T06:00:00Z",
+      "firstPeriod": "2021M01",
+      "lastPeriod": "2026M03",
+      "category": "public",
+      "variableNames": [
+        "region",
+        "typ av nyckeltal",
+        "tabellinnehåll",
+        "månad"
+      ],
+      "source": "SCB",
+      "subjectCode": "AM",
+      "timeUnit": "Monthly",
+      "paths": [
+        [
+          {
+            "id": "AM",
+            "label": "Arbetsmarknad",
+            "sortCode": "Arbetsmarknad"
+          },
+          {
+            "id": "AM0210",
+            "label": "Befolkningens arbetsmarknadsstatus (BAS)",
+            "sortCode": "060"
+          },
+          {
+            "id": "AM0210N",
+            "label": "Nyckeltal",
+            "sortCode": "008"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB5643?lang=sv"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "en",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB5643?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB5643/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB5643/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    },
+    {
+      "id": "TAB5663",
+      "label": "Nyckeltal från Befolkningens arbetsmarknadsstatus (BAS). Sysselsättningsgrad och arbetslöshet efter region. Preliminär statistik.  Månad 2024M01-2026M03",
+      "description": "",
+      "sortCode": "09",
+      "updated": "2026-06-12T06:00:00Z",
+      "firstPeriod": "2024M01",
+      "lastPeriod": "2026M03",
+      "category": "public",
+      "variableNames": [
+        "region",
+        "typ av nyckeltal",
+        "tabellinnehåll",
+        "månad"
+      ],
+      "source": "SCB",
+      "subjectCode": "AM",
+      "timeUnit": "Monthly",
+      "paths": [
+        [
+          {
+            "id": "AM",
+            "label": "Arbetsmarknad",
+            "sortCode": "Arbetsmarknad"
+          },
+          {
+            "id": "AM0210",
+            "label": "Befolkningens arbetsmarknadsstatus (BAS)",
+            "sortCode": "060"
+          },
+          {
+            "id": "AM0210N",
+            "label": "Nyckeltal",
+            "sortCode": "008"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB5663?lang=sv"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "en",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB5663?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB5663/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB5663/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    },
+    {
+      "id": "TAB6473",
+      "label": "Befolkningsstatistik efter region och kön.  Månad 2025M01-2026M04",
+      "description": "",
+      "sortCode": "001",
+      "updated": "2026-06-08T06:00:00Z",
+      "firstPeriod": "2025M01",
+      "lastPeriod": "2026M04",
+      "category": "public",
+      "variableNames": [
+        "region",
+        "förändringar",
+        "kön",
+        "tabellinnehåll",
+        "månad"
+      ],
+      "source": "SCB",
+      "subjectCode": "BE",
+      "timeUnit": "Monthly",
+      "paths": [
+        [
+          {
+            "id": "BE",
+            "label": "Befolkning",
+            "sortCode": "Befolkning"
+          },
+          {
+            "id": "BE0101",
+            "label": "Befolkningsstatistik",
+            "sortCode": "Befolkningsstatistik"
+          },
+          {
+            "id": "BE0101G",
+            "label": "Befolkningsförändringar",
+            "sortCode": "002"
+          }
+        ]
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6473?lang=sv"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "en",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6473?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6473/metadata?lang=sv"
+        },
+        {
+          "rel": "data",
+          "hreflang": "sv",
+          "href": "https://statistikdatabasen.scb.se/api/v2/tables/TAB6473/data?lang=sv&outputFormat=json-stat2"
+        }
+      ]
+    }
+  ],
+  "page": {
+    "pageNumber": 1,
+    "pageSize": 20,
+    "totalElements": 10,
+    "totalPages": 1,
+    "links": []
+  },
+  "links": [
+    {
+      "rel": "self",
+      "hreflang": "sv",
+      "href": "https://statistikdatabasen.scb.se/api/v2/tables/?lang=sv&query=befolkning&pagesize=20&pageNumber=1&pastDays=30"
+    }
+  ]
+}
