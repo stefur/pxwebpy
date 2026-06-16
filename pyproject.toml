@@ -61,8 +61,11 @@ strict = true
 [dependency-groups]
 dev = [
     "pre-commit>=4.4.0",
+    {include-group = "nox"},
+    {include-group = "tests"},
 ]
 docs = [
+    # Pinning griffe until quartodoc has a new release that supports version >2.0.0
     "griffe>=1.15.0,<2.0.0",
     "ipykernel>=7.2.0",
     "nbclient>=0.11.0",
@@ -72,9 +75,11 @@ docs = [
     "pyarrow>=24.0.0",
     "quartodoc>=0.11.2.dev2",
 ]
-tests = [
+nox = [
     "nox>=2026.4.10",
     "nox-uv>=0.8.0",
+]
+tests = [
     "pytest>=9.0.3",
     "pytest-cov>=7.1.0",
     "responses>=0.26.1",

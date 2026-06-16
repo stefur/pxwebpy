@@ -35,12 +35,6 @@ To run `ruff` manually from the command line or editor, see the [`ruff` document
 Follow the [`NumPy`](https://numpydoc.readthedocs.io/en/latest/format.html#overview) style guide when writing docstrings. This is important for being able to [build the documentation](#building-the-documentation).
 
 ## Running tests
-
-Install the dependency group needed for running tests:
-```bash
-uv sync --group=tests
-```
-
 For fast iteration on specific tests, use `uv run pytest`:
 
 ```bash

@@ -1419,7 +1419,13 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "nox" },
+    { name = "nox-uv" },
     { name = "pre-commit" },
+    { name = "pytest" },
+    { name = "pytest-cov" },
+    { name = "responses" },
+    { name = "syrupy" },
 ]
 docs = [
     { name = "griffe" },
@@ -1432,9 +1438,11 @@ docs = [
     { name = "pyarrow" },
     { name = "quartodoc" },
 ]
-tests = [
+nox = [
     { name = "nox" },
     { name = "nox-uv" },
+]
+tests = [
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "responses" },
@@ -1449,7 +1457,15 @@ requires-dist = [
 ]
 
 [package.metadata.requires-dev]
-dev = [{ name = "pre-commit", specifier = ">=4.4.0" }]
+dev = [
+    { name = "nox", specifier = ">=2026.4.10" },
+    { name = "nox-uv", specifier = ">=0.8.0" },
+    { name = "pre-commit", specifier = ">=4.4.0" },
+    { name = "pytest", specifier = ">=9.0.3" },
+    { name = "pytest-cov", specifier = ">=7.1.0" },
+    { name = "responses", specifier = ">=0.26.1" },
+    { name = "syrupy", specifier = ">=5.1.0" },
+]
 docs = [
     { name = "griffe", specifier = ">=1.15.0,<2.0.0" },
     { name = "ipykernel", specifier = ">=7.2.0" },
@@ -1460,9 +1476,11 @@ docs = [
     { name = "pyarrow", specifier = ">=24.0.0" },
     { name = "quartodoc", git = "https://github.com/machow/quartodoc?rev=665734cf5db6dbd2fdd8a37b0dd1701f1e3fd734" },
 ]
-tests = [
+nox = [
     { name = "nox", specifier = ">=2026.4.10" },
     { name = "nox-uv", specifier = ">=0.8.0" },
+]
+tests = [
     { name = "pytest", specifier = ">=9.0.3" },
     { name = "pytest-cov", specifier = ">=7.1.0" },
     { name = "responses", specifier = ">=0.26.1" },
