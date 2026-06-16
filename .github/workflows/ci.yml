@@ -36,7 +36,7 @@ jobs:
           cache-dependency-glob: "uv.lock"
 
       - name: Install Nox
-        run: uv sync --no-default-groups --locked --group=nox
+        run: uv sync --no-default-groups --locked --group=nox --no-install-project
 
       - name: Run tests
         env:
