@@ -410,7 +410,7 @@ class PxApi:
         value_codes: dict[str, list[str] | str] | None = None,
         code_list: dict[str, str] | None = None,
         show: Show | None = None,
-    ) -> Iterator[dict]:
+    ) -> Iterator[dict[str, Any]]:
         """
         Like `~~.PxApi.get_table_data`, but yields row dicts one at a time
         instead of materialising the full dataset in memory before returning.
@@ -579,7 +579,7 @@ class PxApi:
         self,
         table_id: str,
         show: Show | None = None,
-    ) -> Iterator[dict]:
+    ) -> Iterator[dict[str, Any]]:
         """
         Like `~~.PxApi.get_table_data_all`, but yields row dicts one at a time
         instead of materialising the full dataset in memory before returning.
