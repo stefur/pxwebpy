@@ -9,12 +9,10 @@ def count_data_cells(value_codes: dict[str, Any]) -> int:
     Based on the supplied value codes, calculate the number of data cells this would
     selection would produce.
     """
-    value_codes_length = {
-        variable: len(value) for variable, value in value_codes.items()
-    }
+    value_codes_length = [len(value) for value in value_codes.values()]
     number_of_data_cells = 1
     for value_code in value_codes_length:
-        number_of_data_cells *= value_codes_length[value_code]
+        number_of_data_cells *= value_code
 
     return number_of_data_cells
 

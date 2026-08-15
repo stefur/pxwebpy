@@ -456,7 +456,7 @@ class PxApi:
         # Make sure all selections provided are in a list, even if single values
         for variable in list(value_codes.keys()):
             if not isinstance(variable, str):
-                raise ValueError("All variables must be strings.")
+                raise TypeError("All variables must be strings.")
 
             value_code = value_codes[variable]
 
@@ -470,7 +470,7 @@ class PxApi:
                         f"All value codes in list for variable '{variable}' must be strings."
                     )
             else:
-                raise ValueError(
+                raise TypeError(
                     f"Value codes for variable '{variable}' must be a string or a list of strings."
                 )
 

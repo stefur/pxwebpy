@@ -182,7 +182,7 @@ class Client:
                 len(self.call_timestamps)
                 <= self.configuration["maxCallsPerTimeWindow"]
             ):
-                return None
+                return
 
             # Otherise there have been to many calls, so we need to sleep
             sleep_time = self.configuration["timeWindow"] - (
@@ -194,4 +194,4 @@ class Client:
         )
         # Sleep before continuing
         time.sleep(sleep_time)
-        return None
+        return
