@@ -76,7 +76,7 @@ docs = [
     "quartodoc>=0.11.2.dev2",
 ]
 nox = [
-    "nox>=2026.4.10",
+    "nox>=2026.8.10",
     "nox-uv>=0.8.0",
 ]
 tests = [

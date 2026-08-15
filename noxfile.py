@@ -2,6 +2,8 @@ from nox import Session, options
 from nox_uv import session
 
 options.default_venv_backend = "uv"
+options.allow_parallel = True
+options.parallel = "auto"
 
 
 @session(
