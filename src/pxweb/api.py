@@ -466,7 +466,7 @@ class PxApi:
                 ]  # Coerce single strings to list
             elif isinstance(value_code, list):
                 if not all(isinstance(v, str) for v in value_code):
-                    raise ValueError(
+                    raise TypeError(
                         f"All value codes in list for variable '{variable}' must be strings."
                     )
             else:

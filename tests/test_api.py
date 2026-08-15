@@ -83,12 +83,12 @@ def test_get_table_data_all_iter(api: PxApi) -> None:
 
 
 def test_get_table_data_only_list_or_strings(api: PxApi) -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         api.get_table_data(table_id="TAB6471", value_codes={"some_var": 42})  # type: ignore[dict-item]
 
 
 def test_get_table_data_only_strings_in_list(api: PxApi) -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         api.get_table_data(
             table_id="TAB6471",
             value_codes={"some_var": ["1", "2", 42]},  # type: ignore[list-item]
