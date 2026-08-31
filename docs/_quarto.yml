@@ -64,6 +64,10 @@ quartodoc:
       contents:
         - name: PxApi
         - get_known_apis
+    - subtitle: Types
+      contents:
+        - name: KnownApi
+        - name: Show
 
 filters:
   - interlinks
