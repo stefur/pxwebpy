@@ -11,7 +11,7 @@ from ._internal.functions import (
     split_value_codes,
     unpack_table_data,
 )
-from .types import KnownApi, Show
+from .typing import KnownApi, Show
 
 logger = getLogger(__name__)
 

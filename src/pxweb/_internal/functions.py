@@ -1,7 +1,7 @@
 import itertools
 from typing import Any
 
-from ..types import Show
+from ..typing import Show
 
 
 def count_data_cells(value_codes: dict[str, Any]) -> int:
